@@ -13,11 +13,11 @@ public class Drag : MonoBehaviour
 
 
     //盤面フィールドデータ
-    private const int pitch = 70;               //フィールドのマス目のピッチ
-    private const int Xmax = 70;                //フィールドのX座標上限
-    private const int Xmin = -140;               //フィールドのX座標下限
-    private const int Ymax = 70;                //フィールドのY座標上限
-    private const int Ymin = -140;               //フィールドのY座標下限
+    private const int pitch = 35;               //フィールドのマス目のピッチ
+    private const int Xmax = 105;                //フィールドのX座標上限
+    private const int Xmin = -105;               //フィールドのX座標下限
+    private const int Ymax = 105;                //フィールドのY座標上限
+    private const int Ymin = -105;               //フィールドのY座標下限
 
     // Start is called before the first frame update
     void Start()
@@ -57,27 +57,18 @@ public class Drag : MonoBehaviour
         this.transform.SetSiblingIndex(0);
     }
 
-    //ドロップ時の座標を四捨五入（六捨五入）する
+    //ドロップ時の座標
     private int Rounding(float axis)
     {
         float dec = axis / pitch;
-        float centi = 0;
-        int conf = 0;
+        float conf = 0;
 
-        //座標が正の数値なら四捨五入
-        if (axis >= 0)
-        {
-            centi = (dec - Mathf.FloorToInt(dec));
-            if (centi >= 0.5) conf = Mathf.CeilToInt(dec) * pitch;
-            if (centi < 0.5) conf = Mathf.FloorToInt(dec) * pitch;
+        if  (dec <= 2 && dec >= -2) {
+            conf = Mathf.Abs(axis) / dec;
         }
-        //座標が負の数値なら六捨五入
-        else
-        {
-            centi = (dec - Mathf.CeilToInt(dec));
-            if (centi >= -0.5) conf = Mathf.CeilToInt(dec) * pitch;
-            if (centi < -0.5) conf = Mathf.FloorToInt(dec) * pitch;
+        else {
+            conf = Mathf.Abs(axis) * 3 / dec;
         }
-        return conf;
+        return (int)conf;
     }
 }
