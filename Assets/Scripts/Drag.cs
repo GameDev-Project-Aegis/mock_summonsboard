@@ -61,14 +61,15 @@ public class Drag : MonoBehaviour
     private int Rounding(float axis)
     {
         float dec = axis / pitch;
-        float conf = 0;
+        int sign = (int)(axis / Mathf.Abs(axis));
+        int conf = 0;
 
         if  (dec <= 2 && dec >= -2) {
-            conf = Mathf.Abs(axis) / dec;
+            conf = sign * pitch;
         }
         else {
-            conf = Mathf.Abs(axis) * 3 / dec;
+            conf = sign * pitch * 3;
         }
-        return (int)conf;
+        return conf;
     }
 }
