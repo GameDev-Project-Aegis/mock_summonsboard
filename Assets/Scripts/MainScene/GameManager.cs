@@ -12,6 +12,10 @@ public class GameManager : MonoBehaviour
     public GameObject objectEntranceDungeon;
     public GameObject canvasGame;
 
+    //火のダンジョンレベルの時 => false
+    //フロアセレクトレベルの時 => true
+    int selectDungeonLevel = 0;
+
     void Start()
     {
         objectNomalDungeon.GetComponent<Animator>().SetTrigger("slideIn");
@@ -20,33 +24,50 @@ public class GameManager : MonoBehaviour
     //DungeonObjectディレクトのスクリプトから呼び出し
 
     public void TapNomalDungeon(){
-        //nomalの消去
         objectNomalDungeon.GetComponent<Animator>().SetTrigger("slideOut");
-        //fireの消去
         objectFireDungeon.GetComponent<Animator>().SetTrigger("slideIn");
+        selectDungeonLevel = 1;
     }
 
     public void TapFireDungeon(){
-        //nomalの消去
         objectFireDungeon.GetComponent<Animator>().SetTrigger("slideOut");
-        //fireの消去
         objectfireDungeon01.GetComponent<Animator>().SetTrigger("slideIn");
+        selectDungeonLevel = 2;
     }
     
     public void TapfireDungeon01(){
         selectDungeon.SetActive(true);
     }
 
+    public void TapBackButton(){
+        switch (selectDungeonLevel)
+        {
+            //
+            case 0:
+                break;
+            case 1:
+                objectFireDungeon.GetComponent<Animator>().SetTrigger("slideOut");
+                objectNomalDungeon.GetComponent<Animator>().SetTrigger("slideIn");
+                selectDungeonLevel = 0;
+                break;
+            case 2:
+                objectfireDungeon01.GetComponent<Animator>().SetTrigger("slideOut");
+                objectFireDungeon.GetComponent<Animator>().SetTrigger("slideIn");
+                selectDungeonLevel = 1;
+                break;
+        }
+    }
+
     //SelectDungeonディレクトのスクリプトから呼び出し
 
-    public void TapEnterButton(){
+    public void TapEnterDungeon(){
         // DungeonSceneの追加
         SceneManager.LoadScene ("DungeonScene");
 	    // MainSceneの削除
         SceneManager.UnloadSceneAsync("MainScene");
     }
 
-    public void TapBackButton(){
+    public void TapBackDungeon(){
         //shrinkアニメーション
         objectEntranceDungeon.GetComponent<Animator>().SetTrigger("shrink");
         //オブジェクト消去

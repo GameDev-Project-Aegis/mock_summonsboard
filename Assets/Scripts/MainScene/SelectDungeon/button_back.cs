@@ -12,6 +12,6 @@ public class button_back : MonoBehaviour
         gameManager = GameObject.Find("GameManager");
     }
     public void OnTap(){
-        gameManager.GetComponent<GameManager>().TapBackButton();
+        gameManager.GetComponent<GameManager>().TapBackDungeon();
     }
 }

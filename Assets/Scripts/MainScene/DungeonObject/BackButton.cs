@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class button_enter : MonoBehaviour
+public class BackButton : MonoBehaviour
 {
     private GameObject gameManager;
 
@@ -12,6 +12,6 @@ public class button_enter : MonoBehaviour
         gameManager = GameObject.Find("GameManager");
     }
     public void OnTap(){
-        gameManager.GetComponent<GameManager>().TapEnterDungeon();
+        gameManager.GetComponent<GameManager>().TapBackButton();
     }
 }
