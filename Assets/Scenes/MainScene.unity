@@ -148,17 +148,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 31119032}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 579018031}
-  m_RootOrder: 5
+  m_Father: {fileID: 214352202}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.0000076294, y: -0.000030518}
-  m_SizeDelta: {x: 280, y: 607}
+  m_AnchoredPosition: {x: -0.205, y: -0.57001}
+  m_SizeDelta: {x: 213.41, y: 462.64}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &31119034
 MonoBehaviour:
@@ -264,6 +264,43 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &214352201
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 214352202}
+  m_Layer: 5
+  m_Name: SelectDungeon
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &214352202
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 214352201}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 31119033}
+  - {fileID: 506525038}
+  m_Father: {fileID: 579018031}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &214652726
 GameObject:
   m_ObjectHideFlags: 0
@@ -298,8 +335,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -0.05}
-  m_SizeDelta: {x: 282.04, y: 611.09}
+  m_AnchoredPosition: {x: 0.07, y: 0.145}
+  m_SizeDelta: {x: 212.86, y: 461.21}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &214652728
 MonoBehaviour:
@@ -351,6 +388,7 @@ GameObject:
   - component: {fileID: 506525041}
   - component: {fileID: 506525040}
   - component: {fileID: 506525039}
+  - component: {fileID: 506525042}
   m_Layer: 5
   m_Name: EntranceDungeon
   m_TagString: Untagged
@@ -365,19 +403,19 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 506525037}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 963888885}
   - {fileID: 797236938}
-  m_Father: {fileID: 579018031}
-  m_RootOrder: 6
+  m_Father: {fileID: 214352202}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 265.09, y: 303.7}
+  m_AnchoredPosition: {x: 0.07, y: 6.5}
+  m_SizeDelta: {x: 192.42, y: 220.45}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &506525039
 MonoBehaviour:
@@ -461,6 +499,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 506525037}
   m_CullTransparentMesh: 1
+--- !u!95 &506525042
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 506525037}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: f7865fa6eef564028b37bde7b7bdca6f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &579018027
 GameObject:
   m_ObjectHideFlags: 0
@@ -557,8 +614,7 @@ RectTransform:
   - {fileID: 960476108}
   - {fileID: 2063266179}
   - {fileID: 669088721}
-  - {fileID: 31119033}
-  - {fileID: 506525038}
+  - {fileID: 214352202}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -579,6 +635,8 @@ GameObject:
   - component: {fileID: 669088724}
   - component: {fileID: 669088723}
   - component: {fileID: 669088722}
+  - component: {fileID: 669088725}
+  - component: {fileID: 669088726}
   m_Layer: 5
   m_Name: object_fireDungeon01
   m_TagString: Untagged
@@ -602,8 +660,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -22.585, y: 70}
-  m_SizeDelta: {x: 193.11, y: 72.93}
+  m_AnchoredPosition: {x: 150, y: 52.235}
+  m_SizeDelta: {x: 145.4, y: 54.91}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &669088722
 MonoBehaviour:
@@ -648,7 +706,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 669088723}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 669088726}
+        m_TargetAssemblyTypeName: fireDungeon01, Assembly-CSharp
+        m_MethodName: OnClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &669088723
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -687,6 +757,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 669088720}
   m_CullTransparentMesh: 1
+--- !u!95 &669088725
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 669088720}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: ee4cc72043fc949e29ab8fb74c256f37, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &669088726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 669088720}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d929e0830a94b4178825b3e0ff4e934d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &797236937
 GameObject:
   m_ObjectHideFlags: 0
@@ -722,8 +823,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -56.41, y: -108.6}
-  m_SizeDelta: {x: 75.02, y: 35.76}
+  m_AnchoredPosition: {x: -40, y: -77.755}
+  m_SizeDelta: {x: 58.66, y: 26.67}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &797236939
 MonoBehaviour:
@@ -819,6 +920,8 @@ GameObject:
   - component: {fileID: 960476111}
   - component: {fileID: 960476110}
   - component: {fileID: 960476109}
+  - component: {fileID: 960476112}
+  - component: {fileID: 960476113}
   m_Layer: 5
   m_Name: object_NomalDungeon
   m_TagString: Untagged
@@ -842,8 +945,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -22.015, y: 76.8}
-  m_SizeDelta: {x: 191.97, y: 53.76}
+  m_AnchoredPosition: {x: 150, y: 59}
+  m_SizeDelta: {x: 147.75, y: 41.38}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &960476109
 MonoBehaviour:
@@ -888,7 +991,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 960476110}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 960476113}
+        m_TargetAssemblyTypeName: NomalDungeon, Assembly-CSharp
+        m_MethodName: OnClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &960476110
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -927,6 +1042,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 960476107}
   m_CullTransparentMesh: 1
+--- !u!95 &960476112
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 960476107}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 6bfeb69ff0838490499c3b713e060c96, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &960476113
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 960476107}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43aa853abfd394e9db56ca7a76151e9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &963888884
 GameObject:
   m_ObjectHideFlags: 0
@@ -962,8 +1108,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 55.11, y: -109.8}
-  m_SizeDelta: {x: 75.98, y: 38.16}
+  m_AnchoredPosition: {x: 40.6, y: -77.57}
+  m_SizeDelta: {x: 52.36, y: 26.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &963888886
 MonoBehaviour:
@@ -1081,8 +1227,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -21.19, y: -62.9}
-  m_SizeDelta: {x: 193.62, y: 351.79}
+  m_AnchoredPosition: {x: -16.53, y: -49.06}
+  m_SizeDelta: {x: 147.92, y: 268.76}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1046399186
 MonoBehaviour:
@@ -1122,6 +1268,54 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1046399184}
   m_CullTransparentMesh: 1
+--- !u!1 &1540398237
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1540398239}
+  - component: {fileID: 1540398238}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1540398238
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1540398237}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04988dd46bdf0405c9b128cfbbf044b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectNomalDungeon: {fileID: 960476107}
+  objectFireDungeon: {fileID: 2063266178}
+  objectfireDungeon01: {fileID: 669088720}
+  selectDungeon: {fileID: 214352201}
+  canvasGame: {fileID: 579018027}
+--- !u!4 &1540398239
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1540398237}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1716057192
 GameObject:
   m_ObjectHideFlags: 0
@@ -1167,7 +1361,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 8
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1217,6 +1411,8 @@ GameObject:
   - component: {fileID: 2063266182}
   - component: {fileID: 2063266181}
   - component: {fileID: 2063266180}
+  - component: {fileID: 2063266183}
+  - component: {fileID: 2063266184}
   m_Layer: 5
   m_Name: object_FireDungeon
   m_TagString: Untagged
@@ -1240,8 +1436,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -21.19, y: 70}
-  m_SizeDelta: {x: 192.2, y: 74}
+  m_AnchoredPosition: {x: 150, y: 51.365}
+  m_SizeDelta: {x: 147.13, y: 56.651}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2063266180
 MonoBehaviour:
@@ -1286,7 +1482,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2063266181}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2063266184}
+        m_TargetAssemblyTypeName: FireDungeon, Assembly-CSharp
+        m_MethodName: OnClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2063266181
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1325,3 +1533,34 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2063266178}
   m_CullTransparentMesh: 1
+--- !u!95 &2063266183
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2063266178}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b08e19a6dea514cfcbd3f092a50be704, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &2063266184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2063266178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 080639798965e45b9be76a2145db327c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
