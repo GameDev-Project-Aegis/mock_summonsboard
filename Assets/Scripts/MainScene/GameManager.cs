@@ -8,6 +8,12 @@ public class GameManager : MonoBehaviour
     public GameObject objectNomalDungeon;
     public GameObject objectFireDungeon;
     public GameObject objectfireDungeon01;
+
+    public GameObject dungeonSelect1;
+    public GameObject dungeonSelect2;
+    public GameObject dungeonSelect3;
+    public GameObject logborecover;
+
     public GameObject selectDungeon;
     public GameObject objectEntranceDungeon;
     public GameObject canvasGame;
@@ -19,19 +25,26 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         objectNomalDungeon.GetComponent<Animator>().SetTrigger("slideIn");
+        dungeonSelect1.GetComponent<Animator>().SetTrigger("slideIn");
+        logborecover.GetComponent<Animator>().SetTrigger("slideIn");
     }
 
     //DungeonObjectディレクトのスクリプトから呼び出し
 
     public void TapNomalDungeon(){
         objectNomalDungeon.GetComponent<Animator>().SetTrigger("slideOut");
+        dungeonSelect1.GetComponent<Animator>().SetTrigger("slideOut");
+        logborecover.GetComponent<Animator>().SetTrigger("slideOut");
         objectFireDungeon.GetComponent<Animator>().SetTrigger("slideIn");
+        dungeonSelect2.GetComponent<Animator>().SetTrigger("slideIn");
         selectDungeonLevel = 1;
     }
 
     public void TapFireDungeon(){
         objectFireDungeon.GetComponent<Animator>().SetTrigger("slideOut");
+        dungeonSelect2.GetComponent<Animator>().SetTrigger("slideOut");
         objectfireDungeon01.GetComponent<Animator>().SetTrigger("slideIn");
+        dungeonSelect3.GetComponent<Animator>().SetTrigger("slideIn");
         selectDungeonLevel = 2;
     }
     
@@ -42,17 +55,21 @@ public class GameManager : MonoBehaviour
     public void TapBackButton(){
         switch (selectDungeonLevel)
         {
-            //
             case 0:
                 break;
             case 1:
                 objectFireDungeon.GetComponent<Animator>().SetTrigger("slideOut");
+                dungeonSelect2.GetComponent<Animator>().SetTrigger("slideOut");
                 objectNomalDungeon.GetComponent<Animator>().SetTrigger("slideIn");
+                dungeonSelect1.GetComponent<Animator>().SetTrigger("slideIn");
+                logborecover.GetComponent<Animator>().SetTrigger("slideIn");
                 selectDungeonLevel = 0;
                 break;
             case 2:
                 objectfireDungeon01.GetComponent<Animator>().SetTrigger("slideOut");
+                dungeonSelect3.GetComponent<Animator>().SetTrigger("slideOut");
                 objectFireDungeon.GetComponent<Animator>().SetTrigger("slideIn");
+                dungeonSelect2.GetComponent<Animator>().SetTrigger("slideIn");
                 selectDungeonLevel = 1;
                 break;
         }
