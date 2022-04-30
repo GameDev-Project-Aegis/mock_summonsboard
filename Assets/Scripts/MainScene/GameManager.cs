@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Threading.Tasks;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
@@ -18,12 +19,16 @@ public class GameManager : MonoBehaviour
     public GameObject objectEntranceDungeon;
     public GameObject canvasGame;
 
+    public GameObject Brighter;
+
     //火のダンジョンレベルの時 => false
     //フロアセレクトレベルの時 => true
     int selectDungeonLevel = 0;
 
-    void Start()
+    async void Start()
     {
+        await Task.Delay(500);
+        Brighter.SetActive(false);
         objectNomalDungeon.GetComponent<Animator>().SetTrigger("slideIn");
         dungeonSelect1.GetComponent<Animator>().SetTrigger("slideIn");
         logborecover.GetComponent<Animator>().SetTrigger("slideIn");
