@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Drag1 : MonoBehaviour
+public class Drag2 : MonoBehaviour
 {
     private float constantZ;                     //ドラッグ時のZ座標
     private Vector3 pos;                         //味方の座標
@@ -52,8 +52,8 @@ public class Drag1 : MonoBehaviour
     void Initialize()
     {
         // オブジェクトを探す
-        GameObject ally1 = allyParent.transform.Find("ally (1)").gameObject;
-        // GameObject ally2 = GameObject.Find ("ally (2)");
+        // GameObject ally1 = allyParent.transform.Find("ally (1)").gameObject;
+        GameObject ally2 = allyParent.transform.Find ("ally (2)").gameObject;
         // GameObject ally3 = GameObject.Find ("ally (3)");
         // GameObject ally4 = GameObject.Find ("ally (4)");
         // GameObject enemy1 = GameObject.Find ("enemy (1)");
@@ -63,7 +63,7 @@ public class Drag1 : MonoBehaviour
         // ally1.transform.localPosition = new Vector3(105, 35, 0);
 
         pos.x = 105;
-        pos.y = 35;
+        pos.y = -35;
 
         //取得したマスの座標を配列に代入
         int[] a = PosNo(transform.localPosition.x, transform.localPosition.y);
@@ -72,7 +72,7 @@ public class Drag1 : MonoBehaviour
 
         board[h, v] = MONSTER.ALLY;
 
-        board[3, 2] = MONSTER.ALLY;   //ally(2)を配置
+        board[3, 1] = MONSTER.ALLY;   //ally(1)を配置
         board[3, 3] = MONSTER.ALLY;   //ally(3)を配置
         board[2, 3] = MONSTER.ALLY;   //ally(4)を配置
         board[1, 0] = MONSTER.ENEMY;  //enemy(1)を配置
