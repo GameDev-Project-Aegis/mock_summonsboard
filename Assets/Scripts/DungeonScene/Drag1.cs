@@ -24,8 +24,8 @@ public class Drag1 : MonoBehaviour
     GameObject allyParent = null;               //味方Parent
     [SerializeField]
     GameObject enemyParent = null;              //敵Parent
-    // [SerializeField]
-    // GameObject boardDisplay = null;             //盤面フィールド
+    [SerializeField]
+    GameObject boardDisplay = null;             //盤面フィールド
     
     const int WIDTH = 4;
     const int HEIGHT = 4;
@@ -81,11 +81,11 @@ public class Drag1 : MonoBehaviour
 
     // 盤面を表示
     void ShowBoard() {
-        //boardDisplayの全ての子オブジェクトを味方Parentに移行
-        // foreach (Transform child in boardDisplay.transform)
-        // {
-        //     transform.SetParent(allyParent.transform, false);
-        // }
+        // boardDisplayの全ての子オブジェクトを味方Parentに移行
+        foreach (Transform child in boardDisplay.transform)
+        {
+            transform.SetParent(allyParent.transform, false);
+        }
     }
 
     //クリック時の処理
@@ -103,10 +103,10 @@ public class Drag1 : MonoBehaviour
     //ドラッグ時の処理
     private void OnMouseDrag()
     {
-        // //味方Parentの子なら盤面フィールドに移行する
-        // if (transform.parent.gameObject == allyParent) {
-        //     transform.SetParent(boardDisplay.transform, false);
-        // }
+        //味方Parentの子なら盤面フィールドに移行する
+        if (transform.parent.gameObject == allyParent) {
+            transform.SetParent(boardDisplay.transform, false);
+        }
 
         //マウスポイントの取得と座標代入
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
