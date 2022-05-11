@@ -39,7 +39,7 @@ public class Drag1 : MonoBehaviour
         constantZ = transform.position.z;
 
         Initialize(); // 盤面の初期値を設定
-        ShowBoard();  // 盤面を表示
+        // ShowBoard();  // 盤面を表示
     }
 
     // Update is called once per frame
@@ -80,6 +80,7 @@ public class Drag1 : MonoBehaviour
     }
 
     // 盤面を表示
+    /*
     void ShowBoard() {
         // boardDisplayの全ての子オブジェクトを味方Parentに移行
         foreach (Transform child in boardDisplay.transform)
@@ -87,6 +88,7 @@ public class Drag1 : MonoBehaviour
             transform.SetParent(allyParent.transform, false);
         }
     }
+    */
 
     //クリック時の処理
     private void OnMouseDown()
@@ -103,16 +105,16 @@ public class Drag1 : MonoBehaviour
     //ドラッグ時の処理
     private void OnMouseDrag()
     {
-        //味方Parentの子なら盤面フィールドに移行する
-        if (transform.parent.gameObject == allyParent) {
-            transform.SetParent(boardDisplay.transform, false);
-        }
+        // //味方Parentの子なら盤面フィールドに移行する
+        // if (transform.parent.gameObject == allyParent) {
+        //     transform.SetParent(boardDisplay.transform, false);
+        // }
 
         //マウスポイントの取得と座標代入
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        mousePos.z = constantZ;
+        mousePos.z = constantZ - 1;
         transform.position = mousePos;
-        transform.SetSiblingIndex(99);  //一番手前に表示
+        //transform.SetSiblingIndex(99);  //一番手前に表示
     }
 
     //ドロップ時の処理
@@ -134,7 +136,7 @@ public class Drag1 : MonoBehaviour
         this.transform.SetSiblingIndex(0);
 
         //今いるマスを味方にする（機能していない？）
-        board[h, v] = MONSTER.ALLY;
+        // board[h, v] = MONSTER.ALLY;
     }
 
     //ドロップ時のマスの座標を取得
