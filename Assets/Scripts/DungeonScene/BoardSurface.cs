@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class BoardSurface : MonoBehaviour
 {
+    //駒オブジェクトをuGUIでアタッチする
     public GameObject ally1;
     public GameObject ally2;
     public GameObject ally3;
@@ -12,31 +13,34 @@ public class BoardSurface : MonoBehaviour
     public GameObject enemy1;
     public GameObject enemy2;
 
+    //ドラッグ時のみドラッグする駒をセットするための空オブジェクト
+    //「?」の記載はallyDragをnullと置けるようにするため（null許容型）
+    private GameObject? allyDrag;
+
+    //駒をタッチ操作する処理に必要な変数の定義
     private Camera mainCamera;
     private float PosZ;
+    private Vector3 mousePos;
+    private int[] PointArray = new int[2];
+    private int DragObjectNum;
+    private int InitialPointX;
+    private int InitialPointY;
+    private int PointX;
+    private int PointY;
+
+    //マス目に対応するlocal座標を配列としたもの
+    float[] PointValueXArray = {-105, -35, 35, 105};
+    float[] PointValueYArray = {105, 35, -35, -105};
 
     //盤面用の配列
-    //16行3列の配列を定義
-    //1列目->x位置(0-3)
-    //2列目->y位置(0-3)
-    //3列目->そのマス目のステータス(0:空, 1:ally1, 2:ally2, 3:ally3, 4:ally4, 5:enemy1, ... )
-    int[,] arrayBoard = new int[16, 3]{
-        {0,0,0},
-        {0,1,0},
-        {0,2,0},
-        {0,3,0},
-        {1,0,0},
-        {1,1,0},
-        {1,2,0},
-        {1,3,0},
-        {2,0,0},
-        {2,1,0},
-        {2,2,0},
-        {2,3,0},
-        {3,0,0},
-        {3,1,0},
-        {3,2,0},
-        {3,3,0}
+    //4行4列の配列を定義
+    //行->Y位置、列->X位置
+    //値はマスのステータスを表す（0->空, 1->ally1, 2->ally2, 3->ally3, 4->ally4, 5->enemy1, 6->enemy2,）
+    int[,] arrayBoard = new int[4, 4]{
+        {0,0,0,0},
+        {0,0,0,0},
+        {0,0,0,0},
+        {0,0,0,0}
     };
 
     
@@ -49,12 +53,12 @@ public class BoardSurface : MonoBehaviour
 
         //駒を初期配置に置く
         //①配列の設定（駒が初期配置されるマス目のステータスを変更）
-        arrayBoard[7,2] = 1;   // ally1
-        arrayBoard[11,2] = 2;  // ally2
-        arrayBoard[15,2] = 3;  // ally3
-        arrayBoard[14,2] = 4;  // ally4
-        arrayBoard[2,2] = 5;  // enemy1
-        arrayBoard[4,2] = 5;  // enemy2
+        arrayBoard[1,3] = 1;   // ally1
+        arrayBoard[2,3] = 2;  // ally2
+        arrayBoard[3,3] = 3;  // ally3
+        arrayBoard[3,2] = 4;  // ally4
+        arrayBoard[0,1] = 5;  // enemy1
+        arrayBoard[1,0] = 5;  // enemy2
         //②駒オブジェクトに座標を指定
         ally1.transform.localPosition = new Vector3(105, 35, 0);
         ally2.transform.localPosition = new Vector3(105, -35, 0);
@@ -67,23 +71,98 @@ public class BoardSurface : MonoBehaviour
     // クリック時
     void OnMouseDown()
     {
-        Debug.Log("Mouse Down");
-        Debug.Log(arrayBoard[6,2]);
-        Debug.Log(arrayBoard[7,2]);
+        //①タップしたマスに味方駒があるか判定
+        mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+        PointArray = GetBoardPoint(mousePos.x, mousePos.y); //GetBoardPoint()は下で定義してるよ！
+        InitialPointX = PointArray[0];
+        InitialPointY = PointArray[1];
+
+        //②味方駒がいた場合にallyDragにその駒のオブジェクトをセットする
+        if (arrayBoard[InitialPointY,InitialPointX] == 1) {
+            allyDrag = ally1;
+            DragObjectNum = 1;
+        }else if (arrayBoard[InitialPointY,InitialPointX] == 2) {
+            allyDrag = ally2;
+            DragObjectNum = 2;
+        }else if (arrayBoard[InitialPointY,InitialPointX] == 3) {
+            allyDrag = ally3;
+            DragObjectNum = 3;
+        }else if (arrayBoard[InitialPointY,InitialPointX] == 4) {
+            allyDrag = ally4;
+            DragObjectNum = 4;
+        }
     }
 
     // ドラッグ時
     void OnMouseDrag()
     {
-        Vector3 mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-        mousePos.z = PosZ;
-        ally1.transform.position = mousePos;
+        //allyDragに駒オブジェクトがセットされてる場合のみ実行
+        if (allyDrag != null) {
+            //マウスから取得した座標をallyDragオブジェクトに入れる
+            mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+            mousePos.z = PosZ;
+            allyDrag.transform.position = mousePos;
+        }
     }
 
     // ドロップ時
     void OnMouseUp()
     {
-        //
+        //allyDragに駒オブジェクトがセットされてる場合のみ実行
+        if (allyDrag != null) {
+            //①座標からマスを導出
+            mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+            PointArray = GetBoardPoint(mousePos.x, mousePos.y);
+            PointX = PointArray[0];
+            PointY = PointArray[1];
+
+            //②マスに駒が置かれていないかを判別
+            if (arrayBoard[PointY,PointX] == 0) {
+                //駒オブジェクトのpositionの書き換え
+                //ドロップ時のマウスの位置するマスに対応したローカル座標を配列PointValueX(Y)Arrayで取得している
+                mousePos.z = PosZ;
+                allyDrag.transform.localPosition = new Vector3(PointValueXArray[PointX], PointValueYArray[PointY], 0);
+                //配列arrayBoardの書き換え
+                arrayBoard[InitialPointY,InitialPointX] = 0;    //元いたマスのステータスを0にする
+                arrayBoard[PointY,PointX] = DragObjectNum;      //移動した先のマスのステータスを駒の番号にする
+            }else { // ↓ドロップした先に他の駒がいた場合の処理
+                //駒を初期位置に戻す
+                allyDrag.transform.localPosition = new Vector3(PointValueXArray[InitialPointX], PointValueYArray[InitialPointY], 0);
+            }
+
+            //allyDragを空に戻して置く
+            allyDrag = null;
+        }
+    }
+
+    //関数GetBoardPoint()
+    //float型の座標を引数で与えるとどのマス目かを返す関数
+    //返り値の型は長さ2の配列（int）
+    int[] GetBoardPoint(float mPosX, float mPosY) {
+        
+        if (mPosX > -2.2 && mPosX < -1.1) {
+            PointX = 0;
+        }else if (mPosX > -1.1 && mPosX < 0) {
+            PointX = 1;
+        }else if (mPosX > 0 && mPosX < 1.1) {
+            PointX = 2;
+        }else if (mPosX > 1.1 && mPosX < 2.2) {
+            PointX = 3;
+        }
+
+        if (mPosY < 2.2 && mPosY > 1.1) {
+            PointY = 0;
+        }else if (mPosY < 1.1 && mPosY > 0) {
+            PointY = 1;
+        }else if (mPosY < 0 && mPosY > -1.1) {
+            PointY = 2;
+        }else if (mPosY < -1.1 && mPosY > -2.2) {
+            PointY = 3;
+        }
+
+        int[] arr = {PointX, PointY};
+
+        return arr;
     }
     
 }
