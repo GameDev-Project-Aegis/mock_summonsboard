@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class GameManagerDungeonScene : MonoBehaviour
 {
-    private float constantZ;                     //ドラッグ時のZ座標
-    private Vector3 pos;                         //味方の座標
+    // private float constantZ;                     //ドラッグ時のZ座標
+    // private Vector3 pos;                         //味方の座標
 
 
     private const int pitch = 35;               //フィールドのマス目のピッチ
@@ -31,11 +31,13 @@ public class GameManagerDungeonScene : MonoBehaviour
 
     MONSTER[,] board = new MONSTER[WIDTH, HEIGHT];  //4*4配列を宣言
 
+    public GameObject ally1;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        constantZ = transform.position.z;
+        // constantZ = ally1.transform.position.z;
 
         Initialize(); // 盤面の初期値を設定
         // ShowBoard();  // 盤面を表示
@@ -51,7 +53,7 @@ public class GameManagerDungeonScene : MonoBehaviour
     void Initialize()
     {
         // オブジェクトを探す
-        GameObject ally1 = allyParent.transform.Find("ally (1)").gameObject;
+        // GameObject ally1 = allyParent.transform.Find("ally (1)").gameObject;
         // GameObject ally2 = GameObject.Find ("ally (2)");
         // GameObject ally3 = GameObject.Find ("ally (3)");
         // GameObject ally4 = GameObject.Find ("ally (4)");
@@ -69,7 +71,7 @@ public class GameManagerDungeonScene : MonoBehaviour
         int h = a[0];
         int v = a[1];
 
-        board[h, v] = MONSTER.ALLY;
+        // board[h, v] = MONSTER.ALLY;
 
         board[3, 2] = MONSTER.ALLY;   //ally(2)を配置
         board[3, 3] = MONSTER.ALLY;   //ally(3)を配置
@@ -89,54 +91,54 @@ public class GameManagerDungeonScene : MonoBehaviour
     }
     */
 
-    //クリック時の処理
-    private void OnMouseDown()
-    {
-        //取得したマスの座標を配列に代入
-        int[] a = PosNo(transform.localPosition.x, transform.localPosition.y);
-        int h = a[0];
-        int v = a[1];
+    // //クリック時の処理
+    // private void OnMouseDown()
+    // {
+    //     //取得したマスの座標を配列に代入
+    //     int[] a = PosNo(transform.localPosition.x, transform.localPosition.y);
+    //     int h = a[0];
+    //     int v = a[1];
 
-        //元いたマスを空欄にする
-        board[h, v] = MONSTER.EMPTY;
-    }
+    //     //元いたマスを空欄にする
+    //     board[h, v] = MONSTER.EMPTY;
+    // }
 
-    //ドラッグ時の処理
-    private void OnMouseDrag()
-    {
-        // //味方Parentの子なら盤面フィールドに移行する
-        // if (transform.parent.gameObject == allyParent) {
-        //     transform.SetParent(boardDisplay.transform, false);
-        // }
+    // //ドラッグ時の処理
+    // private void OnMouseDrag()
+    // {
+    //     // //味方Parentの子なら盤面フィールドに移行する
+    //     // if (transform.parent.gameObject == allyParent) {
+    //     //     transform.SetParent(boardDisplay.transform, false);
+    //     // }
 
-        //マウスポイントの取得と座標代入
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        mousePos.z = constantZ - 1;
-        transform.position = mousePos;
-        //transform.SetSiblingIndex(99);  //一番手前に表示
-    }
+    //     //マウスポイントの取得と座標代入
+    //     Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+    //     mousePos.z = constantZ - 1;
+    //     transform.position = mousePos;
+    //     //transform.SetSiblingIndex(99);  //一番手前に表示
+    // }
 
-    //ドロップ時の処理
-    private void OnMouseUp()
-    {
-        //取得したマスの座標を配列に代入
-        int[] a = PosNo(transform.localPosition.x, transform.localPosition.y);
-        int h = a[0];
-        int v = a[1];
+    // //ドロップ時の処理
+    // private void OnMouseUp()
+    // {
+    //     //取得したマスの座標を配列に代入
+    //     int[] a = PosNo(transform.localPosition.x, transform.localPosition.y);
+    //     int h = a[0];
+    //     int v = a[1];
         
-        //空欄にのみ配置可能
-        if (board[h, v] == MONSTER.EMPTY) {
-            pos.x = h * 2 * pitch - 105;     //自身のx座標
-            pos.y = -(v * 2 * pitch - 105);  //自身のy座標
-        }
+    //     //空欄にのみ配置可能
+    //     if (board[h, v] == MONSTER.EMPTY) {
+    //         pos.x = h * 2 * pitch - 105;     //自身のx座標
+    //         pos.y = -(v * 2 * pitch - 105);  //自身のy座標
+    //     }
 
-        //コマを配置
-        this.transform.localPosition = pos;
-        this.transform.SetSiblingIndex(0);
+    //     //コマを配置
+    //     this.transform.localPosition = pos;
+    //     // this.transform.SetSiblingIndex(0);
 
-        //今いるマスを味方にする（機能していない？）
-        // board[h, v] = MONSTER.ALLY;
-    }
+    //     //今いるマスを味方にする（機能していない？）
+    //     // board[h, v] = MONSTER.ALLY;
+    // }
 
     //ドロップ時のマスの座標を取得
     private int[] PosNo(float xaxis, float yaxis)

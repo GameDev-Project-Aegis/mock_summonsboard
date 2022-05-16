@@ -1327,6 +1327,7 @@ MonoBehaviour:
   allyParent: {fileID: 1560616891}
   enemyParent: {fileID: 178341084}
   boardDisplay: {fileID: 398561759}
+  ally1: {fileID: 1689481665}
 --- !u!4 &1565934408
 Transform:
   m_ObjectHideFlags: 0
