@@ -57,15 +57,15 @@ public class BoardSurface : MonoBehaviour
         arrayBoard[2,3] = 2;  // ally2
         arrayBoard[3,3] = 3;  // ally3
         arrayBoard[3,2] = 4;  // ally4
-        arrayBoard[0,1] = 5;  // enemy1
-        arrayBoard[1,0] = 5;  // enemy2
+        arrayBoard[1,0] = 5;  // enemy1
+        arrayBoard[0,1] = 6;  // enemy2
         //②駒オブジェクトに座標を指定
         ally1.transform.localPosition = new Vector3(105, 35, 0);
         ally2.transform.localPosition = new Vector3(105, -35, 0);
         ally3.transform.localPosition = new Vector3(105, -105, 0);
         ally4.transform.localPosition = new Vector3(35, -105, 0);
-        enemy1.transform.localPosition = new Vector3(-35, 105, 0);
-        enemy2.transform.localPosition = new Vector3(-105, 35, 0);
+        enemy1.transform.localPosition = new Vector3(-105, 35, 0);
+        enemy2.transform.localPosition = new Vector3(-35, 105, 0);
 
         //アニメーション作成のために一時的にattack()を開始時に呼び出し
         //ally1.GetComponent<ally1>().Attack();
@@ -81,18 +81,23 @@ public class BoardSurface : MonoBehaviour
         InitialPointY = PointArray[1];
 
         //②味方駒がいた場合にallyDragにその駒のオブジェクトをセットする
+        //transform.SetAsLastSibling()でヒエラルキー内の順序を変更し，一番手前に表示
         if (arrayBoard[InitialPointY,InitialPointX] == 1) {
             allyDrag = ally1;
             DragObjectNum = 1;
+            ally1.transform.SetAsLastSibling();
         }else if (arrayBoard[InitialPointY,InitialPointX] == 2) {
             allyDrag = ally2;
             DragObjectNum = 2;
+            ally2.transform.SetAsLastSibling();
         }else if (arrayBoard[InitialPointY,InitialPointX] == 3) {
             allyDrag = ally3;
             DragObjectNum = 3;
+            ally3.transform.SetAsLastSibling();
         }else if (arrayBoard[InitialPointY,InitialPointX] == 4) {
             allyDrag = ally4;
             DragObjectNum = 4;
+            ally4.transform.SetAsLastSibling();
         }
     }
 
