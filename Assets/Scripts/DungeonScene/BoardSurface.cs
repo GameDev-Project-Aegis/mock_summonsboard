@@ -46,7 +46,81 @@ public class BoardSurface : MonoBehaviour
 
     //ドラッグ時に味方駒を半透明とするためのAllyをアタッチしておく
     public CanvasGroup Ally;
-    
+
+    //各モンスターの動く範囲のマスを配列としておく
+    int[,] arrayAlly1 = {
+        //左上矢印
+        {-1,1},
+        //左矢印
+        {-3,0},
+        {-2,0},
+        {-1,0},
+        //左下矢印
+        {-1,-1},
+        //右上矢印
+        {1,1},
+        {2,2},
+        {3,3},
+        //右矢印
+        {1,0},
+        {2,0},
+        {3,0},
+        //右下矢印
+        {1,-1},
+        {2,-2},
+        {3,-3}
+    };
+    int[,] arrayAlly2 = {
+        //左上矢印
+        {-1,1},
+        //左矢印
+        {-3,0},
+        {-2,0},
+        {-1,0},
+        //左下矢印
+        {-1,-1},
+        //上矢印
+        {0,1},
+        //右上矢印
+        {1,1},
+        //右矢印
+        {1,0},
+        {2,0},
+        {3,0},
+        //右下矢印
+        {1,-1}
+    };
+    int[,] arrayAlly3 = {
+        //左上矢印
+        {-1,1},
+        //左矢印
+        {-1,0},
+        //左下矢印
+        {-1,-1},
+        //右上矢印
+        {1,1},
+        //右矢印
+        {1,0},
+        //右下矢印
+        {1,-1}
+    };
+
+    int[,] arrayAlly4 = {
+        //左上矢印
+        {-1,1},
+        //左矢印
+        {-3,0},
+        {-2,0},
+        {-1,0},
+        //上矢印
+        {0,1},
+        //下矢印
+        {0,-1},
+        //右矢印
+        {1,0},
+        {2,0},
+        {3,0}
+    };    
     // Start is called before the first frame update
     void Start()
     {
@@ -85,26 +159,26 @@ public class BoardSurface : MonoBehaviour
 
         //②味方駒がいた場合にallyDragにその駒のオブジェクトをセットする
         //transform.SetAsLastSibling()でヒエラルキー内の順序を変更し，一番手前に表示
-        //③alluDragがセットされた場合に味方駒のcanvasを半透明にする
         if (arrayBoard[InitialPointY,InitialPointX] == 1) {
             allyDrag = ally1;
             DragObjectNum = 1;
             ally1.transform.SetAsLastSibling();
-            Ally.alpha = 0.6f;
         }else if (arrayBoard[InitialPointY,InitialPointX] == 2) {
             allyDrag = ally2;
             DragObjectNum = 2;
             ally2.transform.SetAsLastSibling();
-            Ally.alpha = 0.6f;
         }else if (arrayBoard[InitialPointY,InitialPointX] == 3) {
             allyDrag = ally3;
             DragObjectNum = 3;
             ally3.transform.SetAsLastSibling();
-            Ally.alpha = 0.6f;
         }else if (arrayBoard[InitialPointY,InitialPointX] == 4) {
             allyDrag = ally4;
             DragObjectNum = 4;
             ally4.transform.SetAsLastSibling();
+        }
+
+        if (allyDrag != null){
+            //③alluDragがセットされた場合に味方駒のcanvasを半透明にする
             Ally.alpha = 0.6f;
         }
     }
