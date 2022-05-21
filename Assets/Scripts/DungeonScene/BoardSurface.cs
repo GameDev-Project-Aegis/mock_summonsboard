@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BoardSurface : MonoBehaviour
 {
@@ -43,6 +44,8 @@ public class BoardSurface : MonoBehaviour
         {0,0,0,0}
     };
 
+    //ドラッグ時に味方駒を半透明とするためのAllyをアタッチしておく
+    public CanvasGroup Ally;
     
     // Start is called before the first frame update
     void Start()
@@ -82,22 +85,27 @@ public class BoardSurface : MonoBehaviour
 
         //②味方駒がいた場合にallyDragにその駒のオブジェクトをセットする
         //transform.SetAsLastSibling()でヒエラルキー内の順序を変更し，一番手前に表示
+        //③alluDragがセットされた場合に味方駒のcanvasを半透明にする
         if (arrayBoard[InitialPointY,InitialPointX] == 1) {
             allyDrag = ally1;
             DragObjectNum = 1;
             ally1.transform.SetAsLastSibling();
+            Ally.alpha = 0.6f;
         }else if (arrayBoard[InitialPointY,InitialPointX] == 2) {
             allyDrag = ally2;
             DragObjectNum = 2;
             ally2.transform.SetAsLastSibling();
+            Ally.alpha = 0.6f;
         }else if (arrayBoard[InitialPointY,InitialPointX] == 3) {
             allyDrag = ally3;
             DragObjectNum = 3;
             ally3.transform.SetAsLastSibling();
+            Ally.alpha = 0.6f;
         }else if (arrayBoard[InitialPointY,InitialPointX] == 4) {
             allyDrag = ally4;
             DragObjectNum = 4;
             ally4.transform.SetAsLastSibling();
+            Ally.alpha = 0.6f;
         }
     }
 
@@ -138,8 +146,11 @@ public class BoardSurface : MonoBehaviour
                 allyDrag.transform.localPosition = new Vector3(PointValueXArray[InitialPointX], PointValueYArray[InitialPointY], 0);
             }
 
-            //allyDragを空に戻して置く
+            //③allyDragを空に戻して置く
             allyDrag = null;
+
+            //④alluDragがセットされた場合に味方駒のcanvasを半透明にする
+            Ally.alpha = 1.0f;
         }
     }
 
@@ -172,5 +183,4 @@ public class BoardSurface : MonoBehaviour
 
         return arr;
     }
-    
 }
