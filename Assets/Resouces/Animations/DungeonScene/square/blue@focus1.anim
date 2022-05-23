@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: '@focus2'
+  m_Name: blue@focus1
   serializedVersion: 6
   m_Legacy: 0
   m_Compressed: 0
@@ -19,18 +19,18 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: {x: 0, y: 0, z: 0}
-        inSlope: {x: 0, y: 0, z: 35.9401}
-        outSlope: {x: 0, y: 0, z: 35.9401}
+        value: {x: 0, y: 0, z: 360}
+        inSlope: {x: 0, y: 0, z: -35.9401}
+        outSlope: {x: 0, y: 0, z: -35.9401}
         tangentMode: 0
         weightedMode: 0
         inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
         outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
       - serializedVersion: 3
         time: 10.016666
-        value: {x: 0, y: 0, z: 360}
-        inSlope: {x: 0, y: 0, z: 35.9401}
-        outSlope: {x: 0, y: 0, z: 35.9401}
+        value: {x: 0, y: 0, z: 0}
+        inSlope: {x: 0, y: 0, z: -35.9401}
+        outSlope: {x: 0, y: 0, z: -35.9401}
         tangentMode: 0
         weightedMode: 0
         inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
@@ -280,18 +280,18 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0
-        inSlope: 35.9401
-        outSlope: 35.9401
+        value: 360
+        inSlope: -35.9401
+        outSlope: -35.9401
         tangentMode: 34
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 10.016666
-        value: 360
-        inSlope: 35.9401
-        outSlope: 35.9401
+        value: 0
+        inSlope: -35.9401
+        outSlope: -35.9401
         tangentMode: 34
         weightedMode: 0
         inWeight: 0.33333334
