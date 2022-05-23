@@ -2634,6 +2634,7 @@ MonoBehaviour:
   ally4: {fileID: 532248494}
   enemy1: {fileID: 805949108}
   enemy2: {fileID: 256312505}
+  Board: {fileID: 110610397}
   Ally: {fileID: 2095445527}
 --- !u!1 &682592829
 GameObject:

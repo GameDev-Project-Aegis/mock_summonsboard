@@ -44,6 +44,20 @@ public class BoardSurface : MonoBehaviour
         {0,0,0,0}
     };
 
+    //盤面に番号を振る
+    int[,] arrayBoardNum = new int[4, 4]{
+        {1,2,3,4},
+        {5,6,7,8},
+        {9,10,11,12},
+        {13,14,15,16}
+    };
+    //盤面の番号を格納するための変数
+    private int boardNum;
+    //プレハブSquareをセットするための空オブジェクト
+    private GameObject? Square;
+    //子オブジェクトとしてプレハブを取得するためのBoardオブジェクトをアタッチ
+    public GameObject Board;
+
     //ドラッグ時に味方駒を半透明とするためのAllyをアタッチしておく
     public CanvasGroup Ally;
 
@@ -178,8 +192,16 @@ public class BoardSurface : MonoBehaviour
         }
 
         if (allyDrag != null){
-            //③alluDragがセットされた場合に味方駒のcanvasを半透明にする
+            //③味方駒のcanvasを半透明にする
             Ally.alpha = 0.6f;
+            //④初期配置の場所のSquareのHighLightを表示する
+            boardNum = arrayBoardNum[InitialPointY,InitialPointX];
+            // Square = Board.transform.GetChild(boardNum).gameObject;
+            // if(Square != null){
+            //     Image image = Square.Find("HighLight").GetComponent<image>();
+            //     var c = image.color;
+            //     image.color = new Color(c.r, c.g, c.b, 0.7f);
+            // }
         }
     }
 
