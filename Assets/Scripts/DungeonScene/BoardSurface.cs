@@ -20,23 +20,23 @@ public class BoardSurface : MonoBehaviour
         //アニメーション作成のために一時的にattack()を開始時に呼び出し
         //ally1.GetComponent<ally1>().Attack();
 
-        //Squareを配列に入れる
-        SquareBox[0] = square01;
-        SquareBox[1] = square02;
-        SquareBox[2] = square03;
-        SquareBox[3] = square04;
-        SquareBox[4] = square05;
-        SquareBox[5] = square06;
-        SquareBox[6] = square07;
-        SquareBox[7] = square08;
-        SquareBox[8] = square09;
-        SquareBox[9] = square10;
-        SquareBox[10] = square11;
-        SquareBox[11] = square12;
-        SquareBox[12] = square13;
-        SquareBox[13] = square14;
-        SquareBox[14] = square15;
-        SquareBox[15] = square16;
+        // //Squareを配列に入れる
+        // SquareBox[0] = square01;
+        // SquareBox[1] = square02;
+        // SquareBox[2] = square03;
+        // SquareBox[3] = square04;
+        // SquareBox[4] = square05;
+        // SquareBox[5] = square06;
+        // SquareBox[6] = square07;
+        // SquareBox[7] = square08;
+        // SquareBox[8] = square09;
+        // SquareBox[9] = square10;
+        // SquareBox[10] = square11;
+        // SquareBox[11] = square12;
+        // SquareBox[12] = square13;
+        // SquareBox[13] = square14;
+        // SquareBox[14] = square15;
+        // SquareBox[15] = square16;
     }
 
     // クリック時
@@ -48,14 +48,11 @@ public class BoardSurface : MonoBehaviour
         if (allyDrag != null){
             //③味方駒のcanvasを半透明にする
             Ally.alpha = 0.6f;
-            //④初期配置の場所のSquareのHighLight(originally)を表示する
-            boardNum = arrayBoardNum[InitialPointY,InitialPointX];
-            Debug.Log(boardNum);
-            // Square = Board.transform.GetChild(boardNum).gameObject;
-            Square = SquareBox[boardNum - 1];
-            if(Square != null){
-                Square.transform.Find("HighLight").GetComponent<Animator>().SetBool("drag",true);
-            }
+            //④初期配置の場所にHighLight(originally)を表示する
+            HighLight_O.transform.localPosition = new Vector3(PointValueXArray[InitialPointX], PointValueYArray[InitialPointY], 0);
+            HighLight_O.GetComponent<Animator>().SetTrigger("setOriginally");
+            //HighLight(distination)を表示する
+            HighLight_D.GetComponent<Animator>().SetTrigger("setDistination");
         }
     }
 
@@ -70,15 +67,10 @@ public class BoardSurface : MonoBehaviour
             //座標からマス目を取得
             mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
             PointArray = GetBoardPoint(mousePos.x, mousePos.y);
+            //HighLghtの移動
             PointX = PointArray[0];
             PointY = PointArray[1];
-            boardNum = arrayBoardNum[PointY,PointX];
-            //Squareが前フレームと変わっている場合
-            if (Square != SquareBox[boardNum - 1]){
-                Square.transform.Find("HighLight").GetComponent<Animator>().SetTrigger("missDist");
-                SquareBox[boardNum - 1].transform.Find("HighLight").GetComponent<Animator>().SetTrigger("enterDist");
-                Square = SquareBox[boardNum - 1];
-            }
+            HighLight_D.transform.localPosition = new Vector3(PointValueXArray[PointX], PointValueYArray[PointY], 0);
         }
     }
 
@@ -89,13 +81,9 @@ public class BoardSurface : MonoBehaviour
         if (allyDrag != null) {
             //1.モンスターをドロップしたときの処理を行う関数
             DropMonster();
-        }
-        //HighLightを解除する
-        if(Square != null){
-            Debug.Log("解除");
-            Square.transform.Find("HighLight").GetComponent<Animator>().SetBool("drag",false);
-            Square.transform.Find("HighLight").GetComponent<Animator>().SetTrigger("drop");
-            Square = null;
+            //2.HighLightの解除
+            HighLight_O.GetComponent<Animator>().SetTrigger("outOriginally");
+            HighLight_D.GetComponent<Animator>().SetTrigger("outDistination");
         }
     }
 
@@ -265,42 +253,47 @@ public class BoardSurface : MonoBehaviour
     //2.モンスターをドラッグさせている間の味方駒の表示エフェクト
     //2.1.変数
     //盤面に番号を振る
-    int[,] arrayBoardNum = new int[4, 4]{
-        {1,2,3,4},
-        {5,6,7,8},
-        {9,10,11,12},
-        {13,14,15,16}
-    };
+    // int[,] arrayBoardNum = new int[4, 4]{
+    //     {1,2,3,4},
+    //     {5,6,7,8},
+    //     {9,10,11,12},
+    //     {13,14,15,16}
+    // };
     //盤面の番号を格納するための変数
-    private int boardNum;
+    // private int boardNum;
     //プレハブSquareをセットするための空オブジェクト
-    private GameObject? Square;
+    // private GameObject? Square;
     //子オブジェクトとしてプレハブを取得するためのBoardオブジェクトをアタッチ
-    public GameObject Board;
+    // public GameObject Board;
 
-    //プレハブを全て予めアタッチしておく
-    public GameObject square01;
-    public GameObject square02;
-    public GameObject square03;
-    public GameObject square04;
-    public GameObject square05;
-    public GameObject square06;
-    public GameObject square07;
-    public GameObject square08;
-    public GameObject square09;
-    public GameObject square10;
-    public GameObject square11;
-    public GameObject square12;
-    public GameObject square13;
-    public GameObject square14;
-    public GameObject square15;
-    public GameObject square16;
+    // //プレハブを全て予めアタッチしておく
+    // public GameObject square01;
+    // public GameObject square02;
+    // public GameObject square03;
+    // public GameObject square04;
+    // public GameObject square05;
+    // public GameObject square06;
+    // public GameObject square07;
+    // public GameObject square08;
+    // public GameObject square09;
+    // public GameObject square10;
+    // public GameObject square11;
+    // public GameObject square12;
+    // public GameObject square13;
+    // public GameObject square14;
+    // public GameObject square15;
+    // public GameObject square16;
 
-    //アタッチしたオブジェクトを配列とする
-    GameObject[] SquareBox = new GameObject[16];
+    // //アタッチしたオブジェクトを配列とする
+    // GameObject[] SquareBox = new GameObject[16];
 
     //ドラッグ時に味方駒を半透明とするためのAllyをアタッチしておく
     public CanvasGroup Ally;
+    
+    //HighLight(originally)をアタッチ
+    public GameObject HighLight_O;
+    //HighLight(distination)をアタッチ
+    public GameObject HighLight_D;
 
     // //各モンスターの動く範囲のマスを配列としておく
     // int[,] arrayAlly1 = {
@@ -376,5 +369,4 @@ public class BoardSurface : MonoBehaviour
     //     {2,0},
     //     {3,0}
     // };
-
 }
