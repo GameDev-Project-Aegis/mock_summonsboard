@@ -6,118 +6,7 @@ using UnityEngine.UI;
 
 public class BoardSurface : MonoBehaviour
 {
-    //盤面に番号を振る
-    int[,] arrayBoardNum = new int[4, 4]{
-        {1,2,3,4},
-        {5,6,7,8},
-        {9,10,11,12},
-        {13,14,15,16}
-    };
-    //盤面の番号を格納するための変数
-    private int boardNum;
-    //プレハブSquareをセットするための空オブジェクト
-    private GameObject? Square;
-    //子オブジェクトとしてプレハブを取得するためのBoardオブジェクトをアタッチ
-    public GameObject Board;
-    // //プレハブを全て予めアタッチしておく
-    // public GameObject square01;
-    // public GameObject square02;
-    // public GameObject square03;
-    // public GameObject square04;
-    // public GameObject square05;
-    // public GameObject square06;
-    // public GameObject square07;
-    // public GameObject square08;
-    // public GameObject square09;
-    // public GameObject square10;
-    // public GameObject square11;
-    // public GameObject square12;
-    // public GameObject square13;
-    // public GameObject square14;
-    // public GameObject square15;
-    // public GameObject square16;
-    // public GameObject square17;
-    // public GameObject square18;
-    // public GameObject square19;
-    // public GameObject square20;
-
-    //ドラッグ時に味方駒を半透明とするためのAllyをアタッチしておく
-    public CanvasGroup Ally;
-
-    //各モンスターの動く範囲のマスを配列としておく
-    int[,] arrayAlly1 = {
-        //左上矢印
-        {-1,1},
-        //左矢印
-        {-3,0},
-        {-2,0},
-        {-1,0},
-        //左下矢印
-        {-1,-1},
-        //右上矢印
-        {1,1},
-        {2,2},
-        {3,3},
-        //右矢印
-        {1,0},
-        {2,0},
-        {3,0},
-        //右下矢印
-        {1,-1},
-        {2,-2},
-        {3,-3}
-    };
-    int[,] arrayAlly2 = {
-        //左上矢印
-        {-1,1},
-        //左矢印
-        {-3,0},
-        {-2,0},
-        {-1,0},
-        //左下矢印
-        {-1,-1},
-        //上矢印
-        {0,1},
-        //右上矢印
-        {1,1},
-        //右矢印
-        {1,0},
-        {2,0},
-        {3,0},
-        //右下矢印
-        {1,-1}
-    };
-    int[,] arrayAlly3 = {
-        //左上矢印
-        {-1,1},
-        //左矢印
-        {-1,0},
-        //左下矢印
-        {-1,-1},
-        //右上矢印
-        {1,1},
-        //右矢印
-        {1,0},
-        //右下矢印
-        {1,-1}
-    };
-
-    int[,] arrayAlly4 = {
-        //左上矢印
-        {-1,1},
-        //左矢印
-        {-3,0},
-        {-2,0},
-        {-1,0},
-        //上矢印
-        {0,1},
-        //下矢印
-        {0,-1},
-        //右矢印
-        {1,0},
-        {2,0},
-        {3,0}
-    };    
+    //app層
     // Start is called before the first frame update
     void Start()
     {
@@ -125,17 +14,35 @@ public class BoardSurface : MonoBehaviour
         mainCamera = Camera.main;
         PosZ = ally1.transform.position.z;
 
-        //駒を初期配置に置く
+        //1.駒を初期配置に置く
         PlaceMonsterInitially();
 
         //アニメーション作成のために一時的にattack()を開始時に呼び出し
         //ally1.GetComponent<ally1>().Attack();
+
+        //Squareを配列に入れる
+        SquareBox[0] = square01;
+        SquareBox[1] = square02;
+        SquareBox[2] = square03;
+        SquareBox[3] = square04;
+        SquareBox[4] = square05;
+        SquareBox[5] = square06;
+        SquareBox[6] = square07;
+        SquareBox[7] = square08;
+        SquareBox[8] = square09;
+        SquareBox[9] = square10;
+        SquareBox[10] = square11;
+        SquareBox[11] = square12;
+        SquareBox[12] = square13;
+        SquareBox[13] = square14;
+        SquareBox[14] = square15;
+        SquareBox[15] = square16;
     }
 
     // クリック時
     void OnMouseDown()
     {
-        //タップした先のモンスターを返す関数（いない場合はnullを返す）
+        //1.タップした先のモンスターを返す関数（いない場合はnullを返す）
         allyDrag = MonsterOnTaped();
 
         if (allyDrag != null){
@@ -144,7 +51,8 @@ public class BoardSurface : MonoBehaviour
             //④初期配置の場所のSquareのHighLight(originally)を表示する
             boardNum = arrayBoardNum[InitialPointY,InitialPointX];
             Debug.Log(boardNum);
-            Square = Board.transform.GetChild(boardNum).gameObject;
+            // Square = Board.transform.GetChild(boardNum).gameObject;
+            Square = SquareBox[boardNum - 1];
             if(Square != null){
                 Square.transform.Find("HighLight").GetComponent<Animator>().SetBool("drag",true);
             }
@@ -156,8 +64,21 @@ public class BoardSurface : MonoBehaviour
     {
         //allyDragに駒オブジェクトがセットされてる場合のみ実行
         if (allyDrag != null) {
-            //モンスターをドラッグに合わせて移動させる関数
+            //1.モンスターをドラッグに合わせて移動させる関数
             DragMonster();
+            //2.ドラッグした先のHighLightをdistinationにする
+            //座標からマス目を取得
+            mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+            PointArray = GetBoardPoint(mousePos.x, mousePos.y);
+            PointX = PointArray[0];
+            PointY = PointArray[1];
+            boardNum = arrayBoardNum[PointY,PointX];
+            //Squareが前フレームと変わっている場合
+            if (Square != SquareBox[boardNum - 1]){
+                Square.transform.Find("HighLight").GetComponent<Animator>().SetTrigger("missDist");
+                SquareBox[boardNum - 1].transform.Find("HighLight").GetComponent<Animator>().SetTrigger("enterDist");
+                Square = SquareBox[boardNum - 1];
+            }
         }
     }
 
@@ -166,7 +87,7 @@ public class BoardSurface : MonoBehaviour
     {
         //allyDragに駒オブジェクトがセットされてる場合のみ実行
         if (allyDrag != null) {
-            //モンスターをドロップしたときの処理を行う関数
+            //1.モンスターをドロップしたときの処理を行う関数
             DropMonster();
         }
         //HighLightを解除する
@@ -178,8 +99,10 @@ public class BoardSurface : MonoBehaviour
         }
     }
 
+    //model層
+    
     //1.味方駒をドラッグ&ドロップする機能
-    //1.1 変数
+    //1.1.変数
     //駒オブジェクトをuGUIでアタッチする
     public GameObject ally1;
     public GameObject ally2;
@@ -218,7 +141,7 @@ public class BoardSurface : MonoBehaviour
         {0,0,0,0}
     };
 
-    //1.2 関数
+    //1.2.関数
     //駒を初期配置に置く関数
     void PlaceMonsterInitially(){
         //①配列の設定（駒が初期配置されるマス目のステータスを変更）
@@ -338,5 +261,120 @@ public class BoardSurface : MonoBehaviour
         //④alluDragがセットされた場合に味方駒のcanvasを半透明にする
         Ally.alpha = 1.0f;
     }
+
+    //2.モンスターをドラッグさせている間の味方駒の表示エフェクト
+    //2.1.変数
+    //盤面に番号を振る
+    int[,] arrayBoardNum = new int[4, 4]{
+        {1,2,3,4},
+        {5,6,7,8},
+        {9,10,11,12},
+        {13,14,15,16}
+    };
+    //盤面の番号を格納するための変数
+    private int boardNum;
+    //プレハブSquareをセットするための空オブジェクト
+    private GameObject? Square;
+    //子オブジェクトとしてプレハブを取得するためのBoardオブジェクトをアタッチ
+    public GameObject Board;
+
+    //プレハブを全て予めアタッチしておく
+    public GameObject square01;
+    public GameObject square02;
+    public GameObject square03;
+    public GameObject square04;
+    public GameObject square05;
+    public GameObject square06;
+    public GameObject square07;
+    public GameObject square08;
+    public GameObject square09;
+    public GameObject square10;
+    public GameObject square11;
+    public GameObject square12;
+    public GameObject square13;
+    public GameObject square14;
+    public GameObject square15;
+    public GameObject square16;
+
+    //アタッチしたオブジェクトを配列とする
+    GameObject[] SquareBox = new GameObject[16];
+
+    //ドラッグ時に味方駒を半透明とするためのAllyをアタッチしておく
+    public CanvasGroup Ally;
+
+    // //各モンスターの動く範囲のマスを配列としておく
+    // int[,] arrayAlly1 = {
+    //     //左上矢印
+    //     {-1,1},
+    //     //左矢印
+    //     {-3,0},
+    //     {-2,0},
+    //     {-1,0},
+    //     //左下矢印
+    //     {-1,-1},
+    //     //右上矢印
+    //     {1,1},
+    //     {2,2},
+    //     {3,3},
+    //     //右矢印
+    //     {1,0},
+    //     {2,0},
+    //     {3,0},
+    //     //右下矢印
+    //     {1,-1},
+    //     {2,-2},
+    //     {3,-3}
+    // };
+    // int[,] arrayAlly2 = {
+    //     //左上矢印
+    //     {-1,1},
+    //     //左矢印
+    //     {-3,0},
+    //     {-2,0},
+    //     {-1,0},
+    //     //左下矢印
+    //     {-1,-1},
+    //     //上矢印
+    //     {0,1},
+    //     //右上矢印
+    //     {1,1},
+    //     //右矢印
+    //     {1,0},
+    //     {2,0},
+    //     {3,0},
+    //     //右下矢印
+    //     {1,-1}
+    // };
+    // int[,] arrayAlly3 = {
+    //     //左上矢印
+    //     {-1,1},
+    //     //左矢印
+    //     {-1,0},
+    //     //左下矢印
+    //     {-1,-1},
+    //     //右上矢印
+    //     {1,1},
+    //     //右矢印
+    //     {1,0},
+    //     //右下矢印
+    //     {1,-1}
+    // };
+
+    // int[,] arrayAlly4 = {
+    //     //左上矢印
+    //     {-1,1},
+    //     //左矢印
+    //     {-3,0},
+    //     {-2,0},
+    //     {-1,0},
+    //     //上矢印
+    //     {0,1},
+    //     //下矢印
+    //     {0,-1},
+    //     //右矢印
+    //     {1,0},
+    //     {2,0},
+    //     {3,0}
+    // };
 
 }
