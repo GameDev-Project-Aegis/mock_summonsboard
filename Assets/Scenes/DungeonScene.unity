@@ -2272,7 +2272,7 @@ MonoBehaviour:
   FocusLeftDown: {fileID: 291163116}
   FocusUp: {fileID: 1823492312}
   FocusDown: {fileID: 115782197}
-  FocuRightUp: {fileID: 485345805}
+  FocusRightUp: {fileID: 485345805}
   FocusRight: {fileID: 1866339224}
   FocusRightDown: {fileID: 877343476}
   Ally: {fileID: 2095445527}

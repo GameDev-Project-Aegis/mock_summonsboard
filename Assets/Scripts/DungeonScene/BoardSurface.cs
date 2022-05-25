@@ -183,12 +183,29 @@ public class BoardSurface : MonoBehaviour
             DragMonster();
             //2.ドラッグした先のHighLightをdistinationにする
             //座標からマス目を取得
-            mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+            // mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
             PointArray = GetBoardPoint(mousePos.x, mousePos.y);
             //HighLghtの移動
             PointX = PointArray[0];
             PointY = PointArray[1];
             HighLight_D.transform.localPosition = new Vector3(PointValueXArray[PointX], PointValueYArray[PointY], 0);
+
+            //座標が盤面から外に出た時に駒を初期位置に戻す
+            if (mousePos.x < -2.2 || mousePos.x > 2.2 || mousePos.y < -2.2 || mousePos.y > 2.2){
+                allyDrag.transform.localPosition = new Vector3(PointValueXArray[InitialPointX], PointValueYArray[InitialPointY], 0);
+
+                HighLight_O.GetComponent<Animator>().SetTrigger("outOriginally");
+                HighLight_D.GetComponent<Animator>().SetTrigger("outDistination");
+
+                //2.focusの解除
+                FocusParent.SetActive(false);
+
+                //③allyDragを空に戻して置く
+                allyDrag = null;
+
+                //④alluDragがセットされた場合に味方駒のcanvasを半透明にする
+                Ally.alpha = 1.0f;
+            }
         }
     }
 
