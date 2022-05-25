@@ -20,23 +20,15 @@ public class BoardSurface : MonoBehaviour
         //アニメーション作成のために一時的にattack()を開始時に呼び出し
         //ally1.GetComponent<ally1>().Attack();
 
-        // //Squareを配列に入れる
-        // SquareBox[0] = square01;
-        // SquareBox[1] = square02;
-        // SquareBox[2] = square03;
-        // SquareBox[3] = square04;
-        // SquareBox[4] = square05;
-        // SquareBox[5] = square06;
-        // SquareBox[6] = square07;
-        // SquareBox[7] = square08;
-        // SquareBox[8] = square09;
-        // SquareBox[9] = square10;
-        // SquareBox[10] = square11;
-        // SquareBox[11] = square12;
-        // SquareBox[12] = square13;
-        // SquareBox[13] = square14;
-        // SquareBox[14] = square15;
-        // SquareBox[15] = square16;
+        //Focusを配列に入れる
+        FocusBox[0] = FocusLeftUp;
+        FocusBox[1] = FocusLeft;
+        FocusBox[2] = FocusLeftDown;
+        FocusBox[3] = FocusUp;
+        FocusBox[4] = FocusDown;
+        FocusBox[5] = FocusRightUp;
+        FocusBox[6] = FocusRight;
+        FocusBox[7] = FocusRightDown;
     }
 
     // クリック時
@@ -53,6 +45,132 @@ public class BoardSurface : MonoBehaviour
             HighLight_O.GetComponent<Animator>().SetTrigger("setOriginally");
             //HighLight(distination)を表示する
             HighLight_D.GetComponent<Animator>().SetTrigger("setDistination");
+
+            //Focusを座標にセットする
+            FocusParent.SetActive(true);
+            FocusParent.transform.localPosition = new Vector3(PointValueXArray[InitialPointX], PointValueYArray[InitialPointY], 0);
+            //対象のFocusプレハブをアクションさせる
+            if (allyDrag == ally1){
+                moveAlly = moveAlly1;
+            } else if (allyDrag == ally2){
+                moveAlly = moveAlly2;
+            } else if (allyDrag == ally3){
+                moveAlly = moveAlly3;
+            } else if (allyDrag == ally4){
+                moveAlly = moveAlly4;
+            }
+            //LeftUp
+            if (moveAlly[0] != 0){
+                if (InitialPointY >= 1 && InitialPointX >= 1){
+                    FocusLeftUp.transform.GetChild(0).GetComponent<focus>().FocusMove();
+                }
+            }
+            if (moveAlly[0] == 2){
+                if (InitialPointY >= 2 && InitialPointX >= 2){
+                    FocusLeftUp.transform.GetChild(1).GetComponent<focus>().FocusMove();
+                }
+                if (InitialPointY >= 3 && InitialPointX >= 3){
+                    FocusLeftUp.transform.GetChild(2).GetComponent<focus>().FocusMove();
+                }
+            }
+            //Left
+            if (moveAlly[1] != 0){
+                if (InitialPointX >= 1){
+                    FocusLeft.transform.GetChild(0).GetComponent<focus>().FocusMove();
+                }
+            }
+            if (moveAlly[1] == 2){
+                if (InitialPointX >= 2){
+                    FocusLeft.transform.GetChild(1).GetComponent<focus>().FocusMove();
+                }
+                if (InitialPointX >= 3){
+                    FocusLeft.transform.GetChild(2).GetComponent<focus>().FocusMove();
+                }
+            }
+            //LeftDown
+            if (moveAlly[2] != 0){
+                if (InitialPointY <= 2 && InitialPointX >= 1){
+                    FocusLeftDown.transform.GetChild(0).GetComponent<focus>().FocusMove();
+                }
+            }
+            if (moveAlly[2] == 2){
+                if (InitialPointY <= 1 && InitialPointX >= 2){
+                    FocusLeftDown.transform.GetChild(1).GetComponent<focus>().FocusMove();
+                }
+                if (InitialPointY <= 0 && InitialPointX >= 3){
+                    FocusLeftDown.transform.GetChild(2).GetComponent<focus>().FocusMove();
+                }
+            }
+            //Up
+            if (moveAlly[3] != 0){
+                if (InitialPointY >= 1){
+                    FocusUp.transform.GetChild(0).GetComponent<focus>().FocusMove();
+                }
+            }
+            if (moveAlly[3] == 2){
+                if (InitialPointY >= 2){
+                    FocusLeftDown.transform.GetChild(1).GetComponent<focus>().FocusMove();
+                }
+                if (InitialPointY >= 3){
+                    FocusLeftDown.transform.GetChild(2).GetComponent<focus>().FocusMove();
+                }
+            }
+            //Down
+            if (moveAlly[4] != 0){
+                if (InitialPointY <= 2){
+                    FocusDown.transform.GetChild(0).GetComponent<focus>().FocusMove();
+                }
+            }
+            if (moveAlly[4] == 2){
+                if (InitialPointY <= 1){
+                    FocusDown.transform.GetChild(1).GetComponent<focus>().FocusMove();
+                }
+                if (InitialPointY <= 0){
+                    FocusDown.transform.GetChild(2).GetComponent<focus>().FocusMove();
+                }
+            }
+            //RightUp
+            if (moveAlly[5] != 0){
+                if (InitialPointY >= 1 && InitialPointX <= 2){
+                    FocusRightUp.transform.GetChild(0).GetComponent<focus>().FocusMove();
+                }
+            }
+            if (moveAlly[5] == 2){
+                if (InitialPointY >= 2 && InitialPointX <= 1){
+                    FocusRightUp.transform.GetChild(1).GetComponent<focus>().FocusMove();
+                }
+                if (InitialPointY >= 3 && InitialPointX <= 0){
+                    FocusRightUp.transform.GetChild(2).GetComponent<focus>().FocusMove();
+                }
+            }
+            //Right
+            if (moveAlly[6] != 0){
+                if (InitialPointX <= 2){
+                    FocusRight.transform.GetChild(0).GetComponent<focus>().FocusMove();
+                }
+            }
+            if (moveAlly[6] == 2){
+                if (InitialPointX <= 1){
+                    FocusRight.transform.GetChild(1).GetComponent<focus>().FocusMove();
+                }
+                if (InitialPointX <= 0){
+                    FocusRight.transform.GetChild(2).GetComponent<focus>().FocusMove();
+                }
+            }
+            //RightDown
+            if (moveAlly[7] != 0){
+                if (InitialPointY <= 2 && InitialPointX <= 2){
+                    FocusRightDown.transform.GetChild(0).GetComponent<focus>().FocusMove();
+                }
+            }
+            if (moveAlly[7] == 2){
+                if (InitialPointY <= 1 && InitialPointX <= 1){
+                    FocusRightDown.transform.GetChild(1).GetComponent<focus>().FocusMove();
+                }
+                if (InitialPointY <= 0 && InitialPointX <= 0){
+                    FocusRightDown.transform.GetChild(2).GetComponent<focus>().FocusMove();
+                }
+            }
         }
     }
 
@@ -84,6 +202,9 @@ public class BoardSurface : MonoBehaviour
             //2.HighLightの解除
             HighLight_O.GetComponent<Animator>().SetTrigger("outOriginally");
             HighLight_D.GetComponent<Animator>().SetTrigger("outDistination");
+
+            //2.focusの解除
+            FocusParent.SetActive(false);
         }
     }
 
@@ -253,39 +374,40 @@ public class BoardSurface : MonoBehaviour
     //2.モンスターをドラッグさせている間の味方駒の表示エフェクト
     //2.1.変数
     //盤面に番号を振る
-    // int[,] arrayBoardNum = new int[4, 4]{
-    //     {1,2,3,4},
-    //     {5,6,7,8},
-    //     {9,10,11,12},
-    //     {13,14,15,16}
-    // };
+    int[,] arrayBoardNum = new int[4, 4]{
+        {1,2,3,4},
+        {5,6,7,8},
+        {9,10,11,12},
+        {13,14,15,16}
+    };
     //盤面の番号を格納するための変数
-    // private int boardNum;
+    private int boardNum;
     //プレハブSquareをセットするための空オブジェクト
     // private GameObject? Square;
     //子オブジェクトとしてプレハブを取得するためのBoardオブジェクトをアタッチ
     // public GameObject Board;
 
-    // //プレハブを全て予めアタッチしておく
-    // public GameObject square01;
-    // public GameObject square02;
-    // public GameObject square03;
-    // public GameObject square04;
-    // public GameObject square05;
-    // public GameObject square06;
-    // public GameObject square07;
-    // public GameObject square08;
-    // public GameObject square09;
-    // public GameObject square10;
-    // public GameObject square11;
-    // public GameObject square12;
-    // public GameObject square13;
-    // public GameObject square14;
-    // public GameObject square15;
-    // public GameObject square16;
+    //プレハブを全て予めアタッチしておく
+    public GameObject FocusParent;
+    public GameObject FocusLeftUp;
+    public GameObject FocusLeft;
+    public GameObject FocusLeftDown;
+    public GameObject FocusUp;
+    public GameObject FocusDown;
+    public GameObject FocusRightUp;
+    public GameObject FocusRight;
+    public GameObject FocusRightDown;
 
-    // //アタッチしたオブジェクトを配列とする
-    // GameObject[] SquareBox = new GameObject[16];
+    //アタッチしたプレハブを配列とする
+    GameObject[] FocusBox = new GameObject[16];
+
+    //各モンスターの動く範囲のマスを配列としておく
+    int[] moveAlly1 = {1,2,1,0,0,2,2,2};
+    int[] moveAlly2 = {1,2,1,1,0,1,2,1};
+    int[] moveAlly3 = {1,1,1,0,0,1,1,1};
+    int[] moveAlly4 = {1,2,0,1,1,0,2,0};
+    //上記をセットするための空配列
+    int[] moveAlly = new int[8];
 
     //ドラッグ時に味方駒を半透明とするためのAllyをアタッチしておく
     public CanvasGroup Ally;
@@ -294,79 +416,4 @@ public class BoardSurface : MonoBehaviour
     public GameObject HighLight_O;
     //HighLight(distination)をアタッチ
     public GameObject HighLight_D;
-
-    // //各モンスターの動く範囲のマスを配列としておく
-    // int[,] arrayAlly1 = {
-    //     //左上矢印
-    //     {-1,1},
-    //     //左矢印
-    //     {-3,0},
-    //     {-2,0},
-    //     {-1,0},
-    //     //左下矢印
-    //     {-1,-1},
-    //     //右上矢印
-    //     {1,1},
-    //     {2,2},
-    //     {3,3},
-    //     //右矢印
-    //     {1,0},
-    //     {2,0},
-    //     {3,0},
-    //     //右下矢印
-    //     {1,-1},
-    //     {2,-2},
-    //     {3,-3}
-    // };
-    // int[,] arrayAlly2 = {
-    //     //左上矢印
-    //     {-1,1},
-    //     //左矢印
-    //     {-3,0},
-    //     {-2,0},
-    //     {-1,0},
-    //     //左下矢印
-    //     {-1,-1},
-    //     //上矢印
-    //     {0,1},
-    //     //右上矢印
-    //     {1,1},
-    //     //右矢印
-    //     {1,0},
-    //     {2,0},
-    //     {3,0},
-    //     //右下矢印
-    //     {1,-1}
-    // };
-    // int[,] arrayAlly3 = {
-    //     //左上矢印
-    //     {-1,1},
-    //     //左矢印
-    //     {-1,0},
-    //     //左下矢印
-    //     {-1,-1},
-    //     //右上矢印
-    //     {1,1},
-    //     //右矢印
-    //     {1,0},
-    //     //右下矢印
-    //     {1,-1}
-    // };
-
-    // int[,] arrayAlly4 = {
-    //     //左上矢印
-    //     {-1,1},
-    //     //左矢印
-    //     {-3,0},
-    //     {-2,0},
-    //     {-1,0},
-    //     //上矢印
-    //     {0,1},
-    //     //下矢印
-    //     {0,-1},
-    //     //右矢印
-    //     {1,0},
-    //     {2,0},
-    //     {3,0}
-    // };
 }
