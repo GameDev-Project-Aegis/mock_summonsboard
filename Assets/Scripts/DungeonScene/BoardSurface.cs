@@ -64,115 +64,182 @@ public class BoardSurface : MonoBehaviour
                 if (InitialPointY >= 1 && InitialPointX >= 1){
                     FocusLeftUp.transform.GetChild(0).GetComponent<focus>().FocusMove();
                 }
+                AvailableSquares[0,0] = InitialPointX-1;
+                AvailableSquares[0,1] = InitialPointY-1;
             }
             if (moveAlly[0] == 2){
                 if (InitialPointY >= 2 && InitialPointX >= 2){
                     FocusLeftUp.transform.GetChild(1).GetComponent<focus>().FocusMove();
                 }
+                AvailableSquares[1,0] = InitialPointX-2;
+                AvailableSquares[1,1] = InitialPointY-2;
                 if (InitialPointY >= 3 && InitialPointX >= 3){
                     FocusLeftUp.transform.GetChild(2).GetComponent<focus>().FocusMove();
                 }
+                AvailableSquares[2,0] = InitialPointX-3;
+                AvailableSquares[2,1] = InitialPointY-3;
             }
             //Left
             if (moveAlly[1] != 0){
                 if (InitialPointX >= 1){
                     FocusLeft.transform.GetChild(0).GetComponent<focus>().FocusMove();
                 }
+                AvailableSquares[3,0] = InitialPointX-1;
+                AvailableSquares[3,1] = InitialPointY;
             }
             if (moveAlly[1] == 2){
                 if (InitialPointX >= 2){
                     FocusLeft.transform.GetChild(1).GetComponent<focus>().FocusMove();
                 }
+                AvailableSquares[4,0] = InitialPointX-2;
+                AvailableSquares[4,1] = InitialPointY;
                 if (InitialPointX >= 3){
                     FocusLeft.transform.GetChild(2).GetComponent<focus>().FocusMove();
                 }
+                AvailableSquares[5,0] = InitialPointX-3;
+                AvailableSquares[5,1] = InitialPointY;
             }
             //LeftDown
             if (moveAlly[2] != 0){
                 if (InitialPointY <= 2 && InitialPointX >= 1){
                     FocusLeftDown.transform.GetChild(0).GetComponent<focus>().FocusMove();
                 }
+                AvailableSquares[6,0] = InitialPointX-1;
+                AvailableSquares[6,1] = InitialPointY+1;
             }
             if (moveAlly[2] == 2){
                 if (InitialPointY <= 1 && InitialPointX >= 2){
                     FocusLeftDown.transform.GetChild(1).GetComponent<focus>().FocusMove();
                 }
+                AvailableSquares[7,0] = InitialPointX-2;
+                AvailableSquares[7,1] = InitialPointY+2;
                 if (InitialPointY <= 0 && InitialPointX >= 3){
                     FocusLeftDown.transform.GetChild(2).GetComponent<focus>().FocusMove();
                 }
+                AvailableSquares[8,0] = InitialPointX-3;
+                AvailableSquares[8,1] = InitialPointY+3;
             }
             //Up
             if (moveAlly[3] != 0){
                 if (InitialPointY >= 1){
                     FocusUp.transform.GetChild(0).GetComponent<focus>().FocusMove();
                 }
+                AvailableSquares[9,0] = InitialPointX;
+                AvailableSquares[9,1] = InitialPointY-1;
             }
             if (moveAlly[3] == 2){
                 if (InitialPointY >= 2){
                     FocusLeftDown.transform.GetChild(1).GetComponent<focus>().FocusMove();
                 }
+                AvailableSquares[10,0] = InitialPointX;
+                AvailableSquares[10,1] = InitialPointY-2;
                 if (InitialPointY >= 3){
                     FocusLeftDown.transform.GetChild(2).GetComponent<focus>().FocusMove();
                 }
+                AvailableSquares[11,0] = InitialPointX;
+                AvailableSquares[11,1] = InitialPointY-3;
             }
             //Down
             if (moveAlly[4] != 0){
                 if (InitialPointY <= 2){
                     FocusDown.transform.GetChild(0).GetComponent<focus>().FocusMove();
                 }
+                AvailableSquares[12,0] = InitialPointX;
+                AvailableSquares[12,1] = InitialPointY+1;
             }
             if (moveAlly[4] == 2){
                 if (InitialPointY <= 1){
                     FocusDown.transform.GetChild(1).GetComponent<focus>().FocusMove();
                 }
+                AvailableSquares[13,0] = InitialPointX;
+                AvailableSquares[13,1] = InitialPointY+2;
                 if (InitialPointY <= 0){
                     FocusDown.transform.GetChild(2).GetComponent<focus>().FocusMove();
                 }
+                AvailableSquares[14,0] = InitialPointX;
+                AvailableSquares[14,1] = InitialPointY+3;
             }
             //RightUp
             if (moveAlly[5] != 0){
                 if (InitialPointY >= 1 && InitialPointX <= 2){
                     FocusRightUp.transform.GetChild(0).GetComponent<focus>().FocusMove();
                 }
+                AvailableSquares[15,0] = InitialPointX+1;
+                AvailableSquares[15,1] = InitialPointY-1;
             }
             if (moveAlly[5] == 2){
                 if (InitialPointY >= 2 && InitialPointX <= 1){
                     FocusRightUp.transform.GetChild(1).GetComponent<focus>().FocusMove();
                 }
+                AvailableSquares[16,0] = InitialPointX+2;
+                AvailableSquares[16,1] = InitialPointY-2;
                 if (InitialPointY >= 3 && InitialPointX <= 0){
                     FocusRightUp.transform.GetChild(2).GetComponent<focus>().FocusMove();
                 }
+                AvailableSquares[17,0] = InitialPointX+3;
+                AvailableSquares[17,1] = InitialPointY-3;
             }
             //Right
             if (moveAlly[6] != 0){
                 if (InitialPointX <= 2){
                     FocusRight.transform.GetChild(0).GetComponent<focus>().FocusMove();
                 }
+                AvailableSquares[18,0] = InitialPointX+1;
+                AvailableSquares[18,1] = InitialPointY;
             }
             if (moveAlly[6] == 2){
                 if (InitialPointX <= 1){
                     FocusRight.transform.GetChild(1).GetComponent<focus>().FocusMove();
                 }
+                AvailableSquares[19,0] = InitialPointX+2;
+                AvailableSquares[19,1] = InitialPointY;
                 if (InitialPointX <= 0){
                     FocusRight.transform.GetChild(2).GetComponent<focus>().FocusMove();
                 }
+                AvailableSquares[20,0] = InitialPointX+3;
+                AvailableSquares[20,1] = InitialPointY;
             }
             //RightDown
             if (moveAlly[7] != 0){
                 if (InitialPointY <= 2 && InitialPointX <= 2){
                     FocusRightDown.transform.GetChild(0).GetComponent<focus>().FocusMove();
                 }
+                AvailableSquares[21,0] = InitialPointX+1;
+                AvailableSquares[21,1] = InitialPointY+1;
             }
             if (moveAlly[7] == 2){
                 if (InitialPointY <= 1 && InitialPointX <= 1){
                     FocusRightDown.transform.GetChild(1).GetComponent<focus>().FocusMove();
                 }
+                AvailableSquares[22,0] = InitialPointX+2;
+                AvailableSquares[22,1] = InitialPointY+2;
                 if (InitialPointY <= 0 && InitialPointX <= 0){
                     FocusRightDown.transform.GetChild(2).GetComponent<focus>().FocusMove();
                 }
+                AvailableSquares[23,0] = InitialPointX+3;
+                AvailableSquares[23,1] = InitialPointY+3;
             }
         }
     }
+
+    //動けるマスの範囲の二次元配列を作成して{PointX,PointY}の組み合わせが存在すれば下の処理に進める
+    int[,] AvailableSquares = new int[24,2];
+    // {
+    //     // {InitialPointX-1,InitialPointY-1},
+    //     // {InitialPointX-1,InitialPointY},
+    //     // {InitialPointX-2,InitialPointY},
+    //     // {InitialPointX-3,InitialPointY},
+    //     // {InitialPointX-1,InitialPointY+1},
+    //     // {InitialPointX+1,InitialPointY-1},
+    //     // {InitialPointX+2,InitialPointY-2},
+    //     // {InitialPointX+3,InitialPointY-3},
+    //     // {InitialPointX+1,InitialPointY},
+    //     // {InitialPointX+2,InitialPointY},
+    //     // {InitialPointX+3,InitialPointY},
+    //     // {InitialPointX+1,InitialPointY+1},
+    //     // {InitialPointX+2,InitialPointY+2},
+    //     // {InitialPointX+3,InitialPointY+3}
+    // };
 
     // ドラッグ時
     void OnMouseDrag()
@@ -215,7 +282,43 @@ public class BoardSurface : MonoBehaviour
         //allyDragに駒オブジェクトがセットされてる場合のみ実行
         if (allyDrag != null) {
             //1.モンスターをドロップしたときの処理を行う関数
-            DropMonster();
+            // DropMonster();
+            //①座標からマスを導出
+            mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+            PointArray = GetBoardPoint(mousePos.x, mousePos.y);
+            PointX = PointArray[0];
+            PointY = PointArray[1];
+
+            //動けるマスの整理
+            bool immovable = false;
+            for(int i = 0; i < AvailableSquares.GetLength(0); i++){
+                if (AvailableSquares[i,0] == PointX && AvailableSquares[i,1] == PointY){
+                    //②マスに駒が置かれていないかを判別
+                    if (arrayBoard[PointY,PointX] == 0) {
+                        //駒オブジェクトのpositionの書き換え
+                        //ドロップ時のマウスの位置するマスに対応したローカル座標を配列PointValueX(Y)Arrayで取得している
+                        mousePos.z = PosZ;
+                        allyDrag.transform.localPosition = new Vector3(PointValueXArray[PointX], PointValueYArray[PointY], 0);
+                        //配列arrayBoardの書き換え
+                        arrayBoard[InitialPointY,InitialPointX] = 0;    //元いたマスのステータスを0にする
+                        arrayBoard[PointY,PointX] = DragObjectNum;      //移動した先のマスのステータスを駒の番号にする
+
+                        immovable = true;
+                    }
+                    break;
+                }
+            }
+            if (!immovable){
+                //駒を初期位置に戻す
+                allyDrag.transform.localPosition = new Vector3(PointValueXArray[InitialPointX], PointValueYArray[InitialPointY], 0); 
+            }
+
+            //③allyDragを空に戻して置く
+            allyDrag = null;
+
+            //④alluDragがセットされた場合に味方駒のcanvasを半透明にする
+            Ally.alpha = 1.0f;
+            
             //2.HighLightの解除
             HighLight_O.GetComponent<Animator>().SetTrigger("outOriginally");
             HighLight_D.GetComponent<Animator>().SetTrigger("outDistination");
@@ -361,31 +464,6 @@ public class BoardSurface : MonoBehaviour
 
     //モンスターをドロップしたときの処理を行う関数
     void DropMonster(){
-        //①座標からマスを導出
-        mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-        PointArray = GetBoardPoint(mousePos.x, mousePos.y);
-        PointX = PointArray[0];
-        PointY = PointArray[1];
-
-        //②マスに駒が置かれていないかを判別
-        if (arrayBoard[PointY,PointX] == 0) {
-            //駒オブジェクトのpositionの書き換え
-            //ドロップ時のマウスの位置するマスに対応したローカル座標を配列PointValueX(Y)Arrayで取得している
-            mousePos.z = PosZ;
-            allyDrag.transform.localPosition = new Vector3(PointValueXArray[PointX], PointValueYArray[PointY], 0);
-            //配列arrayBoardの書き換え
-            arrayBoard[InitialPointY,InitialPointX] = 0;    //元いたマスのステータスを0にする
-            arrayBoard[PointY,PointX] = DragObjectNum;      //移動した先のマスのステータスを駒の番号にする
-        }else { // ↓ドロップした先に他の駒がいた場合の処理
-            //駒を初期位置に戻す
-            allyDrag.transform.localPosition = new Vector3(PointValueXArray[InitialPointX], PointValueYArray[InitialPointY], 0);
-        }
-
-        //③allyDragを空に戻して置く
-        allyDrag = null;
-
-        //④alluDragがセットされた場合に味方駒のcanvasを半透明にする
-        Ally.alpha = 1.0f;
     }
 
     //2.モンスターをドラッグさせている間の味方駒の表示エフェクト
