@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7297110226261791842}
   - component: {fileID: 4227933909887749989}
   m_Layer: 5
-  m_Name: Focus
+  m_Name: FocusChild
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
