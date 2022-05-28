@@ -46,6 +46,9 @@ public class BoardSurface : MonoBehaviour
             HighLight_O.transform.localPosition = new Vector3(PointValueXArray[InitialPointX], PointValueYArray[InitialPointY], 0);
             HighLight_O.GetComponent<Animator>().SetTrigger("setOriginally");
             //HighLight(distination)を表示する
+            BeforePointX = InitialPointX;
+            BeforePointY = InitialPointY;
+            HighLight_D.transform.localPosition = new Vector3(PointValueXArray[InitialPointX], PointValueYArray[InitialPointY], 0);
             HighLight_D.GetComponent<Animator>().SetTrigger("setDistination");
 
             //Focusを座標にセットする
@@ -240,7 +243,18 @@ public class BoardSurface : MonoBehaviour
             //HighLghtの移動
             PointX = PointArray[0];
             PointY = PointArray[1];
-            HighLight_D.transform.localPosition = new Vector3(PointValueXArray[PointX], PointValueYArray[PointY], 0);
+            if (PointX != BeforePointX || PointY != BeforePointY){
+                for(int i = 0; i < AvailableSquares.GetLength(0); i++){
+                    if (AvailableSquares[i,0] == PointX && AvailableSquares[i,1] == PointY){
+                        Debug.Log("移動可能マス");
+                        BeforePointX = PointX;
+                        BeforePointY = PointY;
+                        HighLight_D.transform.localPosition = new Vector3(PointValueXArray[PointX], PointValueYArray[PointY], 0);
+                        break;
+                    }
+                }
+                
+            }
 
             //座標が盤面から外に出た時に駒を初期位置に戻す
             if (mousePos.x < -2.2 || mousePos.x > 2.2 || mousePos.y < -2.2 || mousePos.y > 2.2){
@@ -339,6 +353,8 @@ public class BoardSurface : MonoBehaviour
     private int InitialPointY;
     private int PointX;
     private int PointY;
+    private int BeforePointX;
+    private int BeforePointY;
 
     //マス目に対応するlocal座標を配列としたもの
     float[] PointValueXArray = {-105, -35, 35, 105};
