@@ -65,8 +65,6 @@ public class BoardSurface : MonoBehaviour
     private int InitialPointY;
     private int PointX;
     private int PointY;
-    private int BeforePointX;
-    private int BeforePointY;
 
     //マス目に対応するlocal座標を配列としたもの
     float[] PointValueXArray = {-105, -35, 35, 105};
@@ -90,9 +88,14 @@ public class BoardSurface : MonoBehaviour
     int[] moveAlly4 = {1,2,0,1,1,0,2,0};
     //上記をセットするための空配列
     int[] moveAlly = new int[8];
+    //モンスターが動ける範囲のマスを配列とする
+    int[,] AvailableSquares;
 
     //Squareプレハブを盤面状に格納するための配列
     GameObject[,] SquareBox = new GameObject[4,4];
+
+    //ドロップ可能か判定のためのbool値
+    bool immovable = false;
     
     // Start is called before the first frame update
     void Start()
@@ -101,13 +104,85 @@ public class BoardSurface : MonoBehaviour
         mainCamera = Camera.main;
         PosZ = ally1.transform.position.z;
 
-        //1.駒を初期配置に置く
+        //駒を初期配置に置く
         PlaceMonsterInitially();
 
         //アニメーション作成のために一時的にattack()を開始時に呼び出し
         //ally1.GetComponent<ally1>().Attack();
 
         //SquareBoxにプレハブをセットする
+        PrepareSquareBox();
+    }
+
+    // クリック時
+    void OnMouseDown()
+    {
+        //タップした先のモンスターを返す関数（いない場合はnullを返す）
+        //InitialPointX,InitialPointYもセットされる
+        allyDrag = MonsterOnTaped();
+
+        if (allyDrag != null){
+            //味方駒のcanvasを半透明にする
+            Ally.alpha = 0.6f;
+
+            //ハイライトを表示
+            SetHighLight();
+
+            //動けるマスの範囲の二次元配列を作成・Squareプレハブの非表示・Focusプレハブの表示
+            GenerateAvailableSquares(InitialPointX,InitialPointY);
+        }
+    }
+
+    // ドラッグ時
+    void OnMouseDrag()
+    {
+        //allyDragに駒オブジェクトがセットされてる場合のみ実行
+        if (allyDrag != null) {
+            mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+
+            //モンスターをドラッグに合わせて移動させる
+            DragMonster();
+
+            //ハイライトをドラッグに合わせて移動させる
+            DragHighLight();
+            
+            //座標が盤面から外に出た時に駒を初期位置に戻す
+            if (mousePos.x < -2 || mousePos.x > 2 || mousePos.y < -2 || mousePos.y > 2){
+                InitializationDrag();
+            }
+        }
+    }
+
+    // ドロップ時
+    void OnMouseUp()
+    {
+        //allyDragに駒オブジェクトがセットされてる場合のみ実行
+        if (allyDrag != null) {
+            //モンスターをドロップしたときの処理を行う関数
+            DropMonster();
+        }
+    }
+
+    //関数：駒を初期配置に置く
+    void PlaceMonsterInitially(){
+        //①配列の設定（駒が初期配置されるマス目のステータスを変更）
+        arrayBoard[1,3] = 1;   // ally1
+        arrayBoard[2,3] = 2;  // ally2
+        arrayBoard[3,3] = 3;  // ally3
+        arrayBoard[3,2] = 4;  // ally4
+        arrayBoard[1,0] = 5;  // enemy1
+        arrayBoard[0,1] = 6;  // enemy2
+        //②駒オブジェクトに座標を指定
+        ally1.transform.localPosition = new Vector3(105, 35, 0);
+        ally2.transform.localPosition = new Vector3(105, -35, 0);
+        ally3.transform.localPosition = new Vector3(105, -105, 0);
+        ally4.transform.localPosition = new Vector3(35, -105, 0);
+        enemy1.transform.localPosition = new Vector3(-105, 35, 0);
+        enemy2.transform.localPosition = new Vector3(-35, 105, 0);
+    }
+
+    //関数：SquareBoxにプレハブをセットする関数
+    void PrepareSquareBox(){
         SquareBox[0,0] = Square01;
         SquareBox[0,1] = Square02;
         SquareBox[0,2] = Square03;
@@ -126,26 +201,82 @@ public class BoardSurface : MonoBehaviour
         SquareBox[3,3] = Square16;
     }
     
-    int[,] AvailableSquares;
+    //関数：タップした先のモンスターを返す
+    GameObject? MonsterOnTaped(){
+        //①タップしたマスに味方駒があるか判定
+        mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+        PointArray = GetBoardPoint(mousePos.x, mousePos.y); //GetBoardPoint()は下で定義してるよ！
+        InitialPointX = PointArray[0];
+        InitialPointY = PointArray[1];
 
-    // クリック時
-    void OnMouseDown()
-    {
-        //1.タップした先のモンスターを返す関数（いない場合はnullを返す）
-        allyDrag = MonsterOnTaped();
+        //②味方駒がいた場合にallyDragにその駒のオブジェクトをセットする
+        //transform.SetAsLastSibling()でヒエラルキー内の順序を変更し，一番手前に表示
+        if (arrayBoard[InitialPointY,InitialPointX] == 1) {
+            // allyDrag = ally1;
+            DragObjectNum = 1;
+            ally1.transform.SetAsLastSibling();
+            return ally1;
+        }else if (arrayBoard[InitialPointY,InitialPointX] == 2) {
+            // allyDrag = ally2;
+            DragObjectNum = 2;
+            ally2.transform.SetAsLastSibling();
+            return ally2;
+        }else if (arrayBoard[InitialPointY,InitialPointX] == 3) {
+            // allyDrag = ally3;
+            DragObjectNum = 3;
+            ally3.transform.SetAsLastSibling();
+            return ally3;
+        }else if (arrayBoard[InitialPointY,InitialPointX] == 4) {
+            // allyDrag = ally4;
+            DragObjectNum = 4;
+            ally4.transform.SetAsLastSibling();
+            return ally4;
+        }else{
+            return null;
+        }
+    }
+    
+    //関数：float型の座標を引数で与えるとどのマス目かを返す関数
+    //返り値の型は長さ2の配列（int）
+    int[] GetBoardPoint(float mPosX, float mPosY){
+        
+        if (mPosX > -2.2 && mPosX < -1.1) {
+            PointX = 0;
+        }else if (mPosX > -1.1 && mPosX < 0) {
+            PointX = 1;
+        }else if (mPosX > 0 && mPosX < 1.1) {
+            PointX = 2;
+        }else if (mPosX > 1.1 && mPosX < 2.2) {
+            PointX = 3;
+        }
 
-        if (allyDrag != null){
-            //③味方駒のcanvasを半透明にする
-            Ally.alpha = 0.6f;
-            //④初期配置の場所にHighLight(originally)を表示する
-            HighLight_O.transform.localPosition = new Vector3(PointValueXArray[InitialPointX], PointValueYArray[InitialPointY], 0);
-            HighLight_O.GetComponent<Animator>().SetTrigger("setOriginally");
-            //HighLight(distination)を表示する
-            BeforePointX = InitialPointX;
-            BeforePointY = InitialPointY;
-            HighLight_D.transform.localPosition = new Vector3(PointValueXArray[InitialPointX], PointValueYArray[InitialPointY], 0);
-            HighLight_D.GetComponent<Animator>().SetTrigger("setDistination");
+        if (mPosY < 2.2 && mPosY > 1.1) {
+            PointY = 0;
+        }else if (mPosY < 1.1 && mPosY > 0) {
+            PointY = 1;
+        }else if (mPosY < 0 && mPosY > -1.1) {
+            PointY = 2;
+        }else if (mPosY < -1.1 && mPosY > -2.2) {
+            PointY = 3;
+        }
 
+        int[] arr = {PointX, PointY};
+
+        return arr;
+    }
+
+    //関数：タップ時にハイライトを表示する関数
+    void SetHighLight(){
+        //初期配置の場所にHighLight(originally)を表示する
+        HighLight_O.transform.localPosition = new Vector3(PointValueXArray[InitialPointX], PointValueYArray[InitialPointY], 0);
+        HighLight_O.GetComponent<Animator>().SetTrigger("setOriginally");
+        //HighLight(distination)を表示する
+        HighLight_D.transform.localPosition = new Vector3(PointValueXArray[InitialPointX], PointValueYArray[InitialPointY], 0);
+        HighLight_D.GetComponent<Animator>().SetTrigger("setDistination");
+    }
+
+    //関数：動けるマスの範囲の二次元配列を作成とプレハブの非表示
+    void GenerateAvailableSquares(int InitialPointX, int InitialPointY){
             //Focusを座標にセットする
             FocusParent.SetActive(true);
             FocusParent.transform.localPosition = new Vector3(PointValueXArray[InitialPointX], PointValueYArray[InitialPointY], 0);
@@ -159,32 +290,12 @@ public class BoardSurface : MonoBehaviour
             } else if (allyDrag == ally4){
                 moveAlly = moveAlly4;
             }
-            //動けるマスの範囲の二次元配列を作成して{PointX,PointY}の組み合わせが存在すれば下の処理に進める
+
             AvailableSquares = new int[24,2]{
-                {10,10},
-                {10,10},
-                {10,10},
-                {10,10},
-                {10,10},
-                {10,10},
-                {10,10},
-                {10,10},
-                {10,10},
-                {10,10},
-                {10,10},
-                {10,10},
-                {10,10},
-                {10,10},
-                {10,10},
-                {10,10},
-                {10,10},
-                {10,10},
-                {10,10},
-                {10,10},
-                {10,10},
-                {10,10},
-                {10,10},
-                {10,10}
+                {10,10},{10,10},{10,10},{10,10},{10,10},{10,10},
+                {10,10},{10,10},{10,10},{10,10},{10,10},{10,10},
+                {10,10},{10,10},{10,10},{10,10},{10,10},{10,10},
+                {10,10},{10,10},{10,10},{10,10},{10,10},{10,10}
             };
             SquareBox[InitialPointY,InitialPointX].SetActive(false);
             //LeftUp
@@ -371,52 +482,42 @@ public class BoardSurface : MonoBehaviour
                     SquareBox[InitialPointY+3,InitialPointX+3].SetActive(false);
                 }
             }
-        }
-    }
-    
-    bool immovable = false;
-
-    // ドラッグ時
-    void OnMouseDrag()
-    {
-        //allyDragに駒オブジェクトがセットされてる場合のみ実行
-        if (allyDrag != null) {
-            //1.モンスターをドラッグに合わせて移動させる関数
-            DragMonster();
-            //2.ドラッグした先のHighLightをdistinationにする
-            //座標からマス目を取得
-            // mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-            PointArray = GetBoardPoint(mousePos.x, mousePos.y);
-            //HighLghtの移動
-            HighLight_D.transform.localPosition = new Vector3(PointValueXArray[PointArray[0]], PointValueYArray[PointArray[1]], 0);
-
-            //座標が盤面から外に出た時に駒を初期位置に戻す
-            if (mousePos.x < -2 || mousePos.x > 2 || mousePos.y < -2 || mousePos.y > 2){
-                allyDrag.transform.localPosition = new Vector3(PointValueXArray[InitialPointX], PointValueYArray[InitialPointY], 0);
-
-                HighLight_O.GetComponent<Animator>().SetTrigger("outOriginally");
-                HighLight_D.GetComponent<Animator>().SetTrigger("outDistination");
-
-                //2.focusの解除
-                FocusParent.SetActive(false);
-
-                //③allyDragを空に戻して置く
-                allyDrag = null;
-
-                //④alluDragがセットされた場合に味方駒のcanvasを半透明にする
-                Ally.alpha = 1.0f;
-            }
-        }
     }
 
-    // ドロップ時
-    void OnMouseUp()
-    {
-        //allyDragに駒オブジェクトがセットされてる場合のみ実行
-        if (allyDrag != null) {
-            //1.モンスターをドロップしたときの処理を行う関数
-            // DropMonster();
-            //①座標からマスを導出
+    //関数：モンスターをドラッグに合わせて移動させる
+    void DragMonster(){
+        mousePos.z = PosZ;
+        allyDrag.transform.position = mousePos;
+    }
+
+    //関数：ハイライトをドラッグに合わせて移動させる
+    void DragHighLight(){
+        //座標からマス目を取得
+        PointArray = GetBoardPoint(mousePos.x, mousePos.y);
+        //HighLghtの移動
+        HighLight_D.transform.localPosition = new Vector3(PointValueXArray[PointArray[0]], PointValueYArray[PointArray[1]], 0);
+    }
+            
+    //座標が盤面から外に出た時に駒を初期位置に戻す
+    void InitializationDrag(){
+        allyDrag.transform.localPosition = new Vector3(PointValueXArray[InitialPointX], PointValueYArray[InitialPointY], 0);
+
+        HighLight_O.GetComponent<Animator>().SetTrigger("outOriginally");
+        HighLight_D.GetComponent<Animator>().SetTrigger("outDistination");
+
+        //focusの解除
+        FocusParent.SetActive(false);
+
+        //allyDragを空に戻して置く
+        allyDrag = null;
+
+        //alluDragがセットされた場合に味方駒のcanvasを半透明にする
+        Ally.alpha = 1.0f;
+    }
+
+    //モンスターをドロップしたときの処理を行う関数
+    void DropMonster(){
+        //座標からマスを導出
             mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
             PointArray = GetBoardPoint(mousePos.x, mousePos.y);
             PointX = PointArray[0];
@@ -449,11 +550,11 @@ public class BoardSurface : MonoBehaviour
             //allyレイヤーの透明度を元に戻す
             Ally.alpha = 1.0f;
             
-            //2.HighLightの解除
+            //HighLightの解除
             HighLight_O.GetComponent<Animator>().SetTrigger("outOriginally");
             HighLight_D.GetComponent<Animator>().SetTrigger("outDistination");
 
-            //2.focusの解除
+            //focusの解除
             FocusParent.SetActive(false);
 
             //Squareを元に戻す
@@ -462,102 +563,5 @@ public class BoardSurface : MonoBehaviour
                     SquareBox[i,j].SetActive(true);
                 }
             }
-        }
-    }
-
-    //1.2.関数
-    //駒を初期配置に置く関数
-    void PlaceMonsterInitially(){
-        //①配列の設定（駒が初期配置されるマス目のステータスを変更）
-        arrayBoard[1,3] = 1;   // ally1
-        arrayBoard[2,3] = 2;  // ally2
-        arrayBoard[3,3] = 3;  // ally3
-        arrayBoard[3,2] = 4;  // ally4
-        arrayBoard[1,0] = 5;  // enemy1
-        arrayBoard[0,1] = 6;  // enemy2
-        //②駒オブジェクトに座標を指定
-        ally1.transform.localPosition = new Vector3(105, 35, 0);
-        ally2.transform.localPosition = new Vector3(105, -35, 0);
-        ally3.transform.localPosition = new Vector3(105, -105, 0);
-        ally4.transform.localPosition = new Vector3(35, -105, 0);
-        enemy1.transform.localPosition = new Vector3(-105, 35, 0);
-        enemy2.transform.localPosition = new Vector3(-35, 105, 0);
-    }
-    
-    //タップした先のモンスターを返す関数
-    GameObject? MonsterOnTaped(){
-        //①タップしたマスに味方駒があるか判定
-        mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-        PointArray = GetBoardPoint(mousePos.x, mousePos.y); //GetBoardPoint()は下で定義してるよ！
-        InitialPointX = PointArray[0];
-        InitialPointY = PointArray[1];
-
-        //②味方駒がいた場合にallyDragにその駒のオブジェクトをセットする
-        //transform.SetAsLastSibling()でヒエラルキー内の順序を変更し，一番手前に表示
-        if (arrayBoard[InitialPointY,InitialPointX] == 1) {
-            // allyDrag = ally1;
-            DragObjectNum = 1;
-            ally1.transform.SetAsLastSibling();
-            return ally1;
-        }else if (arrayBoard[InitialPointY,InitialPointX] == 2) {
-            // allyDrag = ally2;
-            DragObjectNum = 2;
-            ally2.transform.SetAsLastSibling();
-            return ally2;
-        }else if (arrayBoard[InitialPointY,InitialPointX] == 3) {
-            // allyDrag = ally3;
-            DragObjectNum = 3;
-            ally3.transform.SetAsLastSibling();
-            return ally3;
-        }else if (arrayBoard[InitialPointY,InitialPointX] == 4) {
-            // allyDrag = ally4;
-            DragObjectNum = 4;
-            ally4.transform.SetAsLastSibling();
-            return ally4;
-        }else{
-            return null;
-        }
-    }
-    
-    //関数GetBoardPoint()
-    //float型の座標を引数で与えるとどのマス目かを返す関数
-    //返り値の型は長さ2の配列（int）
-    int[] GetBoardPoint(float mPosX, float mPosY) {
-        
-        if (mPosX > -2.2 && mPosX < -1.1) {
-            PointX = 0;
-        }else if (mPosX > -1.1 && mPosX < 0) {
-            PointX = 1;
-        }else if (mPosX > 0 && mPosX < 1.1) {
-            PointX = 2;
-        }else if (mPosX > 1.1 && mPosX < 2.2) {
-            PointX = 3;
-        }
-
-        if (mPosY < 2.2 && mPosY > 1.1) {
-            PointY = 0;
-        }else if (mPosY < 1.1 && mPosY > 0) {
-            PointY = 1;
-        }else if (mPosY < 0 && mPosY > -1.1) {
-            PointY = 2;
-        }else if (mPosY < -1.1 && mPosY > -2.2) {
-            PointY = 3;
-        }
-
-        int[] arr = {PointX, PointY};
-
-        return arr;
-    }
-
-    //モンスターをドラッグに合わせて移動させる関数
-    void DragMonster(){
-        //マウスから取得した座標をallyDragオブジェクトに入れる
-        mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-        mousePos.z = PosZ;
-        allyDrag.transform.position = mousePos;
-    }
-
-    //モンスターをドロップしたときの処理を行う関数
-    void DropMonster(){
     }
 }
