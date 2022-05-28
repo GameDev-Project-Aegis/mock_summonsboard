@@ -20,16 +20,18 @@ public class BoardSurface : MonoBehaviour
         //アニメーション作成のために一時的にattack()を開始時に呼び出し
         //ally1.GetComponent<ally1>().Attack();
 
-        //Focusを配列に入れる
-        FocusBox[0] = FocusLeftUp;
-        FocusBox[1] = FocusLeft;
-        FocusBox[2] = FocusLeftDown;
-        FocusBox[3] = FocusUp;
-        FocusBox[4] = FocusDown;
-        FocusBox[5] = FocusRightUp;
-        FocusBox[6] = FocusRight;
-        FocusBox[7] = FocusRightDown;
+        // //Focusを配列に入れる
+        // FocusBox[0] = FocusLeftUp;
+        // FocusBox[1] = FocusLeft;
+        // FocusBox[2] = FocusLeftDown;
+        // FocusBox[3] = FocusUp;
+        // FocusBox[4] = FocusDown;
+        // FocusBox[5] = FocusRightUp;
+        // FocusBox[6] = FocusRight;
+        // FocusBox[7] = FocusRightDown;
     }
+    
+    int[,] AvailableSquares;
 
     // クリック時
     void OnMouseDown()
@@ -59,187 +61,170 @@ public class BoardSurface : MonoBehaviour
             } else if (allyDrag == ally4){
                 moveAlly = moveAlly4;
             }
+            //動けるマスの範囲の二次元配列を作成して{PointX,PointY}の組み合わせが存在すれば下の処理に進める
+            AvailableSquares = new int[24,2];
             //LeftUp
             if (moveAlly[0] != 0){
-                if (InitialPointY >= 1 && InitialPointX >= 1){
+                if (InitialPointY-1 >= 0 && InitialPointX-1 >= 0 && arrayBoard[InitialPointY-1,InitialPointX-1] == 0){
                     FocusLeftUp.transform.GetChild(0).GetComponent<focus>().FocusMove();
+                    AvailableSquares[0,0] = InitialPointX-1;
+                    AvailableSquares[0,1] = InitialPointY-1;
                 }
-                AvailableSquares[0,0] = InitialPointX-1;
-                AvailableSquares[0,1] = InitialPointY-1;
             }
             if (moveAlly[0] == 2){
-                if (InitialPointY >= 2 && InitialPointX >= 2){
+                if (InitialPointY >= 2 && InitialPointX >= 2 && arrayBoard[InitialPointY-2,InitialPointX-2] == 0){
                     FocusLeftUp.transform.GetChild(1).GetComponent<focus>().FocusMove();
+                    AvailableSquares[1,0] = InitialPointX-1;
+                    AvailableSquares[1,1] = InitialPointY-1;
                 }
-                AvailableSquares[1,0] = InitialPointX-2;
-                AvailableSquares[1,1] = InitialPointY-2;
-                if (InitialPointY >= 3 && InitialPointX >= 3){
+                if (InitialPointY >= 3 && InitialPointX >= 3 && arrayBoard[InitialPointY-3,InitialPointX-3] == 0){
                     FocusLeftUp.transform.GetChild(2).GetComponent<focus>().FocusMove();
+                    AvailableSquares[3,0] = InitialPointX-3;
+                    AvailableSquares[3,1] = InitialPointY-3;
                 }
-                AvailableSquares[2,0] = InitialPointX-3;
-                AvailableSquares[2,1] = InitialPointY-3;
             }
             //Left
             if (moveAlly[1] != 0){
-                if (InitialPointX >= 1){
+                if (InitialPointX >= 1 && arrayBoard[InitialPointY,InitialPointX-1] == 0){
                     FocusLeft.transform.GetChild(0).GetComponent<focus>().FocusMove();
+                    AvailableSquares[3,0] = InitialPointX-1;
+                    AvailableSquares[3,1] = InitialPointY;
                 }
-                AvailableSquares[3,0] = InitialPointX-1;
-                AvailableSquares[3,1] = InitialPointY;
             }
             if (moveAlly[1] == 2){
-                if (InitialPointX >= 2){
+                if (InitialPointX >= 2 && arrayBoard[InitialPointY,InitialPointX-2] == 0){
                     FocusLeft.transform.GetChild(1).GetComponent<focus>().FocusMove();
+                    AvailableSquares[4,0] = InitialPointX-2;
+                    AvailableSquares[4,1] = InitialPointY;
                 }
-                AvailableSquares[4,0] = InitialPointX-2;
-                AvailableSquares[4,1] = InitialPointY;
-                if (InitialPointX >= 3){
+                if (InitialPointX >= 3 && arrayBoard[InitialPointY,InitialPointX-3] == 0){
                     FocusLeft.transform.GetChild(2).GetComponent<focus>().FocusMove();
+                    AvailableSquares[5,0] = InitialPointX-3;
+                    AvailableSquares[5,1] = InitialPointY;
                 }
-                AvailableSquares[5,0] = InitialPointX-3;
-                AvailableSquares[5,1] = InitialPointY;
             }
             //LeftDown
             if (moveAlly[2] != 0){
-                if (InitialPointY <= 2 && InitialPointX >= 1){
+                if (InitialPointY <= 2 && InitialPointX >= 1 && arrayBoard[InitialPointY+1,InitialPointX-1] == 0){
                     FocusLeftDown.transform.GetChild(0).GetComponent<focus>().FocusMove();
+                    AvailableSquares[6,0] = InitialPointX-1;
+                    AvailableSquares[6,1] = InitialPointY+1;
                 }
-                AvailableSquares[6,0] = InitialPointX-1;
-                AvailableSquares[6,1] = InitialPointY+1;
             }
             if (moveAlly[2] == 2){
-                if (InitialPointY <= 1 && InitialPointX >= 2){
+                if (InitialPointY <= 1 && InitialPointX >= 2 && arrayBoard[InitialPointY+2,InitialPointX-2] == 0){
                     FocusLeftDown.transform.GetChild(1).GetComponent<focus>().FocusMove();
+                    AvailableSquares[7,0] = InitialPointX-2;
+                    AvailableSquares[7,1] = InitialPointY+2;
                 }
-                AvailableSquares[7,0] = InitialPointX-2;
-                AvailableSquares[7,1] = InitialPointY+2;
-                if (InitialPointY <= 0 && InitialPointX >= 3){
+                if (InitialPointY <= 0 && InitialPointX >= 3 && arrayBoard[InitialPointY+3,InitialPointX-3] == 0){
                     FocusLeftDown.transform.GetChild(2).GetComponent<focus>().FocusMove();
+                    AvailableSquares[8,0] = InitialPointX-3;
+                    AvailableSquares[8,1] = InitialPointY+3;
                 }
-                AvailableSquares[8,0] = InitialPointX-3;
-                AvailableSquares[8,1] = InitialPointY+3;
             }
             //Up
             if (moveAlly[3] != 0){
-                if (InitialPointY >= 1){
+                if (InitialPointY >= 1 && arrayBoard[InitialPointY-1,InitialPointX] == 0){
                     FocusUp.transform.GetChild(0).GetComponent<focus>().FocusMove();
+                    AvailableSquares[9,0] = InitialPointX;
+                    AvailableSquares[9,1] = InitialPointY-1;
                 }
-                AvailableSquares[9,0] = InitialPointX;
-                AvailableSquares[9,1] = InitialPointY-1;
             }
             if (moveAlly[3] == 2){
-                if (InitialPointY >= 2){
+                if (InitialPointY >= 2 && arrayBoard[InitialPointY-2,InitialPointX] == 0){
                     FocusLeftDown.transform.GetChild(1).GetComponent<focus>().FocusMove();
+                    AvailableSquares[10,0] = InitialPointX;
+                    AvailableSquares[10,1] = InitialPointY-2;
                 }
-                AvailableSquares[10,0] = InitialPointX;
-                AvailableSquares[10,1] = InitialPointY-2;
-                if (InitialPointY >= 3){
+                if (InitialPointY >= 3 && arrayBoard[InitialPointY-3,InitialPointX] == 0){
                     FocusLeftDown.transform.GetChild(2).GetComponent<focus>().FocusMove();
+                    AvailableSquares[11,0] = InitialPointX;
+                    AvailableSquares[11,1] = InitialPointY-3;
                 }
-                AvailableSquares[11,0] = InitialPointX;
-                AvailableSquares[11,1] = InitialPointY-3;
             }
             //Down
             if (moveAlly[4] != 0){
-                if (InitialPointY <= 2){
+                if (InitialPointY <= 2 && arrayBoard[InitialPointY+1,InitialPointX] == 0){
                     FocusDown.transform.GetChild(0).GetComponent<focus>().FocusMove();
+                    AvailableSquares[12,0] = InitialPointX;
+                    AvailableSquares[12,1] = InitialPointY+1;
                 }
-                AvailableSquares[12,0] = InitialPointX;
-                AvailableSquares[12,1] = InitialPointY+1;
             }
             if (moveAlly[4] == 2){
-                if (InitialPointY <= 1){
+                if (InitialPointY <= 1 && arrayBoard[InitialPointY+2,InitialPointX] == 0){
                     FocusDown.transform.GetChild(1).GetComponent<focus>().FocusMove();
+                    AvailableSquares[13,0] = InitialPointX;
+                    AvailableSquares[13,1] = InitialPointY+2;
                 }
-                AvailableSquares[13,0] = InitialPointX;
-                AvailableSquares[13,1] = InitialPointY+2;
-                if (InitialPointY <= 0){
+                if (InitialPointY <= 0 && arrayBoard[InitialPointY+3,InitialPointX] == 0){
                     FocusDown.transform.GetChild(2).GetComponent<focus>().FocusMove();
+                    AvailableSquares[14,0] = InitialPointX;
+                    AvailableSquares[14,1] = InitialPointY+3;
                 }
-                AvailableSquares[14,0] = InitialPointX;
-                AvailableSquares[14,1] = InitialPointY+3;
             }
             //RightUp
             if (moveAlly[5] != 0){
-                if (InitialPointY >= 1 && InitialPointX <= 2){
+                if (InitialPointY >= 1 && InitialPointX <= 2 && arrayBoard[InitialPointY-1,InitialPointX+1] == 0){
                     FocusRightUp.transform.GetChild(0).GetComponent<focus>().FocusMove();
+                    AvailableSquares[15,0] = InitialPointX+1;
+                    AvailableSquares[15,1] = InitialPointY-1;
                 }
-                AvailableSquares[15,0] = InitialPointX+1;
-                AvailableSquares[15,1] = InitialPointY-1;
             }
             if (moveAlly[5] == 2){
-                if (InitialPointY >= 2 && InitialPointX <= 1){
+                if (InitialPointY >= 2 && InitialPointX <= 1 && arrayBoard[InitialPointY-2,InitialPointX+2] == 0){
                     FocusRightUp.transform.GetChild(1).GetComponent<focus>().FocusMove();
+                    AvailableSquares[16,0] = InitialPointX+2;
+                    AvailableSquares[16,1] = InitialPointY-2;
                 }
-                AvailableSquares[16,0] = InitialPointX+2;
-                AvailableSquares[16,1] = InitialPointY-2;
-                if (InitialPointY >= 3 && InitialPointX <= 0){
+                if (InitialPointY >= 3 && InitialPointX <= 0 && arrayBoard[InitialPointY-3,InitialPointX+3] == 0){
                     FocusRightUp.transform.GetChild(2).GetComponent<focus>().FocusMove();
+                    AvailableSquares[17,0] = InitialPointX+3;
+                    AvailableSquares[17,1] = InitialPointY-3;
                 }
-                AvailableSquares[17,0] = InitialPointX+3;
-                AvailableSquares[17,1] = InitialPointY-3;
             }
             //Right
             if (moveAlly[6] != 0){
-                if (InitialPointX <= 2){
+                if (InitialPointX <= 2 && arrayBoard[InitialPointY,InitialPointX+1] == 0){
                     FocusRight.transform.GetChild(0).GetComponent<focus>().FocusMove();
+                    AvailableSquares[18,0] = InitialPointX+1;
+                    AvailableSquares[18,1] = InitialPointY;
                 }
-                AvailableSquares[18,0] = InitialPointX+1;
-                AvailableSquares[18,1] = InitialPointY;
             }
             if (moveAlly[6] == 2){
-                if (InitialPointX <= 1){
+                if (InitialPointX <= 1 && arrayBoard[InitialPointY,InitialPointX+2] == 0){
                     FocusRight.transform.GetChild(1).GetComponent<focus>().FocusMove();
+                    AvailableSquares[19,0] = InitialPointX+2;
+                    AvailableSquares[19,1] = InitialPointY;
                 }
-                AvailableSquares[19,0] = InitialPointX+2;
-                AvailableSquares[19,1] = InitialPointY;
-                if (InitialPointX <= 0){
+                if (InitialPointX <= 0 && arrayBoard[InitialPointY,InitialPointX+3] == 0){
                     FocusRight.transform.GetChild(2).GetComponent<focus>().FocusMove();
+                    AvailableSquares[20,0] = InitialPointX+3;
+                    AvailableSquares[20,1] = InitialPointY;
                 }
-                AvailableSquares[20,0] = InitialPointX+3;
-                AvailableSquares[20,1] = InitialPointY;
             }
             //RightDown
             if (moveAlly[7] != 0){
-                if (InitialPointY <= 2 && InitialPointX <= 2){
+                if (InitialPointY <= 2 && InitialPointX <= 2 && arrayBoard[InitialPointY+1,InitialPointX+1] == 0){
                     FocusRightDown.transform.GetChild(0).GetComponent<focus>().FocusMove();
+                    AvailableSquares[21,0] = InitialPointX+1;
+                    AvailableSquares[21,1] = InitialPointY+1;
                 }
-                AvailableSquares[21,0] = InitialPointX+1;
-                AvailableSquares[21,1] = InitialPointY+1;
             }
             if (moveAlly[7] == 2){
-                if (InitialPointY <= 1 && InitialPointX <= 1){
+                if (InitialPointY <= 1 && InitialPointX <= 1 && arrayBoard[InitialPointY+2,InitialPointX+2] == 0){
                     FocusRightDown.transform.GetChild(1).GetComponent<focus>().FocusMove();
+                    AvailableSquares[22,0] = InitialPointX+2;
+                    AvailableSquares[22,1] = InitialPointY+2;
                 }
-                AvailableSquares[22,0] = InitialPointX+2;
-                AvailableSquares[22,1] = InitialPointY+2;
-                if (InitialPointY <= 0 && InitialPointX <= 0){
+                if (InitialPointY <= 0 && InitialPointX <= 0 && arrayBoard[InitialPointY+3,InitialPointX+3] == 0){
                     FocusRightDown.transform.GetChild(2).GetComponent<focus>().FocusMove();
+                    AvailableSquares[23,0] = InitialPointX+3;
+                    AvailableSquares[23,1] = InitialPointY+3;
                 }
-                AvailableSquares[23,0] = InitialPointX+3;
-                AvailableSquares[23,1] = InitialPointY+3;
             }
         }
     }
-
-    //動けるマスの範囲の二次元配列を作成して{PointX,PointY}の組み合わせが存在すれば下の処理に進める
-    int[,] AvailableSquares = new int[24,2];
-    // {
-    //     // {InitialPointX-1,InitialPointY-1},
-    //     // {InitialPointX-1,InitialPointY},
-    //     // {InitialPointX-2,InitialPointY},
-    //     // {InitialPointX-3,InitialPointY},
-    //     // {InitialPointX-1,InitialPointY+1},
-    //     // {InitialPointX+1,InitialPointY-1},
-    //     // {InitialPointX+2,InitialPointY-2},
-    //     // {InitialPointX+3,InitialPointY-3},
-    //     // {InitialPointX+1,InitialPointY},
-    //     // {InitialPointX+2,InitialPointY},
-    //     // {InitialPointX+3,InitialPointY},
-    //     // {InitialPointX+1,InitialPointY+1},
-    //     // {InitialPointX+2,InitialPointY+2},
-    //     // {InitialPointX+3,InitialPointY+3}
-    // };
 
     // ドラッグ時
     void OnMouseDrag()
@@ -494,7 +479,7 @@ public class BoardSurface : MonoBehaviour
     public GameObject FocusRightDown;
 
     //アタッチしたプレハブを配列とする
-    GameObject[] FocusBox = new GameObject[16];
+    // GameObject[] FocusBox = new GameObject[16];
 
     //各モンスターの動く範囲のマスを配列としておく
     int[] moveAlly1 = {1,2,1,0,0,2,2,2};
