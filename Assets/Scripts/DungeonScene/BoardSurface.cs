@@ -6,7 +6,73 @@ using UnityEngine.UI;
 
 public class BoardSurface : MonoBehaviour
 {
-    //app層
+    //駒オブジェクトをアタッチする
+    public GameObject ally1;
+    public GameObject ally2;
+    public GameObject ally3;
+    public GameObject ally4;
+    public GameObject enemy1;
+    public GameObject enemy2;
+
+    //ドラッグ時に味方駒を半透明とするためのAllyをアタッチしておく
+    public CanvasGroup Ally;
+    
+    //HighLight(originally)をアタッチ
+    public GameObject HighLight_O;
+    //HighLight(distination)をアタッチ
+    public GameObject HighLight_D;
+
+    //Focusプレハブをアタッチする
+    public GameObject FocusParent;
+    public GameObject FocusLeftUp;
+    public GameObject FocusLeft;
+    public GameObject FocusLeftDown;
+    public GameObject FocusUp;
+    public GameObject FocusDown;
+    public GameObject FocusRightUp;
+    public GameObject FocusRight;
+    public GameObject FocusRightDown;
+
+    //ドラッグ時のみドラッグする駒をセットするための空オブジェクト
+    //「?」の記載はallyDragをnullと置けるようにするため（null許容型）
+    private GameObject? allyDrag;
+
+    //駒をタッチ操作する処理に必要な変数の定義
+    private Camera mainCamera;
+    private float PosZ;
+    private Vector3 mousePos;
+    private int[] PointArray = new int[2];
+    private int DragObjectNum;
+    private int InitialPointX;
+    private int InitialPointY;
+    private int PointX;
+    private int PointY;
+    private int BeforePointX;
+    private int BeforePointY;
+
+    //マス目に対応するlocal座標を配列としたもの
+    float[] PointValueXArray = {-105, -35, 35, 105};
+    float[] PointValueYArray = {105, 35, -35, -105};
+
+    //盤面用の配列
+    //4行4列の配列を定義
+    //行->Y位置、列->X位置
+    //値はマスのステータスを表す（0->空, 1->ally1, 2->ally2, 3->ally3, 4->ally4, 5->enemy1, 6->enemy2,）
+    int[,] arrayBoard = new int[4, 4]{
+        {0,0,0,0},
+        {0,0,0,0},
+        {0,0,0,0},
+        {0,0,0,0}
+    };
+
+    //各モンスターの動く範囲のマスを配列としておく
+    int[] moveAlly1 = {1,2,1,0,0,2,2,2};
+    int[] moveAlly2 = {1,2,1,1,0,1,2,1};
+    int[] moveAlly3 = {1,1,1,0,0,1,1,1};
+    int[] moveAlly4 = {1,2,0,1,1,0,2,0};
+    //上記をセットするための空配列
+    int[] moveAlly = new int[8];
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -19,16 +85,6 @@ public class BoardSurface : MonoBehaviour
 
         //アニメーション作成のために一時的にattack()を開始時に呼び出し
         //ally1.GetComponent<ally1>().Attack();
-
-        // //Focusを配列に入れる
-        // FocusBox[0] = FocusLeftUp;
-        // FocusBox[1] = FocusLeft;
-        // FocusBox[2] = FocusLeftDown;
-        // FocusBox[3] = FocusUp;
-        // FocusBox[4] = FocusDown;
-        // FocusBox[5] = FocusRightUp;
-        // FocusBox[6] = FocusRight;
-        // FocusBox[7] = FocusRightDown;
     }
     
     int[,] AvailableSquares;
@@ -65,7 +121,32 @@ public class BoardSurface : MonoBehaviour
                 moveAlly = moveAlly4;
             }
             //動けるマスの範囲の二次元配列を作成して{PointX,PointY}の組み合わせが存在すれば下の処理に進める
-            AvailableSquares = new int[24,2];
+            AvailableSquares = new int[24,2]{
+                {10,10},
+                {10,10},
+                {10,10},
+                {10,10},
+                {10,10},
+                {10,10},
+                {10,10},
+                {10,10},
+                {10,10},
+                {10,10},
+                {10,10},
+                {10,10},
+                {10,10},
+                {10,10},
+                {10,10},
+                {10,10},
+                {10,10},
+                {10,10},
+                {10,10},
+                {10,10},
+                {10,10},
+                {10,10},
+                {10,10},
+                {10,10}
+            };
             //LeftUp
             if (moveAlly[0] != 0){
                 if (InitialPointY-1 >= 0 && InitialPointX-1 >= 0 && arrayBoard[InitialPointY-1,InitialPointX-1] == 0){
@@ -228,6 +309,8 @@ public class BoardSurface : MonoBehaviour
             }
         }
     }
+    
+    bool immovable = false;
 
     // ドラッグ時
     void OnMouseDrag()
@@ -246,15 +329,13 @@ public class BoardSurface : MonoBehaviour
             if (PointX != BeforePointX || PointY != BeforePointY){
                 for(int i = 0; i < AvailableSquares.GetLength(0); i++){
                     if (AvailableSquares[i,0] == PointX && AvailableSquares[i,1] == PointY){
-                        Debug.Log("移動可能マス");
-                        BeforePointX = PointX;
-                        BeforePointY = PointY;
                         HighLight_D.transform.localPosition = new Vector3(PointValueXArray[PointX], PointValueYArray[PointY], 0);
                         break;
                     }
                 }
-                
             }
+            BeforePointX = PointX;
+            BeforePointY = PointY;
 
             //座標が盤面から外に出た時に駒を初期位置に戻す
             if (mousePos.x < -2.2 || mousePos.x > 2.2 || mousePos.y < -2.2 || mousePos.y > 2.2){
@@ -289,21 +370,18 @@ public class BoardSurface : MonoBehaviour
             PointY = PointArray[1];
 
             //動けるマスの整理
-            bool immovable = false;
+            immovable = false;
             for(int i = 0; i < AvailableSquares.GetLength(0); i++){
                 if (AvailableSquares[i,0] == PointX && AvailableSquares[i,1] == PointY){
-                    //②マスに駒が置かれていないかを判別
-                    if (arrayBoard[PointY,PointX] == 0) {
-                        //駒オブジェクトのpositionの書き換え
-                        //ドロップ時のマウスの位置するマスに対応したローカル座標を配列PointValueX(Y)Arrayで取得している
-                        mousePos.z = PosZ;
+                    //駒オブジェクトのpositionの書き換え
+                    //ドロップ時のマウスの位置するマスに対応したローカル座標を配列PointValueX(Y)Arrayで取得している
+                    mousePos.z = PosZ;
                         allyDrag.transform.localPosition = new Vector3(PointValueXArray[PointX], PointValueYArray[PointY], 0);
-                        //配列arrayBoardの書き換え
-                        arrayBoard[InitialPointY,InitialPointX] = 0;    //元いたマスのステータスを0にする
-                        arrayBoard[PointY,PointX] = DragObjectNum;      //移動した先のマスのステータスを駒の番号にする
+                    //配列arrayBoardの書き換え
+                    arrayBoard[InitialPointY,InitialPointX] = 0;    //元いたマスのステータスを0にする
+                    arrayBoard[PointY,PointX] = DragObjectNum;      //移動した先のマスのステータスを駒の番号にする
 
-                        immovable = true;
-                    }
+                    immovable = true;
                     break;
                 }
             }
@@ -312,10 +390,10 @@ public class BoardSurface : MonoBehaviour
                 allyDrag.transform.localPosition = new Vector3(PointValueXArray[InitialPointX], PointValueYArray[InitialPointY], 0); 
             }
 
-            //③allyDragを空に戻して置く
+            //allyDragを空に戻して置く
             allyDrag = null;
 
-            //④alluDragがセットされた場合に味方駒のcanvasを半透明にする
+            //alluDragがセットされた場合に味方駒のcanvasを半透明にする
             Ally.alpha = 1.0f;
             
             //2.HighLightの解除
@@ -326,50 +404,6 @@ public class BoardSurface : MonoBehaviour
             FocusParent.SetActive(false);
         }
     }
-
-    //model層
-    
-    //1.味方駒をドラッグ&ドロップする機能
-    //1.1.変数
-    //駒オブジェクトをuGUIでアタッチする
-    public GameObject ally1;
-    public GameObject ally2;
-    public GameObject ally3;
-    public GameObject ally4;
-    public GameObject enemy1;
-    public GameObject enemy2;
-
-    //ドラッグ時のみドラッグする駒をセットするための空オブジェクト
-    //「?」の記載はallyDragをnullと置けるようにするため（null許容型）
-    private GameObject? allyDrag;
-
-    //駒をタッチ操作する処理に必要な変数の定義
-    private Camera mainCamera;
-    private float PosZ;
-    private Vector3 mousePos;
-    private int[] PointArray = new int[2];
-    private int DragObjectNum;
-    private int InitialPointX;
-    private int InitialPointY;
-    private int PointX;
-    private int PointY;
-    private int BeforePointX;
-    private int BeforePointY;
-
-    //マス目に対応するlocal座標を配列としたもの
-    float[] PointValueXArray = {-105, -35, 35, 105};
-    float[] PointValueYArray = {105, 35, -35, -105};
-
-    //盤面用の配列
-    //4行4列の配列を定義
-    //行->Y位置、列->X位置
-    //値はマスのステータスを表す（0->空, 1->ally1, 2->ally2, 3->ally3, 4->ally4, 5->enemy1, 6->enemy2,）
-    int[,] arrayBoard = new int[4, 4]{
-        {0,0,0,0},
-        {0,0,0,0},
-        {0,0,0,0},
-        {0,0,0,0}
-    };
 
     //1.2.関数
     //駒を初期配置に置く関数
@@ -466,50 +500,4 @@ public class BoardSurface : MonoBehaviour
     //モンスターをドロップしたときの処理を行う関数
     void DropMonster(){
     }
-
-    //2.モンスターをドラッグさせている間の味方駒の表示エフェクト
-    //2.1.変数
-    //盤面に番号を振る
-    int[,] arrayBoardNum = new int[4, 4]{
-        {1,2,3,4},
-        {5,6,7,8},
-        {9,10,11,12},
-        {13,14,15,16}
-    };
-    //盤面の番号を格納するための変数
-    private int boardNum;
-    //プレハブSquareをセットするための空オブジェクト
-    // private GameObject? Square;
-    //子オブジェクトとしてプレハブを取得するためのBoardオブジェクトをアタッチ
-    // public GameObject Board;
-
-    //プレハブを全て予めアタッチしておく
-    public GameObject FocusParent;
-    public GameObject FocusLeftUp;
-    public GameObject FocusLeft;
-    public GameObject FocusLeftDown;
-    public GameObject FocusUp;
-    public GameObject FocusDown;
-    public GameObject FocusRightUp;
-    public GameObject FocusRight;
-    public GameObject FocusRightDown;
-
-    //アタッチしたプレハブを配列とする
-    // GameObject[] FocusBox = new GameObject[16];
-
-    //各モンスターの動く範囲のマスを配列としておく
-    int[] moveAlly1 = {1,2,1,0,0,2,2,2};
-    int[] moveAlly2 = {1,2,1,1,0,1,2,1};
-    int[] moveAlly3 = {1,1,1,0,0,1,1,1};
-    int[] moveAlly4 = {1,2,0,1,1,0,2,0};
-    //上記をセットするための空配列
-    int[] moveAlly = new int[8];
-
-    //ドラッグ時に味方駒を半透明とするためのAllyをアタッチしておく
-    public CanvasGroup Ally;
-    
-    //HighLight(originally)をアタッチ
-    public GameObject HighLight_O;
-    //HighLight(distination)をアタッチ
-    public GameObject HighLight_D;
 }
