@@ -189,15 +189,8 @@ public class BoardSurface : MonoBehaviour
             }
             //敵駒がセットされていた場合の処理
             else {
-                //focusの解除
-                FocusParent.SetActive(false);
-
-                //Squareを元に戻す
-                for (int i = 0; i < 4; i++){
-                    for (int j = 0; j < 4; j++){
-                        SquareBox[i,j].SetActive(true);
-                    }
-                }
+                //エフェクトのリセットを行う
+                InitializationEffect();
             }
         }
     }
@@ -655,6 +648,11 @@ public class BoardSurface : MonoBehaviour
         HighLight_O.GetComponent<Animator>().SetTrigger("outOriginally");
         HighLight_D.GetComponent<Animator>().SetTrigger("outDistination");
 
+        InitializationEffect();
+    }
+            
+    //関数：フォーカスとスクエアのエフェクトを初期化する
+    void InitializationEffect(){
         //focusの解除
         FocusParent.SetActive(false);
 
@@ -695,5 +693,36 @@ public class BoardSurface : MonoBehaviour
     }
 
     //関数：相手ターンの一連の処理を行う関数
-    void ActionEnemyTurn(){}
+    void ActionEnemyTurn(){
+
+        int? EnemyNum = null;
+        
+        //Enemyの中で一番X座標が小さい駒を取得
+        for(int i=0; i<4; i++){
+            for(int j=0; j<4; j++){
+                if (arrayBoard[j,i]==11 || arrayBoard[j,i]==12){
+                    EnemyNum = arrayBoard[j,i];
+                    break;
+                }
+            }
+            if(EnemyNum != null){
+                break;
+            }
+        }
+        Debug.Log(EnemyNum);
+        
+        //取得した駒にLeft側以外で動けるマスがあるか判定
+        
+
+        //存在しない場合違う駒を取得しなおす
+
+        //取得した駒のフォーカスエフェクトを呼び出す
+
+        //取得した駒のアニメーションを実行する
+
+        //フォーカスアニメーションの解除
+
+        //プレイヤーターンに移行
+        PlayerTurn = true;
+    }
 }
