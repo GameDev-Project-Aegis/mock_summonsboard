@@ -96,6 +96,9 @@ public class BoardSurface : MonoBehaviour
 
     //ドロップ可能か判定のためのbool値
     bool immovable = false;
+
+    //ターン判定のためのbool値（プレイヤーターン -> true, 敵ターン -> false）
+    bool PlayerTurn;
     
     // Start is called before the first frame update
     void Start()
@@ -112,32 +115,38 @@ public class BoardSurface : MonoBehaviour
 
         //SquareBoxにプレハブをセットする
         PrepareSquareBox();
+
+        //プレイヤーターンをセットする
+        PlayerTurn = true;
     }
 
     // クリック時
     void OnMouseDown()
     {
-        //タップした先のモンスターを返す関数（いない場合はnullを返す）
-        //InitialPointX,InitialPointYもセットされる
-        allyDrag = MonsterOnTaped();
+        //プレイヤーターンの場合のみ実行
+        if (PlayerTurn){
+            //タップした先のモンスターを返す関数（いない場合はnullを返す）
+            //InitialPointX,InitialPointYもセットされる
+            allyDrag = MonsterOnTaped();
 
-        if (allyDrag != null){
-            //味方駒のcanvasを半透明にする
-            Ally.alpha = 0.6f;
+            if (allyDrag != null){
+                //味方駒のcanvasを半透明にする
+                Ally.alpha = 0.6f;
 
-            //ハイライトを表示
-            SetHighLight();
+                //ハイライトを表示
+                SetHighLight();
 
-            //動けるマスの範囲の二次元配列を作成・Squareプレハブの非表示・Focusプレハブの表示
-            GenerateAvailableSquares(InitialPointX,InitialPointY);
+                //動けるマスの範囲の二次元配列を作成・Squareプレハブの非表示・Focusプレハブの表示
+                GenerateAvailableSquares(InitialPointX,InitialPointY);
+            }
         }
     }
 
     // ドラッグ時
     void OnMouseDrag()
     {
-        //allyDragに駒オブジェクトがセットされてる場合のみ実行
-        if (allyDrag != null) {
+        //プレイヤーターンかつallyDragに駒オブジェクトがセットされてる場合のみ実行
+        if (PlayerTurn && allyDrag != null) {
             mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
 
             //モンスターをドラッグに合わせて移動させる
@@ -156,11 +165,15 @@ public class BoardSurface : MonoBehaviour
     // ドロップ時
     void OnMouseUp()
     {
-        //allyDragに駒オブジェクトがセットされてる場合のみ実行
-        if (allyDrag != null) {
+        //プレイヤーターンかつallyDragに駒オブジェクトがセットされてる場合のみ実行
+        if (PlayerTurn && allyDrag != null) {
             //モンスターをドロップしたときの処理を行う関数
             immovable = DropMonster();
             InitializationDrag(immovable);
+            if (immovable){
+                //プレイターターンを終了させる処理
+                PlayerTurn = false;
+            }
         }
     }
 
@@ -529,28 +542,28 @@ public class BoardSurface : MonoBehaviour
     //モンスターをドロップしたときの処理を行う関数
     bool DropMonster(){
         //座標からマスを導出
-            mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-            PointArray = GetBoardPoint(mousePos.x, mousePos.y);
-            PointX = PointArray[0];
-            PointY = PointArray[1];
+        mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+        PointArray = GetBoardPoint(mousePos.x, mousePos.y);
+        PointX = PointArray[0];
+        PointY = PointArray[1];
 
-            //動けるマスの整理
-            bool immovable = false;
-            for(int i = 0; i < AvailableSquares.GetLength(0); i++){
-                if (AvailableSquares[i,0] == PointX && AvailableSquares[i,1] == PointY){
-                    //駒オブジェクトのpositionの書き換え
-                    //ドロップ時のマウスの位置するマスに対応したローカル座標を配列PointValueX(Y)Arrayで取得している
-                    mousePos.z = PosZ;
-                        allyDrag.transform.localPosition = new Vector3(PointValueXArray[PointX], PointValueYArray[PointY], 0);
-                    //配列arrayBoardの書き換え
-                    arrayBoard[InitialPointY,InitialPointX] = 0;    //元いたマスのステータスを0にする
-                    arrayBoard[PointY,PointX] = DragObjectNum;      //移動した先のマスのステータスを駒の番号にする
+        //動けるマスの整理
+        bool immovable = false;
+        for(int i = 0; i < AvailableSquares.GetLength(0); i++){
+            if (AvailableSquares[i,0] == PointX && AvailableSquares[i,1] == PointY){
+                //駒オブジェクトのpositionの書き換え
+                //ドロップ時のマウスの位置するマスに対応したローカル座標を配列PointValueX(Y)Arrayで取得している
+                mousePos.z = PosZ;
+                    allyDrag.transform.localPosition = new Vector3(PointValueXArray[PointX], PointValueYArray[PointY], 0);
+                //配列arrayBoardの書き換え
+                arrayBoard[InitialPointY,InitialPointX] = 0;    //元いたマスのステータスを0にする
+                arrayBoard[PointY,PointX] = DragObjectNum;      //移動した先のマスのステータスを駒の番号にする
 
-                    immovable = true;
-                    break;
-                }
+                immovable = true;
+                break;
             }
+        }
 
-            return immovable;
+        return immovable;
     }
 }
