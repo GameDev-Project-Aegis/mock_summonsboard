@@ -692,20 +692,19 @@ public class BoardSurface : MonoBehaviour
         return immovable;
     }
 
+    int[,] MovableSquare = {
+        {10,10},{10,10},{10,10},
+        {10,10},{10,10},{10,10},
+        {10,10},{10,10},{10,10}
+    };
+
     //関数：相手ターンの一連の処理を行う関数
     void ActionEnemyTurn(){
 
         int? EnemyNum = null;
-        int[] moveEnemy = new int[8];
 
-        int EnemyPointX;
-        int EnemyPointY;
-
-        int[,] MovableSquare = {
-            {10,10},{10,10},{10,10},
-            {10,10},{10,10},{10,10},
-            {10,10},{10,10},{10,10}
-        };
+        int EnemyPointX = 10;
+        int EnemyPointY = 10;        
         
         //Enemyの中で一番X座標が小さい駒を取得
         for(int i=0; i<4; i++){
@@ -724,7 +723,7 @@ public class BoardSurface : MonoBehaviour
         Debug.Log(EnemyNum);
         
         //取得した駒にRight側で動けるマスがあるか判定
-        GetEnemyMovableSquare(EnemyNum);
+        GetEnemyMovableSquare(EnemyNum,EnemyPointX,EnemyPointY);
         
         //動けるマスの配列の中からランダムにひとつ取得   
 
@@ -741,7 +740,9 @@ public class BoardSurface : MonoBehaviour
     }
 
     //関数：ActionEnemyTurn()内部で取得した駒にRight側で動けるマスがあるか判定
-    void GetEnemyMovableSquare(int EnemyNum){
+    void GetEnemyMovableSquare(int? EnemyNum, int EnemyPointX, int EnemyPointY){
+        int[] moveEnemy = new int[8];
+
         if (EnemyNum == 11){
             moveEnemy = moveEnemy1;
         } else if (EnemyNum == 12){
