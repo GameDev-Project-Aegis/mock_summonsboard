@@ -696,12 +696,24 @@ public class BoardSurface : MonoBehaviour
     void ActionEnemyTurn(){
 
         int? EnemyNum = null;
+        int[] moveEnemy = new int[8];
+
+        int EnemyPointX;
+        int EnemyPointY;
+
+        int[,] MovableSquare = {
+            {10,10},{10,10},{10,10},
+            {10,10},{10,10},{10,10},
+            {10,10},{10,10},{10,10}
+        };
         
         //Enemyの中で一番X座標が小さい駒を取得
         for(int i=0; i<4; i++){
             for(int j=0; j<4; j++){
                 if (arrayBoard[j,i]==11 || arrayBoard[j,i]==12){
                     EnemyNum = arrayBoard[j,i];
+                    EnemyPointX = i;
+                    EnemyPointY = j;
                     break;
                 }
             }
@@ -711,8 +723,10 @@ public class BoardSurface : MonoBehaviour
         }
         Debug.Log(EnemyNum);
         
-        //取得した駒にLeft側以外で動けるマスがあるか判定
+        //取得した駒にRight側で動けるマスがあるか判定
+        GetEnemyMovableSquare(EnemyNum);
         
+        //動けるマスの配列の中からランダムにひとつ取得   
 
         //存在しない場合違う駒を取得しなおす
 
@@ -724,5 +738,65 @@ public class BoardSurface : MonoBehaviour
 
         //プレイヤーターンに移行
         PlayerTurn = true;
+    }
+
+    //関数：ActionEnemyTurn()内部で取得した駒にRight側で動けるマスがあるか判定
+    void GetEnemyMovableSquare(int EnemyNum){
+        if (EnemyNum == 11){
+            moveEnemy = moveEnemy1;
+        } else if (EnemyNum == 12){
+            moveEnemy = moveEnemy2;
+        }
+        //RightUp
+        if (moveEnemy[5] != 0){
+            if (EnemyPointY >= 1 && EnemyPointX <= 2 && arrayBoard[EnemyPointY-1,EnemyPointX+1] == 0){
+                MovableSquare[0,0] = EnemyPointX+1;
+                MovableSquare[0,1] = EnemyPointY-1;
+            }
+            if (moveAlly[5] == 2){
+                if (EnemyPointY >= 2 && EnemyPointX <= 1 && arrayBoard[EnemyPointY-2,EnemyPointX+2] == 0){
+                    MovableSquare[1,0] = EnemyPointX+2;
+                    MovableSquare[1,1] = EnemyPointY-2;
+                }
+                if (EnemyPointY >= 3 && EnemyPointX <= 0 && arrayBoard[EnemyPointY-3,EnemyPointX+3] == 0){
+                    MovableSquare[2,0] = EnemyPointX+3;
+                    MovableSquare[2,1] = EnemyPointY-3;
+                }
+            }
+        }
+        //Right
+        if (moveEnemy[6] != 0){
+            if (EnemyPointX <= 2 && arrayBoard[EnemyPointY,EnemyPointX+1] == 0){
+                MovableSquare[3,0] = EnemyPointX+1;
+                MovableSquare[3,1] = EnemyPointY-1;
+            }
+            if (moveAlly[6] == 2){
+                if (EnemyPointX <= 1 && arrayBoard[EnemyPointY,EnemyPointX+2] == 0){
+                    MovableSquare[4,0] = EnemyPointX+2;
+                    MovableSquare[4,1] = EnemyPointY-2;
+                }
+                if (EnemyPointX <= 0 && arrayBoard[EnemyPointY,EnemyPointX+3] == 0){
+                    MovableSquare[5,0] = EnemyPointX+3;
+                    MovableSquare[5,1] = EnemyPointY-3;
+                }
+            }
+        }
+        //RightDown
+        if (moveEnemy[7] != 0){
+            if (EnemyPointY <= 2 && EnemyPointX <= 2 && arrayBoard[EnemyPointY+1,EnemyPointX+1] == 0){
+                MovableSquare[6,0] = EnemyPointX+1;
+                MovableSquare[6,1] = EnemyPointY-1;
+            }
+            if (moveAlly[7] == 2){
+                if (EnemyPointY <= 1 && EnemyPointX <= 1 && arrayBoard[EnemyPointY+2,EnemyPointX+2] == 0){
+                    MovableSquare[7,0] = EnemyPointX+2;
+                    MovableSquare[7,1] = EnemyPointY+2;
+                }
+                if (EnemyPointY <= 0 && EnemyPointX <= 0 && arrayBoard[EnemyPointY+3,EnemyPointX+3] == 0){
+                    MovableSquare[8,0] = EnemyPointX+3;
+                    MovableSquare[8,1] = EnemyPointY+3;
+                }
+            }
+        }
     }
 }
