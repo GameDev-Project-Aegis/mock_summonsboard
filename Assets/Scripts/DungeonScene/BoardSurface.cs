@@ -148,7 +148,7 @@ public class BoardSurface : MonoBehaviour
             
             //座標が盤面から外に出た時に駒を初期位置に戻す
             if (mousePos.x < -2 || mousePos.x > 2 || mousePos.y < -2 || mousePos.y > 2){
-                InitializationDrag();
+                InitializationDrag(false);
             }
         }
     }
@@ -159,7 +159,8 @@ public class BoardSurface : MonoBehaviour
         //allyDragに駒オブジェクトがセットされてる場合のみ実行
         if (allyDrag != null) {
             //モンスターをドロップしたときの処理を行う関数
-            DropMonster();
+            immovable = DropMonster();
+            InitializationDrag(immovable);
         }
     }
 
@@ -499,24 +500,34 @@ public class BoardSurface : MonoBehaviour
     }
             
     //座標が盤面から外に出た時に駒を初期位置に戻す
-    void InitializationDrag(){
-        allyDrag.transform.localPosition = new Vector3(PointValueXArray[InitialPointX], PointValueYArray[InitialPointY], 0);
-
-        HighLight_O.GetComponent<Animator>().SetTrigger("outOriginally");
-        HighLight_D.GetComponent<Animator>().SetTrigger("outDistination");
-
-        //focusの解除
-        FocusParent.SetActive(false);
+    void InitializationDrag(bool immovable){
+        if (!immovable){
+            allyDrag.transform.localPosition = new Vector3(PointValueXArray[InitialPointX], PointValueYArray[InitialPointY], 0);
+        }
 
         //allyDragを空に戻して置く
         allyDrag = null;
 
         //alluDragがセットされた場合に味方駒のcanvasを半透明にする
         Ally.alpha = 1.0f;
+            
+        //HighLightの解除
+        HighLight_O.GetComponent<Animator>().SetTrigger("outOriginally");
+        HighLight_D.GetComponent<Animator>().SetTrigger("outDistination");
+
+        //focusの解除
+        FocusParent.SetActive(false);
+
+        //Squareを元に戻す
+        for (int i = 0; i < 4; i++){
+            for (int j = 0; j < 4; j++){
+                SquareBox[i,j].SetActive(true);
+            }
+        }
     }
 
     //モンスターをドロップしたときの処理を行う関数
-    void DropMonster(){
+    bool DropMonster(){
         //座標からマスを導出
             mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
             PointArray = GetBoardPoint(mousePos.x, mousePos.y);
@@ -524,7 +535,7 @@ public class BoardSurface : MonoBehaviour
             PointY = PointArray[1];
 
             //動けるマスの整理
-            immovable = false;
+            bool immovable = false;
             for(int i = 0; i < AvailableSquares.GetLength(0); i++){
                 if (AvailableSquares[i,0] == PointX && AvailableSquares[i,1] == PointY){
                     //駒オブジェクトのpositionの書き換え
@@ -539,29 +550,7 @@ public class BoardSurface : MonoBehaviour
                     break;
                 }
             }
-            if (!immovable){
-                //駒を初期位置に戻す
-                allyDrag.transform.localPosition = new Vector3(PointValueXArray[InitialPointX], PointValueYArray[InitialPointY], 0); 
-            }
 
-            //allyDragを空に戻して置く
-            allyDrag = null;
-
-            //allyレイヤーの透明度を元に戻す
-            Ally.alpha = 1.0f;
-            
-            //HighLightの解除
-            HighLight_O.GetComponent<Animator>().SetTrigger("outOriginally");
-            HighLight_D.GetComponent<Animator>().SetTrigger("outDistination");
-
-            //focusの解除
-            FocusParent.SetActive(false);
-
-            //Squareを元に戻す
-            for (int i = 0; i < 4; i++){
-                for (int j = 0; j < 4; j++){
-                    SquareBox[i,j].SetActive(true);
-                }
-            }
+            return immovable;
     }
 }
