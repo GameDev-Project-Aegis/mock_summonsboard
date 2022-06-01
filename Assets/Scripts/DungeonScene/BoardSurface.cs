@@ -82,10 +82,14 @@ public class BoardSurface : MonoBehaviour
     };
 
     //各モンスターの動く範囲のマスを配列としておく
+    // 0 -> 矢印なし, 1 -> 一重矢印, 2 -> 二重矢印
+    //{左上, 左, 左下, 上, 下, 右上, 右, 右下}
     int[] moveAlly1 = {1,2,1,0,0,2,2,2};
     int[] moveAlly2 = {1,2,1,1,0,1,2,1};
     int[] moveAlly3 = {1,1,1,0,0,1,1,1};
     int[] moveAlly4 = {1,2,0,1,1,0,2,0};
+    int[] moveEnemy1 = {0,1,0,0,0,2,0,2};
+    int[] moveEnemy2 = {0,1,0,1,1,0,1,0};
     //上記をセットするための空配列
     int[] moveAlly = new int[8];
     //モンスターが動ける範囲のマスを配列とする
@@ -96,6 +100,9 @@ public class BoardSurface : MonoBehaviour
 
     //ドロップ可能か判定のためのbool値
     bool immovable = false;
+
+    //ターン判定のためのbool値（プレイヤーターン -> true, 敵ターン -> false）
+    bool PlayerTurn;
     
     // Start is called before the first frame update
     void Start()
@@ -112,32 +119,43 @@ public class BoardSurface : MonoBehaviour
 
         //SquareBoxにプレハブをセットする
         PrepareSquareBox();
+
+        //プレイヤーターンをセットする
+        PlayerTurn = true;
     }
 
-    // クリック時
+    // タップ時
     void OnMouseDown()
     {
-        //タップした先のモンスターを返す関数（いない場合はnullを返す）
-        //InitialPointX,InitialPointYもセットされる
-        allyDrag = MonsterOnTaped();
+        //プレイヤーターンの場合のみ実行
+        if (PlayerTurn){
+            //タップした先のモンスターを返す関数（いない場合はnullを返す）
+            //InitialPointX,InitialPointYもセットされる
+            allyDrag = MonsterOnTaped();
 
-        if (allyDrag != null){
-            //味方駒のcanvasを半透明にする
-            Ally.alpha = 0.6f;
+            //プレイヤー駒をタップした場合の処理
+            if (allyDrag == ally1 || allyDrag == ally2 || allyDrag == ally3 || allyDrag == ally4){
+                //味方駒のcanvasを半透明にする
+                Ally.alpha = 0.6f;
 
-            //ハイライトを表示
-            SetHighLight();
+                //ハイライトを表示
+                SetHighLight();
 
-            //動けるマスの範囲の二次元配列を作成・Squareプレハブの非表示・Focusプレハブの表示
-            GenerateAvailableSquares(InitialPointX,InitialPointY);
+                //動けるマスの範囲の二次元配列を作成・Squareプレハブの非表示・Focusプレハブの表示
+                GenerateAvailableSquares(InitialPointX,InitialPointY,true);
+            }
+            //敵駒をタップした場合の処理
+            else {
+                GenerateAvailableSquares(InitialPointX,InitialPointY,false);
+            }
         }
     }
 
     // ドラッグ時
     void OnMouseDrag()
     {
-        //allyDragに駒オブジェクトがセットされてる場合のみ実行
-        if (allyDrag != null) {
+        //プレイヤーターンかつallyDragにプレイヤー駒オブジェクトがセットされてる場合のみ実行
+        if (PlayerTurn && allyDrag != null && allyDrag != enemy1 && allyDrag != enemy2) {
             mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
 
             //モンスターをドラッグに合わせて移動させる
@@ -148,7 +166,7 @@ public class BoardSurface : MonoBehaviour
             
             //座標が盤面から外に出た時に駒を初期位置に戻す
             if (mousePos.x < -2 || mousePos.x > 2 || mousePos.y < -2 || mousePos.y > 2){
-                InitializationDrag();
+                InitializationDrag(false);
             }
         }
     }
@@ -156,10 +174,24 @@ public class BoardSurface : MonoBehaviour
     // ドロップ時
     void OnMouseUp()
     {
-        //allyDragに駒オブジェクトがセットされてる場合のみ実行
-        if (allyDrag != null) {
-            //モンスターをドロップしたときの処理を行う関数
-            DropMonster();
+        //プレイヤーターンかつallyDragに駒オブジェクトがセットされてる場合のみ実行
+        if (PlayerTurn && allyDrag != null) {
+            //プレイヤー駒がセットされていた場合の処理
+            if (allyDrag == ally1 || allyDrag == ally2 || allyDrag == ally3 || allyDrag == ally4){
+                //モンスターをドロップしたときの処理を行う関数
+                immovable = DropMonster();
+                InitializationDrag(immovable);
+                if (immovable){
+                    //プレイターターンを終了させる処理
+                    PlayerTurn = false;
+                    ActionEnemyTurn();
+                }
+            }
+            //敵駒がセットされていた場合の処理
+            else {
+                //エフェクトのリセットを行う
+                InitializationEffect();
+            }
         }
     }
 
@@ -170,8 +202,8 @@ public class BoardSurface : MonoBehaviour
         arrayBoard[2,3] = 2;  // ally2
         arrayBoard[3,3] = 3;  // ally3
         arrayBoard[3,2] = 4;  // ally4
-        arrayBoard[1,0] = 5;  // enemy1
-        arrayBoard[0,1] = 6;  // enemy2
+        arrayBoard[1,0] = 11;  // enemy1
+        arrayBoard[0,1] = 12;  // enemy2
         //②駒オブジェクトに座標を指定
         ally1.transform.localPosition = new Vector3(105, 35, 0);
         ally2.transform.localPosition = new Vector3(105, -35, 0);
@@ -212,25 +244,27 @@ public class BoardSurface : MonoBehaviour
         //②味方駒がいた場合にallyDragにその駒のオブジェクトをセットする
         //transform.SetAsLastSibling()でヒエラルキー内の順序を変更し，一番手前に表示
         if (arrayBoard[InitialPointY,InitialPointX] == 1) {
-            // allyDrag = ally1;
             DragObjectNum = 1;
             ally1.transform.SetAsLastSibling();
             return ally1;
         }else if (arrayBoard[InitialPointY,InitialPointX] == 2) {
-            // allyDrag = ally2;
             DragObjectNum = 2;
             ally2.transform.SetAsLastSibling();
             return ally2;
         }else if (arrayBoard[InitialPointY,InitialPointX] == 3) {
-            // allyDrag = ally3;
             DragObjectNum = 3;
             ally3.transform.SetAsLastSibling();
             return ally3;
         }else if (arrayBoard[InitialPointY,InitialPointX] == 4) {
-            // allyDrag = ally4;
             DragObjectNum = 4;
             ally4.transform.SetAsLastSibling();
             return ally4;
+        }else if (arrayBoard[InitialPointY,InitialPointX] == 11) {
+            DragObjectNum = 11;
+            return enemy1;
+        }else if (arrayBoard[InitialPointY,InitialPointX] == 12) {
+            DragObjectNum = 12;
+            return enemy2;
         }else{
             return null;
         }
@@ -276,7 +310,7 @@ public class BoardSurface : MonoBehaviour
     }
 
     //関数：動けるマスの範囲の二次元配列を作成とプレハブの非表示
-    void GenerateAvailableSquares(int InitialPointX, int InitialPointY){
+    void GenerateAvailableSquares(int InitialPointX, int InitialPointY, bool Player){
             //Focusを座標にセットする
             FocusParent.SetActive(true);
             FocusParent.transform.localPosition = new Vector3(PointValueXArray[InitialPointX], PointValueYArray[InitialPointY], 0);
@@ -289,6 +323,10 @@ public class BoardSurface : MonoBehaviour
                 moveAlly = moveAlly3;
             } else if (allyDrag == ally4){
                 moveAlly = moveAlly4;
+            } else if (allyDrag == enemy1){
+                moveAlly = moveEnemy1;
+            } else if (allyDrag == enemy2){
+                moveAlly = moveEnemy2;
             }
 
             AvailableSquares = new int[24,2]{
@@ -301,184 +339,280 @@ public class BoardSurface : MonoBehaviour
             //LeftUp
             if (moveAlly[0] != 0){
                 if (InitialPointY-1 >= 0 && InitialPointX-1 >= 0 && arrayBoard[InitialPointY-1,InitialPointX-1] == 0){
-                    FocusLeftUp.transform.GetChild(0).GetComponent<focus>().FocusMove();
-                    AvailableSquares[0,0] = InitialPointX-1;
-                    AvailableSquares[0,1] = InitialPointY-1;
+                    if(Player){
+                        FocusLeftUp.transform.GetChild(0).GetComponent<focus>().FocusMove();
+                        AvailableSquares[0,0] = InitialPointX-1;
+                        AvailableSquares[0,1] = InitialPointY-1;
+                    }else{
+                        FocusLeftUp.transform.GetChild(0).GetComponent<focus>().FocusEnemyMove();
+                    }
                     SquareBox[InitialPointY-1,InitialPointX-1].SetActive(false);
                 }
             }
             if (moveAlly[0] == 2){
                 if (InitialPointY >= 2 && InitialPointX >= 2 && arrayBoard[InitialPointY-2,InitialPointX-2] == 0){
-                    FocusLeftUp.transform.GetChild(1).GetComponent<focus>().FocusMove();
-                    AvailableSquares[1,0] = InitialPointX-1;
-                    AvailableSquares[1,1] = InitialPointY-1;
+                    if(Player){
+                        FocusLeftUp.transform.GetChild(1).GetComponent<focus>().FocusMove();
+                        AvailableSquares[1,0] = InitialPointX-1;
+                        AvailableSquares[1,1] = InitialPointY-1;
+                    }else{
+                        FocusLeftUp.transform.GetChild(1).GetComponent<focus>().FocusEnemyMove();
+                    }
                     SquareBox[InitialPointY-2,InitialPointX-2].SetActive(false);
                 }
                 if (InitialPointY >= 3 && InitialPointX >= 3 && arrayBoard[InitialPointY-3,InitialPointX-3] == 0){
-                    FocusLeftUp.transform.GetChild(2).GetComponent<focus>().FocusMove();
-                    AvailableSquares[3,0] = InitialPointX-3;
-                    AvailableSquares[3,1] = InitialPointY-3;
+                    if(Player){
+                        FocusLeftUp.transform.GetChild(2).GetComponent<focus>().FocusMove();
+                        AvailableSquares[3,0] = InitialPointX-3;
+                        AvailableSquares[3,1] = InitialPointY-3;
+                    }else{
+                        FocusLeftUp.transform.GetChild(2).GetComponent<focus>().FocusEnemyMove();
+                    }
                     SquareBox[InitialPointY-3,InitialPointX-3].SetActive(false);
                 }
             }
             //Left
             if (moveAlly[1] != 0){
                 if (InitialPointX >= 1 && arrayBoard[InitialPointY,InitialPointX-1] == 0){
-                    FocusLeft.transform.GetChild(0).GetComponent<focus>().FocusMove();
-                    AvailableSquares[3,0] = InitialPointX-1;
-                    AvailableSquares[3,1] = InitialPointY;
+                    if(Player){
+                        FocusLeft.transform.GetChild(0).GetComponent<focus>().FocusMove();
+                        AvailableSquares[3,0] = InitialPointX-1;
+                        AvailableSquares[3,1] = InitialPointY;
+                    }else{
+                        FocusLeft.transform.GetChild(0).GetComponent<focus>().FocusEnemyMove();
+                    }
                     SquareBox[InitialPointY,InitialPointX-1].SetActive(false);
                 }
             }
             if (moveAlly[1] == 2){
                 if (InitialPointX >= 2 && arrayBoard[InitialPointY,InitialPointX-2] == 0){
-                    FocusLeft.transform.GetChild(1).GetComponent<focus>().FocusMove();
-                    AvailableSquares[4,0] = InitialPointX-2;
-                    AvailableSquares[4,1] = InitialPointY;
+                    if(Player){
+                        FocusLeft.transform.GetChild(1).GetComponent<focus>().FocusMove();
+                        AvailableSquares[4,0] = InitialPointX-2;
+                        AvailableSquares[4,1] = InitialPointY;
+                    }else{
+                        FocusLeft.transform.GetChild(1).GetComponent<focus>().FocusEnemyMove();
+                    }
                     SquareBox[InitialPointY,InitialPointX-2].SetActive(false);
                 }
                 if (InitialPointX >= 3 && arrayBoard[InitialPointY,InitialPointX-3] == 0){
-                    FocusLeft.transform.GetChild(2).GetComponent<focus>().FocusMove();
-                    AvailableSquares[5,0] = InitialPointX-3;
-                    AvailableSquares[5,1] = InitialPointY;
+                    if(Player){
+                        FocusLeft.transform.GetChild(2).GetComponent<focus>().FocusMove();
+                        AvailableSquares[5,0] = InitialPointX-3;
+                        AvailableSquares[5,1] = InitialPointY;
+                    }else{
+                        FocusLeft.transform.GetChild(2).GetComponent<focus>().FocusEnemyMove();
+                    }
                     SquareBox[InitialPointY,InitialPointX-3].SetActive(false);
                 }
             }
             //LeftDown
             if (moveAlly[2] != 0){
                 if (InitialPointY <= 2 && InitialPointX >= 1 && arrayBoard[InitialPointY+1,InitialPointX-1] == 0){
-                    FocusLeftDown.transform.GetChild(0).GetComponent<focus>().FocusMove();
-                    AvailableSquares[6,0] = InitialPointX-1;
-                    AvailableSquares[6,1] = InitialPointY+1;
+                    if(Player){
+                        FocusLeftDown.transform.GetChild(0).GetComponent<focus>().FocusMove();
+                        AvailableSquares[6,0] = InitialPointX-1;
+                        AvailableSquares[6,1] = InitialPointY+1;
+                    }else{
+                        FocusLeftDown.transform.GetChild(0).GetComponent<focus>().FocusEnemyMove();
+                    }
                     SquareBox[InitialPointY+1,InitialPointX-1].SetActive(false);
                 }
             }
             if (moveAlly[2] == 2){
                 if (InitialPointY <= 1 && InitialPointX >= 2 && arrayBoard[InitialPointY+2,InitialPointX-2] == 0){
-                    FocusLeftDown.transform.GetChild(1).GetComponent<focus>().FocusMove();
-                    AvailableSquares[7,0] = InitialPointX-2;
-                    AvailableSquares[7,1] = InitialPointY+2;
+                    if(Player){
+                        FocusLeftDown.transform.GetChild(1).GetComponent<focus>().FocusMove();
+                        AvailableSquares[7,0] = InitialPointX-2;
+                        AvailableSquares[7,1] = InitialPointY+2;
+                    }else{
+                        FocusLeftDown.transform.GetChild(1).GetComponent<focus>().FocusEnemyMove();
+                    }
                     SquareBox[InitialPointY+2,InitialPointX-2].SetActive(false);
                 }
                 if (InitialPointY <= 0 && InitialPointX >= 3 && arrayBoard[InitialPointY+3,InitialPointX-3] == 0){
-                    FocusLeftDown.transform.GetChild(2).GetComponent<focus>().FocusMove();
-                    AvailableSquares[8,0] = InitialPointX-3;
-                    AvailableSquares[8,1] = InitialPointY+3;
+                    if(Player){
+                        FocusLeftDown.transform.GetChild(2).GetComponent<focus>().FocusMove();
+                        AvailableSquares[8,0] = InitialPointX-3;
+                        AvailableSquares[8,1] = InitialPointY+3;
+                    }else{
+                        FocusLeftDown.transform.GetChild(2).GetComponent<focus>().FocusEnemyMove();
+                    }
                     SquareBox[InitialPointY+3,InitialPointX-3].SetActive(false);
                 }
             }
             //Up
             if (moveAlly[3] != 0){
                 if (InitialPointY >= 1 && arrayBoard[InitialPointY-1,InitialPointX] == 0){
-                    FocusUp.transform.GetChild(0).GetComponent<focus>().FocusMove();
-                    AvailableSquares[9,0] = InitialPointX;
-                    AvailableSquares[9,1] = InitialPointY-1;
+                    if(Player){
+                        FocusUp.transform.GetChild(0).GetComponent<focus>().FocusMove();
+                        AvailableSquares[9,0] = InitialPointX;
+                        AvailableSquares[9,1] = InitialPointY-1;
+                    }else{
+                        FocusUp.transform.GetChild(0).GetComponent<focus>().FocusEnemyMove();
+                    }
                     SquareBox[InitialPointY-1,InitialPointX].SetActive(false);
                 }
             }
             if (moveAlly[3] == 2){
                 if (InitialPointY >= 2 && arrayBoard[InitialPointY-2,InitialPointX] == 0){
-                    FocusLeftDown.transform.GetChild(1).GetComponent<focus>().FocusMove();
-                    AvailableSquares[10,0] = InitialPointX;
-                    AvailableSquares[10,1] = InitialPointY-2;
+                    if(Player){
+                        FocusLeftDown.transform.GetChild(1).GetComponent<focus>().FocusMove();
+                        AvailableSquares[10,0] = InitialPointX;
+                        AvailableSquares[10,1] = InitialPointY-2;
+                    }else{
+                        FocusLeftDown.transform.GetChild(1).GetComponent<focus>().FocusEnemyMove();
+                    }
                     SquareBox[InitialPointY-2,InitialPointX].SetActive(false);
                 }
                 if (InitialPointY >= 3 && arrayBoard[InitialPointY-3,InitialPointX] == 0){
-                    FocusLeftDown.transform.GetChild(2).GetComponent<focus>().FocusMove();
-                    AvailableSquares[11,0] = InitialPointX;
-                    AvailableSquares[11,1] = InitialPointY-3;
+                    if(Player){
+                        FocusLeftDown.transform.GetChild(2).GetComponent<focus>().FocusMove();
+                        AvailableSquares[11,0] = InitialPointX;
+                        AvailableSquares[11,1] = InitialPointY-3;
+                    }else{
+                        FocusLeftDown.transform.GetChild(2).GetComponent<focus>().FocusEnemyMove();
+                    }
                     SquareBox[InitialPointY-3,InitialPointX].SetActive(false);
                 }
             }
             //Down
             if (moveAlly[4] != 0){
                 if (InitialPointY <= 2 && arrayBoard[InitialPointY+1,InitialPointX] == 0){
-                    FocusDown.transform.GetChild(0).GetComponent<focus>().FocusMove();
-                    AvailableSquares[12,0] = InitialPointX;
-                    AvailableSquares[12,1] = InitialPointY+1;
+                    if(Player){
+                        FocusDown.transform.GetChild(0).GetComponent<focus>().FocusMove();
+                        AvailableSquares[12,0] = InitialPointX;
+                        AvailableSquares[12,1] = InitialPointY+1;
+                    }else{
+                        FocusDown.transform.GetChild(0).GetComponent<focus>().FocusEnemyMove();
+                    }
                     SquareBox[InitialPointY+1,InitialPointX].SetActive(false);
                 }
             }
             if (moveAlly[4] == 2){
                 if (InitialPointY <= 1 && arrayBoard[InitialPointY+2,InitialPointX] == 0){
-                    FocusDown.transform.GetChild(1).GetComponent<focus>().FocusMove();
-                    AvailableSquares[13,0] = InitialPointX;
-                    AvailableSquares[13,1] = InitialPointY+2;
+                    if(Player){
+                        FocusDown.transform.GetChild(1).GetComponent<focus>().FocusMove();
+                        AvailableSquares[13,0] = InitialPointX;
+                        AvailableSquares[13,1] = InitialPointY+2;
+                    }else{
+                        FocusDown.transform.GetChild(1).GetComponent<focus>().FocusEnemyMove();
+                    }
                     SquareBox[InitialPointY+2,InitialPointX].SetActive(false);
                 }
                 if (InitialPointY <= 0 && arrayBoard[InitialPointY+3,InitialPointX] == 0){
-                    FocusDown.transform.GetChild(2).GetComponent<focus>().FocusMove();
-                    AvailableSquares[14,0] = InitialPointX;
-                    AvailableSquares[14,1] = InitialPointY+3;
+                    if(Player){
+                        FocusDown.transform.GetChild(2).GetComponent<focus>().FocusMove();
+                        AvailableSquares[14,0] = InitialPointX;
+                        AvailableSquares[14,1] = InitialPointY+3;
+                    }else{
+                        FocusDown.transform.GetChild(2).GetComponent<focus>().FocusEnemyMove();
+                    }
                     SquareBox[InitialPointY+3,InitialPointX].SetActive(false);
                 }
             }
             //RightUp
             if (moveAlly[5] != 0){
                 if (InitialPointY >= 1 && InitialPointX <= 2 && arrayBoard[InitialPointY-1,InitialPointX+1] == 0){
-                    FocusRightUp.transform.GetChild(0).GetComponent<focus>().FocusMove();
-                    AvailableSquares[15,0] = InitialPointX+1;
-                    AvailableSquares[15,1] = InitialPointY-1;
+                    if(Player){
+                        FocusRightUp.transform.GetChild(0).GetComponent<focus>().FocusMove();
+                        AvailableSquares[15,0] = InitialPointX+1;
+                        AvailableSquares[15,1] = InitialPointY-1;
+                    }else{
+                        FocusRightUp.transform.GetChild(0).GetComponent<focus>().FocusEnemyMove();
+                    }
                     SquareBox[InitialPointY-1,InitialPointX+1].SetActive(false);
                 }
             }
             if (moveAlly[5] == 2){
                 if (InitialPointY >= 2 && InitialPointX <= 1 && arrayBoard[InitialPointY-2,InitialPointX+2] == 0){
-                    FocusRightUp.transform.GetChild(1).GetComponent<focus>().FocusMove();
-                    AvailableSquares[16,0] = InitialPointX+2;
-                    AvailableSquares[16,1] = InitialPointY-2;
+                    if(Player){
+                        FocusRightUp.transform.GetChild(1).GetComponent<focus>().FocusMove();
+                        AvailableSquares[16,0] = InitialPointX+2;
+                        AvailableSquares[16,1] = InitialPointY-2;
+                    }else{
+                        FocusRightUp.transform.GetChild(1).GetComponent<focus>().FocusEnemyMove();
+                    }
                     SquareBox[InitialPointY-2,InitialPointX+2].SetActive(false);
                 }
                 if (InitialPointY >= 3 && InitialPointX <= 0 && arrayBoard[InitialPointY-3,InitialPointX+3] == 0){
-                    FocusRightUp.transform.GetChild(2).GetComponent<focus>().FocusMove();
-                    AvailableSquares[17,0] = InitialPointX+3;
-                    AvailableSquares[17,1] = InitialPointY-3;
+                    if(Player){
+                        FocusRightUp.transform.GetChild(2).GetComponent<focus>().FocusMove();
+                        AvailableSquares[17,0] = InitialPointX+3;
+                        AvailableSquares[17,1] = InitialPointY-3;
+                    }else{
+                        FocusRightUp.transform.GetChild(2).GetComponent<focus>().FocusEnemyMove();
+                    }
                     SquareBox[InitialPointY-3,InitialPointX+3].SetActive(false);
                 }
             }
             //Right
             if (moveAlly[6] != 0){
                 if (InitialPointX <= 2 && arrayBoard[InitialPointY,InitialPointX+1] == 0){
-                    FocusRight.transform.GetChild(0).GetComponent<focus>().FocusMove();
-                    AvailableSquares[18,0] = InitialPointX+1;
-                    AvailableSquares[18,1] = InitialPointY;
+                    if(Player){
+                        FocusRight.transform.GetChild(0).GetComponent<focus>().FocusMove();
+                        AvailableSquares[18,0] = InitialPointX+1;
+                        AvailableSquares[18,1] = InitialPointY;
+                    }else{
+                        FocusRight.transform.GetChild(0).GetComponent<focus>().FocusEnemyMove();
+                    }
                     SquareBox[InitialPointY,InitialPointX+1].SetActive(false);
                 }
             }
             if (moveAlly[6] == 2){
                 if (InitialPointX <= 1 && arrayBoard[InitialPointY,InitialPointX+2] == 0){
-                    FocusRight.transform.GetChild(1).GetComponent<focus>().FocusMove();
-                    AvailableSquares[19,0] = InitialPointX+2;
-                    AvailableSquares[19,1] = InitialPointY;
+                    if(Player){
+                        FocusRight.transform.GetChild(1).GetComponent<focus>().FocusMove();
+                        AvailableSquares[19,0] = InitialPointX+2;
+                        AvailableSquares[19,1] = InitialPointY;
+                    }else{
+                        FocusRight.transform.GetChild(1).GetComponent<focus>().FocusEnemyMove();
+                    }
                     SquareBox[InitialPointY,InitialPointX+2].SetActive(false);
                 }
                 if (InitialPointX <= 0 && arrayBoard[InitialPointY,InitialPointX+3] == 0){
-                    FocusRight.transform.GetChild(2).GetComponent<focus>().FocusMove();
-                    AvailableSquares[20,0] = InitialPointX+3;
-                    AvailableSquares[20,1] = InitialPointY;
+                    if(Player){
+                        FocusRight.transform.GetChild(2).GetComponent<focus>().FocusMove();
+                        AvailableSquares[20,0] = InitialPointX+3;
+                        AvailableSquares[20,1] = InitialPointY;
+                    }else{
+                        FocusRight.transform.GetChild(2).GetComponent<focus>().FocusEnemyMove();
+                    }
                     SquareBox[InitialPointY,InitialPointX+3].SetActive(false);
                 }
             }
             //RightDown
             if (moveAlly[7] != 0){
                 if (InitialPointY <= 2 && InitialPointX <= 2 && arrayBoard[InitialPointY+1,InitialPointX+1] == 0){
-                    FocusRightDown.transform.GetChild(0).GetComponent<focus>().FocusMove();
-                    AvailableSquares[21,0] = InitialPointX+1;
-                    AvailableSquares[21,1] = InitialPointY+1;
+                    if(Player){
+                        FocusRightDown.transform.GetChild(0).GetComponent<focus>().FocusMove();
+                        AvailableSquares[21,0] = InitialPointX+1;
+                        AvailableSquares[21,1] = InitialPointY+1;
+                    }else{
+                        FocusRightDown.transform.GetChild(0).GetComponent<focus>().FocusEnemyMove();
+                    }
                     SquareBox[InitialPointY+1,InitialPointX+1].SetActive(false);
                 }
             }
             if (moveAlly[7] == 2){
                 if (InitialPointY <= 1 && InitialPointX <= 1 && arrayBoard[InitialPointY+2,InitialPointX+2] == 0){
-                    FocusRightDown.transform.GetChild(1).GetComponent<focus>().FocusMove();
-                    AvailableSquares[22,0] = InitialPointX+2;
-                    AvailableSquares[22,1] = InitialPointY+2;
+                    if(Player){
+                        FocusRightDown.transform.GetChild(1).GetComponent<focus>().FocusMove();
+                        AvailableSquares[22,0] = InitialPointX+2;
+                        AvailableSquares[22,1] = InitialPointY+2;
+                    }else{
+                        FocusRightDown.transform.GetChild(1).GetComponent<focus>().FocusEnemyMove();
+                    }
                     SquareBox[InitialPointY+2,InitialPointX+2].SetActive(false);
                 }
                 if (InitialPointY <= 0 && InitialPointX <= 0 && arrayBoard[InitialPointY+3,InitialPointX+3] == 0){
-                    FocusRightDown.transform.GetChild(2).GetComponent<focus>().FocusMove();
-                    AvailableSquares[23,0] = InitialPointX+3;
-                    AvailableSquares[23,1] = InitialPointY+3;
+                    if(Player){
+                        FocusRightDown.transform.GetChild(2).GetComponent<focus>().FocusMove();
+                        AvailableSquares[23,0] = InitialPointX+3;
+                        AvailableSquares[23,1] = InitialPointY+3;
+                    }else{
+                        FocusRightDown.transform.GetChild(2).GetComponent<focus>().FocusEnemyMove();
+                    }
                     SquareBox[InitialPointY+3,InitialPointX+3].SetActive(false);
                 }
             }
@@ -498,70 +632,234 @@ public class BoardSurface : MonoBehaviour
         HighLight_D.transform.localPosition = new Vector3(PointValueXArray[PointArray[0]], PointValueYArray[PointArray[1]], 0);
     }
             
-    //座標が盤面から外に出た時に駒を初期位置に戻す
-    void InitializationDrag(){
-        allyDrag.transform.localPosition = new Vector3(PointValueXArray[InitialPointX], PointValueYArray[InitialPointY], 0);
-
-        HighLight_O.GetComponent<Animator>().SetTrigger("outOriginally");
-        HighLight_D.GetComponent<Animator>().SetTrigger("outDistination");
-
-        //focusの解除
-        FocusParent.SetActive(false);
+    //関数：駒の位置とエフェクトを初期化する
+    void InitializationDrag(bool immovable){
+        if (!immovable){
+            allyDrag.transform.localPosition = new Vector3(PointValueXArray[InitialPointX], PointValueYArray[InitialPointY], 0);
+        }
 
         //allyDragを空に戻して置く
         allyDrag = null;
 
         //alluDragがセットされた場合に味方駒のcanvasを半透明にする
         Ally.alpha = 1.0f;
+            
+        //HighLightの解除
+        HighLight_O.GetComponent<Animator>().SetTrigger("outOriginally");
+        HighLight_D.GetComponent<Animator>().SetTrigger("outDistination");
+
+        InitializationEffect();
+    }
+            
+    //関数：フォーカスとスクエアのエフェクトを初期化する
+    void InitializationEffect(){
+        //focusの解除
+        FocusParent.SetActive(false);
+
+        //Squareを元に戻す
+        for (int i = 0; i < 4; i++){
+            for (int j = 0; j < 4; j++){
+                SquareBox[i,j].SetActive(true);
+            }
+        }
     }
 
-    //モンスターをドロップしたときの処理を行う関数
-    void DropMonster(){
+    //関数：モンスターをドロップしたときの処理を行う
+    bool DropMonster(){
         //座標からマスを導出
-            mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-            PointArray = GetBoardPoint(mousePos.x, mousePos.y);
-            PointX = PointArray[0];
-            PointY = PointArray[1];
+        mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+        PointArray = GetBoardPoint(mousePos.x, mousePos.y);
+        PointX = PointArray[0];
+        PointY = PointArray[1];
 
-            //動けるマスの整理
-            immovable = false;
-            for(int i = 0; i < AvailableSquares.GetLength(0); i++){
-                if (AvailableSquares[i,0] == PointX && AvailableSquares[i,1] == PointY){
-                    //駒オブジェクトのpositionの書き換え
-                    //ドロップ時のマウスの位置するマスに対応したローカル座標を配列PointValueX(Y)Arrayで取得している
-                    mousePos.z = PosZ;
-                        allyDrag.transform.localPosition = new Vector3(PointValueXArray[PointX], PointValueYArray[PointY], 0);
-                    //配列arrayBoardの書き換え
-                    arrayBoard[InitialPointY,InitialPointX] = 0;    //元いたマスのステータスを0にする
-                    arrayBoard[PointY,PointX] = DragObjectNum;      //移動した先のマスのステータスを駒の番号にする
+        //動けるマスの整理
+        bool immovable = false;
+        for(int i = 0; i < AvailableSquares.GetLength(0); i++){
+            if (AvailableSquares[i,0] == PointX && AvailableSquares[i,1] == PointY){
+                //駒オブジェクトのpositionの書き換え
+                //ドロップ時のマウスの位置するマスに対応したローカル座標を配列PointValueX(Y)Arrayで取得している
+                mousePos.z = PosZ;
+                allyDrag.transform.localPosition = new Vector3(PointValueXArray[PointX], PointValueYArray[PointY], 0);
+                //配列arrayBoardの書き換え
+                arrayBoard[InitialPointY,InitialPointX] = 0;    //元いたマスのステータスを0にする
+                arrayBoard[PointY,PointX] = DragObjectNum;      //移動した先のマスのステータスを駒の番号にする
 
-                    immovable = true;
+                immovable = true;
+                break;
+            }
+        }
+
+        return immovable;
+    }
+
+    //関数：相手ターンの一連の処理を行う関数
+    void ActionEnemyTurn(){
+
+        int EnemyNum = 0;
+
+        int EnemyPointX = 10;
+        int EnemyPointY = 10;
+
+        int[,] MovableSquare = new int[9,2];  
+        
+        //Enemyの中で一番X座標が小さい駒を取得
+        for(int i=0; i<4; i++){
+            for(int j=0; j<4; j++){
+                if (arrayBoard[j,i]==11 || arrayBoard[j,i]==12){
+                    EnemyNum = arrayBoard[j,i];
+                    EnemyPointX = i;
+                    EnemyPointY = j;
+                    //取得した駒のフォーカスエフェクトを呼び出す
+                    if (EnemyNum==11){
+                        allyDrag = enemy1;
+                    } else if (EnemyNum==12){
+                        allyDrag = enemy2;
+                    }
+                    GenerateAvailableSquares(EnemyPointX,EnemyPointY,false);
+
+                    //取得した駒のアニメーションを実行する
+                    allyDrag.transform.GetChild(0).GetComponent<Animator>().SetTrigger("right1");
+
+                    //アニメーション終了後の処理
+                    StartCoroutine(ProcessAfterAnimation(EnemyPointX,EnemyPointY,EnemyNum));
+
                     break;
                 }
             }
-            if (!immovable){
-                //駒を初期位置に戻す
-                allyDrag.transform.localPosition = new Vector3(PointValueXArray[InitialPointX], PointValueYArray[InitialPointY], 0); 
+            if(EnemyNum != 0){
+                break;
             }
+        }
+        Debug.Log(EnemyNum);
+        
+        // //取得した駒にRight側で動けるマスがあるか判定
+        // MovableSquare = GetEnemyMovableSquare(EnemyNum,EnemyPointX,EnemyPointY);
 
-            //allyDragを空に戻して置く
-            allyDrag = null;
-
-            //allyレイヤーの透明度を元に戻す
-            Ally.alpha = 1.0f;
-            
-            //HighLightの解除
-            HighLight_O.GetComponent<Animator>().SetTrigger("outOriginally");
-            HighLight_D.GetComponent<Animator>().SetTrigger("outDistination");
-
-            //focusの解除
-            FocusParent.SetActive(false);
-
-            //Squareを元に戻す
-            for (int i = 0; i < 4; i++){
-                for (int j = 0; j < 4; j++){
-                    SquareBox[i,j].SetActive(true);
-                }
-            }
+        // //存在しない場合違う駒を取得しなおす
+        // bool enemyMovable = false;
+        // for (int i=0; i<9; i++){
+        //     if (MovableSquare[i,0] != 10){
+        //         enemyMovable = true;
+        //     }
+        // }
+        // if (!enemyMovable){
+        //     if (EnemyNum==11){
+        //         MovableSquare = GetEnemyMovableSquare(12,EnemyPointX,EnemyPointY);
+        //         enemyMovable = false;
+        //         for (int i=0; i<9; i++){
+        //             if (MovableSquare[i,0] != 10){
+        //                 enemyMovable = true;
+        //                 break;
+        //             }
+        //         }
+        //     } else if (EnemyNum==12){
+        //         MovableSquare = GetEnemyMovableSquare(11,EnemyPointX,EnemyPointY);
+        //         enemyMovable = false;
+        //         for (int i=0; i<9; i++){
+        //             if (MovableSquare[i,0] != 10){
+        //                 enemyMovable = true;
+        //                 break;
+        //             }
+        //         }
+        //     }
+        // }
+        
+        //動けるマスの配列の中からランダムにひとつ取得
+        // System.Random r1 = new System.Random();
+        // int r2 = r1.Next(0, 4);
     }
+
+    // コルーチン本体
+    private IEnumerator ProcessAfterAnimation(int EnemyPointX,int EnemyPointY, int EnemyNum)
+    {
+        // 1秒間待つ
+        yield return new WaitForSeconds(1);
+
+        Debug.Log(EnemyPointX);
+        Debug.Log(EnemyPointY);
+
+        //敵オブジェクトの座標の指定し直し
+        allyDrag.transform.localPosition = new Vector3(PointValueXArray[EnemyPointX+1], PointValueYArray[EnemyPointY], 0);
+        
+        //配列arrayBoardの書き換え
+        arrayBoard[EnemyPointY,EnemyPointX] = 0;    //元いたマスのステータスを0にする
+        arrayBoard[EnemyPointY,EnemyPointX+1] = EnemyNum;
+        Debug.Log(arrayBoard);
+
+        //フォーカスアニメーションの解除
+        FocusParent.SetActive(false);
+
+        //プレイヤーターンに移行
+        PlayerTurn = true;
+        allyDrag = null;
+    }
+    
+
+    // //関数：ActionEnemyTurn()内部で取得した駒にRight側で動けるマスがあるか判定
+    // int[,] GetEnemyMovableSquare(int? EnemyNum, int EnemyPointX, int EnemyPointY){
+    //     int[] moveEnemy = new int[8];
+    //     int[,] MovableSquare = {
+    //         {10,10},{10,10},{10,10},
+    //         {10,10},{10,10},{10,10},
+    //         {10,10},{10,10},{10,10}
+    //     };
+
+    //     if (EnemyNum == 11){
+    //         moveEnemy = moveEnemy1;
+    //     } else if (EnemyNum == 12){
+    //         moveEnemy = moveEnemy2;
+    //     }
+    //     //RightUp
+    //     if (moveEnemy[5] != 0){
+    //         if (EnemyPointY >= 1 && EnemyPointX <= 2 && arrayBoard[EnemyPointY-1,EnemyPointX+1] == 0){
+    //             MovableSquare[0,0] = EnemyPointX+1;
+    //             MovableSquare[0,1] = EnemyPointY-1;
+    //         }
+    //         if (moveAlly[5] == 2){
+    //             if (EnemyPointY >= 2 && EnemyPointX <= 1 && arrayBoard[EnemyPointY-2,EnemyPointX+2] == 0){
+    //                 MovableSquare[1,0] = EnemyPointX+2;
+    //                 MovableSquare[1,1] = EnemyPointY-2;
+    //             }
+    //             if (EnemyPointY >= 3 && EnemyPointX <= 0 && arrayBoard[EnemyPointY-3,EnemyPointX+3] == 0){
+    //                 MovableSquare[2,0] = EnemyPointX+3;
+    //                 MovableSquare[2,1] = EnemyPointY-3;
+    //             }
+    //         }
+    //     }
+    //     //Right
+    //     if (moveEnemy[6] != 0){
+    //         if (EnemyPointX <= 2 && arrayBoard[EnemyPointY,EnemyPointX+1] == 0){
+    //             MovableSquare[3,0] = EnemyPointX+1;
+    //             MovableSquare[3,1] = EnemyPointY-1;
+    //         }
+    //         if (moveAlly[6] == 2){
+    //             if (EnemyPointX <= 1 && arrayBoard[EnemyPointY,EnemyPointX+2] == 0){
+    //                 MovableSquare[4,0] = EnemyPointX+2;
+    //                 MovableSquare[4,1] = EnemyPointY-2;
+    //             }
+    //             if (EnemyPointX <= 0 && arrayBoard[EnemyPointY,EnemyPointX+3] == 0){
+    //                 MovableSquare[5,0] = EnemyPointX+3;
+    //                 MovableSquare[5,1] = EnemyPointY-3;
+    //             }
+    //         }
+    //     }
+    //     //RightDown
+    //     if (moveEnemy[7] != 0){
+    //         if (EnemyPointY <= 2 && EnemyPointX <= 2 && arrayBoard[EnemyPointY+1,EnemyPointX+1] == 0){
+    //             MovableSquare[6,0] = EnemyPointX+1;
+    //             MovableSquare[6,1] = EnemyPointY-1;
+    //         }
+    //         if (moveAlly[7] == 2){
+    //             if (EnemyPointY <= 1 && EnemyPointX <= 1 && arrayBoard[EnemyPointY+2,EnemyPointX+2] == 0){
+    //                 MovableSquare[7,0] = EnemyPointX+2;
+    //                 MovableSquare[7,1] = EnemyPointY+2;
+    //             }
+    //             if (EnemyPointY <= 0 && EnemyPointX <= 0 && arrayBoard[EnemyPointY+3,EnemyPointX+3] == 0){
+    //                 MovableSquare[8,0] = EnemyPointX+3;
+    //                 MovableSquare[8,1] = EnemyPointY+3;
+    //             }
+    //         }
+    //     }
+    //     return MovableSquare;
+    // }
 }

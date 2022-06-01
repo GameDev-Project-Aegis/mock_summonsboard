@@ -19,4 +19,16 @@ public class focus : MonoBehaviour
         focus2.GetComponent<Animator>().SetTrigger("unfocus");
         focus3.GetComponent<Animator>().SetTrigger("unfocus");
     }
+
+    public void FocusEnemyMove(){
+        focus1.GetComponent<Animator>().SetTrigger("focusEnemy");
+        focus2.GetComponent<Animator>().SetTrigger("focusEnemy");
+        focus3.GetComponent<Animator>().SetTrigger("focusEnemy");
+    }
+
+    public void UnFocusEnemyMove(){
+        focus1.GetComponent<Animator>().SetTrigger("unfocusEnemy");
+        focus2.GetComponent<Animator>().SetTrigger("unfocusEnemy");
+        focus3.GetComponent<Animator>().SetTrigger("unfocusEnemy");
+    }
 }
