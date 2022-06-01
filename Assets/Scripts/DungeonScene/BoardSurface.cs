@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class BoardSurface : MonoBehaviour
 {
+    public GameObject ActionEnemy;
+
     //駒オブジェクトをアタッチする
     public GameObject ally1;
     public GameObject ally2;
@@ -53,7 +55,7 @@ public class BoardSurface : MonoBehaviour
 
     //ドラッグ時のみドラッグする駒をセットするための空オブジェクト
     //「?」の記載はallyDragをnullと置けるようにするため（null許容型）
-    private GameObject? allyDrag;
+    public GameObject? allyDrag;
 
     //駒をタッチ操作する処理に必要な変数の定義
     private Camera mainCamera;
@@ -74,7 +76,7 @@ public class BoardSurface : MonoBehaviour
     //4行4列の配列を定義
     //行->Y位置、列->X位置
     //値はマスのステータスを表す（0->空, 1->ally1, 2->ally2, 3->ally3, 4->ally4, 5->enemy1, 6->enemy2,）
-    int[,] arrayBoard = new int[4, 4]{
+    public int[,] arrayBoard = new int[4, 4]{
         {0,0,0,0},
         {0,0,0,0},
         {0,0,0,0},
@@ -102,7 +104,7 @@ public class BoardSurface : MonoBehaviour
     bool immovable = false;
 
     //ターン判定のためのbool値（プレイヤーターン -> true, 敵ターン -> false）
-    bool PlayerTurn;
+    private bool PlayerTurn;
     
     // Start is called before the first frame update
     void Start()
@@ -184,7 +186,8 @@ public class BoardSurface : MonoBehaviour
                 if (immovable){
                     //プレイターターンを終了させる処理
                     PlayerTurn = false;
-                    ActionEnemyTurn();
+                    // ActionEnemyTurn();
+                    PlayerTurn = ActionEnemy.GetComponent<ActionEnemy>().ActionEnemyTurn();
                 }
             }
             //敵駒がセットされていた場合の処理
@@ -310,7 +313,7 @@ public class BoardSurface : MonoBehaviour
     }
 
     //関数：動けるマスの範囲の二次元配列を作成とプレハブの非表示
-    void GenerateAvailableSquares(int InitialPointX, int InitialPointY, bool Player){
+    public void GenerateAvailableSquares(int InitialPointX, int InitialPointY, bool Player){
             //Focusを座標にセットする
             FocusParent.SetActive(true);
             FocusParent.transform.localPosition = new Vector3(PointValueXArray[InitialPointX], PointValueYArray[InitialPointY], 0);
@@ -691,175 +694,4 @@ public class BoardSurface : MonoBehaviour
 
         return immovable;
     }
-
-    //関数：相手ターンの一連の処理を行う関数
-    void ActionEnemyTurn(){
-
-        int EnemyNum = 0;
-
-        int EnemyPointX = 10;
-        int EnemyPointY = 10;
-
-        int[,] MovableSquare = new int[9,2];  
-        
-        //Enemyの中で一番X座標が小さい駒を取得
-        for(int i=0; i<4; i++){
-            for(int j=0; j<4; j++){
-                if (arrayBoard[j,i]==11 || arrayBoard[j,i]==12){
-                    EnemyNum = arrayBoard[j,i];
-                    EnemyPointX = i;
-                    EnemyPointY = j;
-                    //取得した駒のフォーカスエフェクトを呼び出す
-                    if (EnemyNum==11){
-                        allyDrag = enemy1;
-                    } else if (EnemyNum==12){
-                        allyDrag = enemy2;
-                    }
-                    GenerateAvailableSquares(EnemyPointX,EnemyPointY,false);
-
-                    //取得した駒のアニメーションを実行する
-                    allyDrag.transform.GetChild(0).GetComponent<Animator>().SetTrigger("right1");
-
-                    //アニメーション終了後の処理
-                    StartCoroutine(ProcessAfterAnimation(EnemyPointX,EnemyPointY,EnemyNum));
-
-                    break;
-                }
-            }
-            if(EnemyNum != 0){
-                break;
-            }
-        }
-        Debug.Log(EnemyNum);
-        
-        // //取得した駒にRight側で動けるマスがあるか判定
-        // MovableSquare = GetEnemyMovableSquare(EnemyNum,EnemyPointX,EnemyPointY);
-
-        // //存在しない場合違う駒を取得しなおす
-        // bool enemyMovable = false;
-        // for (int i=0; i<9; i++){
-        //     if (MovableSquare[i,0] != 10){
-        //         enemyMovable = true;
-        //     }
-        // }
-        // if (!enemyMovable){
-        //     if (EnemyNum==11){
-        //         MovableSquare = GetEnemyMovableSquare(12,EnemyPointX,EnemyPointY);
-        //         enemyMovable = false;
-        //         for (int i=0; i<9; i++){
-        //             if (MovableSquare[i,0] != 10){
-        //                 enemyMovable = true;
-        //                 break;
-        //             }
-        //         }
-        //     } else if (EnemyNum==12){
-        //         MovableSquare = GetEnemyMovableSquare(11,EnemyPointX,EnemyPointY);
-        //         enemyMovable = false;
-        //         for (int i=0; i<9; i++){
-        //             if (MovableSquare[i,0] != 10){
-        //                 enemyMovable = true;
-        //                 break;
-        //             }
-        //         }
-        //     }
-        // }
-        
-        //動けるマスの配列の中からランダムにひとつ取得
-        // System.Random r1 = new System.Random();
-        // int r2 = r1.Next(0, 4);
-    }
-
-    // コルーチン本体
-    private IEnumerator ProcessAfterAnimation(int EnemyPointX,int EnemyPointY, int EnemyNum)
-    {
-        // 1秒間待つ
-        yield return new WaitForSeconds(1);
-
-        Debug.Log(EnemyPointX);
-        Debug.Log(EnemyPointY);
-
-        //敵オブジェクトの座標の指定し直し
-        allyDrag.transform.localPosition = new Vector3(PointValueXArray[EnemyPointX+1], PointValueYArray[EnemyPointY], 0);
-        
-        //配列arrayBoardの書き換え
-        arrayBoard[EnemyPointY,EnemyPointX] = 0;    //元いたマスのステータスを0にする
-        arrayBoard[EnemyPointY,EnemyPointX+1] = EnemyNum;
-        Debug.Log(arrayBoard);
-
-        //フォーカスアニメーションの解除
-        FocusParent.SetActive(false);
-
-        //プレイヤーターンに移行
-        PlayerTurn = true;
-        allyDrag = null;
-    }
-    
-
-    // //関数：ActionEnemyTurn()内部で取得した駒にRight側で動けるマスがあるか判定
-    // int[,] GetEnemyMovableSquare(int? EnemyNum, int EnemyPointX, int EnemyPointY){
-    //     int[] moveEnemy = new int[8];
-    //     int[,] MovableSquare = {
-    //         {10,10},{10,10},{10,10},
-    //         {10,10},{10,10},{10,10},
-    //         {10,10},{10,10},{10,10}
-    //     };
-
-    //     if (EnemyNum == 11){
-    //         moveEnemy = moveEnemy1;
-    //     } else if (EnemyNum == 12){
-    //         moveEnemy = moveEnemy2;
-    //     }
-    //     //RightUp
-    //     if (moveEnemy[5] != 0){
-    //         if (EnemyPointY >= 1 && EnemyPointX <= 2 && arrayBoard[EnemyPointY-1,EnemyPointX+1] == 0){
-    //             MovableSquare[0,0] = EnemyPointX+1;
-    //             MovableSquare[0,1] = EnemyPointY-1;
-    //         }
-    //         if (moveAlly[5] == 2){
-    //             if (EnemyPointY >= 2 && EnemyPointX <= 1 && arrayBoard[EnemyPointY-2,EnemyPointX+2] == 0){
-    //                 MovableSquare[1,0] = EnemyPointX+2;
-    //                 MovableSquare[1,1] = EnemyPointY-2;
-    //             }
-    //             if (EnemyPointY >= 3 && EnemyPointX <= 0 && arrayBoard[EnemyPointY-3,EnemyPointX+3] == 0){
-    //                 MovableSquare[2,0] = EnemyPointX+3;
-    //                 MovableSquare[2,1] = EnemyPointY-3;
-    //             }
-    //         }
-    //     }
-    //     //Right
-    //     if (moveEnemy[6] != 0){
-    //         if (EnemyPointX <= 2 && arrayBoard[EnemyPointY,EnemyPointX+1] == 0){
-    //             MovableSquare[3,0] = EnemyPointX+1;
-    //             MovableSquare[3,1] = EnemyPointY-1;
-    //         }
-    //         if (moveAlly[6] == 2){
-    //             if (EnemyPointX <= 1 && arrayBoard[EnemyPointY,EnemyPointX+2] == 0){
-    //                 MovableSquare[4,0] = EnemyPointX+2;
-    //                 MovableSquare[4,1] = EnemyPointY-2;
-    //             }
-    //             if (EnemyPointX <= 0 && arrayBoard[EnemyPointY,EnemyPointX+3] == 0){
-    //                 MovableSquare[5,0] = EnemyPointX+3;
-    //                 MovableSquare[5,1] = EnemyPointY-3;
-    //             }
-    //         }
-    //     }
-    //     //RightDown
-    //     if (moveEnemy[7] != 0){
-    //         if (EnemyPointY <= 2 && EnemyPointX <= 2 && arrayBoard[EnemyPointY+1,EnemyPointX+1] == 0){
-    //             MovableSquare[6,0] = EnemyPointX+1;
-    //             MovableSquare[6,1] = EnemyPointY-1;
-    //         }
-    //         if (moveAlly[7] == 2){
-    //             if (EnemyPointY <= 1 && EnemyPointX <= 1 && arrayBoard[EnemyPointY+2,EnemyPointX+2] == 0){
-    //                 MovableSquare[7,0] = EnemyPointX+2;
-    //                 MovableSquare[7,1] = EnemyPointY+2;
-    //             }
-    //             if (EnemyPointY <= 0 && EnemyPointX <= 0 && arrayBoard[EnemyPointY+3,EnemyPointX+3] == 0){
-    //                 MovableSquare[8,0] = EnemyPointX+3;
-    //                 MovableSquare[8,1] = EnemyPointY+3;
-    //             }
-    //         }
-    //     }
-    //     return MovableSquare;
-    // }
 }
