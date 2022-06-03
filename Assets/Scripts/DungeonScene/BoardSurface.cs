@@ -68,7 +68,7 @@ public class BoardSurface : MonoBehaviour
         enemy2.transform.localPosition = new Vector3(-35, 105, 0);
 
         //アニメーション作成のために一時的にattack()を開始時に呼び出し
-        //ally1.GetComponent<ally1>().Attack();
+        ally1.GetComponent<ally1>().Attack();
     }
 
     // クリック時
