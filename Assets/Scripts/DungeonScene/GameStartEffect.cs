@@ -15,6 +15,8 @@ public class GameStartEffect : MonoBehaviour
     public GameObject ally4;
     public GameObject enemy1;
     public GameObject enemy2;
+    public GameObject smoke1;
+    public GameObject smoke2;
 
     // Start is called before the first frame update
     void Start()
@@ -54,7 +56,7 @@ public class GameStartEffect : MonoBehaviour
         // EnemyAppearコルーチンの呼び出し
         StartCoroutine(EnemyAppear());
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1.0f);
 
         // LogoSlideInメソッドの呼び出し
         LogoSlideIn();
@@ -96,10 +98,12 @@ public class GameStartEffect : MonoBehaviour
     {
         // 敵を表示
         enemy1.GetComponent<Image>().enabled = true;
+        smoke1.GetComponent<ParticleSystem>().Play();  // 砂埃のパーティクルエフェクトを再生
 
         yield return new WaitForSeconds(0.2f);
 
         enemy2.GetComponent<Image>().enabled = true;
+        smoke2.GetComponent<ParticleSystem>().Play();
     }
 
     // ゲーム開始時の文字、windowを画面内に登場させる
