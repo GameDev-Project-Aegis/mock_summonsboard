@@ -98,7 +98,7 @@ public class BoardSurface : MonoBehaviour
     //上記をセットするための空配列
     int[] moveAlly = new int[8];
     //モンスターが動ける範囲のマスを配列とする
-    int[,] AvailableSquares;
+    public int[,] AvailableSquares;
 
     //Squareプレハブを盤面状に格納するための配列
     GameObject[,] SquareBox = new GameObject[4,4];
