@@ -43,8 +43,8 @@ MonoBehaviour:
     y: 0
     width: 521.6
     height: 264
-  m_MinSize: {x: 101, y: 121}
-  m_MaxSize: {x: 4001, y: 4021}
+  m_MinSize: {x: 100, y: 100}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 15}
   m_Panes:
   - {fileID: 15}
@@ -74,7 +74,7 @@ MonoBehaviour:
   m_MinSize: {x: 100, y: 200}
   m_MaxSize: {x: 8096, y: 16192}
   vertical: 1
-  controlID: 45
+  controlID: 69
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -125,7 +125,7 @@ MonoBehaviour:
   m_MinSize: {x: 400, y: 200}
   m_MaxSize: {x: 32384, y: 16192}
   vertical: 0
-  controlID: 192
+  controlID: 68
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -145,8 +145,8 @@ MonoBehaviour:
     y: 264
     width: 521.6
     height: 458.8
-  m_MinSize: {x: 276, y: 71}
-  m_MaxSize: {x: 4001, y: 4021}
+  m_MinSize: {x: 275, y: 50}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 17}
   m_Panes:
   - {fileID: 17}
@@ -171,8 +171,8 @@ MonoBehaviour:
     y: 0
     width: 236.8
     height: 428
-  m_MinSize: {x: 200, y: 200}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 201, y: 221}
+  m_MaxSize: {x: 4001, y: 4021}
   m_ActualView: {fileID: 18}
   m_Panes:
   - {fileID: 18}
@@ -300,7 +300,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 1
-  controlID: 193
+  controlID: 150
 --- !u!114 &13
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -326,7 +326,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 100}
   m_MaxSize: {x: 24288, y: 8096}
   vertical: 0
-  controlID: 194
+  controlID: 151
 --- !u!114 &14
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -394,6 +394,8 @@ MonoBehaviour:
     - {fileID: 2140488302527467631, guid: 28c02024db64704469ced37b02f9c1cf, type: 2}
     - {fileID: -9049884291637737498, guid: 8032683616085e34d8af659fafbb2206, type: 2}
     - {fileID: -9119619411891195874, guid: 2fc473794c8324f2d8794e413d142c3e, type: 2}
+    - {fileID: 1009075219892533178, guid: 5f0131edf573c493f817a941b927db46, type: 2}
+    - {fileID: -3990190655881313922, guid: 9f767d574bdc5498d96d31338527f902, type: 2}
     m_ValueSerializationHelper:
     - e00: 0.23421052
       e01: 0
@@ -411,14 +413,14 @@ MonoBehaviour:
       e31: 0
       e32: 0
       e33: 1
-    - e00: 0.22938144
+    - e00: 0.2552577
       e01: 0
       e02: 0
-      e03: 8.118561
+      e03: 7.34227
       e10: 0
-      e11: 0.22938144
+      e11: 0.2552577
       e12: 0
-      e13: 75.94588
+      e13: 62.43506
       e20: 0
       e21: 0
       e22: 1
@@ -530,7 +532,7 @@ MonoBehaviour:
       e10: 0
       e11: 0.26063156
       e12: 0
-      e13: 80.24632
+      e13: 72.91052
       e20: 0
       e21: 0
       e22: 1
@@ -571,10 +573,42 @@ MonoBehaviour:
       e31: 0
       e32: 0
       e33: 1
+    - e00: 0.26063156
+      e01: 0
+      e02: 0
+      e03: 1.9684143
+      e10: 0
+      e11: 0.26063156
+      e12: 0
+      e13: 68.1179
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    - e00: 0.26063156
+      e01: 0
+      e02: 0
+      e03: 1.9684143
+      e10: 0
+      e11: 0.26063156
+      e12: 0
+      e13: 70.72421
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
   m_PreviewAnimator: {fileID: 0}
-  m_AnimatorController: {fileID: 9100000, guid: 2fc473794c8324f2d8794e413d142c3e, type: 2}
+  m_AnimatorController: {fileID: 9100000, guid: 5f0131edf573c493f817a941b927db46, type: 2}
   m_BreadCrumbs:
-  - m_Target: {fileID: -9119619411891195874, guid: 2fc473794c8324f2d8794e413d142c3e, type: 2}
+  - m_Target: {fileID: 1009075219892533178, guid: 5f0131edf573c493f817a941b927db46, type: 2}
     m_ScrollPosition: {x: 0, y: 0}
   stateMachineGraph: {fileID: 0}
   stateMachineGraphGUI: {fileID: 0}
@@ -628,22 +662,22 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Prefabs/DungeonScene
+    - Assets/Resouces/Animations/DungeonScene/gameStart
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Prefabs/DungeonScene
+  - Assets/Resouces/Animations/DungeonScene/gameStart
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Users\shuya\mock_summonsboard
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: ec590000
-    m_LastClickedID: 23020
-    m_ExpandedIDs: 00000000bc590000be590000c0590000c2590000c4590000ce590000d259000000ca9a3b
+    scrollPos: {x: 0, y: 194.20001}
+    m_SelectedIDs: dc6d0000
+    m_LastClickedID: 28124
+    m_ExpandedIDs: 00000000dc590000de590000e0590000e2590000e4590000e6590000f0590000f2590000f4590000f05d00008e6200004865000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -671,7 +705,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000bc590000be590000c0590000c2590000c4590000
+    m_ExpandedIDs: 00000000dc590000de590000e0590000e2590000e4590000e6590000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -699,7 +733,7 @@ MonoBehaviour:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
     m_HadKeyboardFocusLastEvent: 1
-    m_ExpandedInstanceIDs: c6230000
+    m_ExpandedInstanceIDs: c62300007c190000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -762,7 +796,7 @@ MonoBehaviour:
     m_ControlHash: -371814159
     m_PrefName: Preview_InspectorPreview
   m_LastInspectedObjectInstanceID: -1
-  m_LastVerticalScrollValue: 198.40002
+  m_LastVerticalScrollValue: 0
   m_GlobalObjectId: 
   m_InspectorMode: 0
   m_LockTracker:
@@ -799,9 +833,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 9a540000
-      m_LastClickedID: 21658
-      m_ExpandedIDs: 2efbffffaa5200005c5400009a540000cc54000008560000
+      m_SelectedIDs: 
+      m_LastClickedID: 0
+      m_ExpandedIDs: 52f0ffff18fbffff74540000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -1056,7 +1090,7 @@ MonoBehaviour:
       floating: 0
       collapsed: 0
       displayed: 0
-      snapOffset: {x: 0, y: 0}
+      snapOffset: {x: 0, y: 24.8}
       snapOffsetDelta: {x: 0, y: 0}
       snapCorner: 0
       id: Scene View/Particles
@@ -1072,9 +1106,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: -1.3155016, y: 0.56307876, z: 19.689121}
+    m_Target: {x: 0.069099784, y: 0, z: 89.88333}
     speed: 2
-    m_Value: {x: -1.3155016, y: 0.56307876, z: 19.689121}
+    m_Value: {x: 0.069099784, y: 0, z: 89.88333}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -1125,9 +1159,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 3.2726643
+    m_Target: 5.601589
     speed: 2
-    m_Value: 3.2726643
+    m_Value: 5.601589
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -1241,7 +1275,7 @@ MonoBehaviour:
     m_VAllowExceedBaseRangeMax: 1
     m_ScaleWithWindow: 0
     m_HSlider: 0
-    m_VSlider: 1
+    m_VSlider: 0
     m_IgnoreScrollWheelUntilClicked: 0
     m_EnableMouseInput: 1
     m_EnableSliderZoomHorizontal: 0
