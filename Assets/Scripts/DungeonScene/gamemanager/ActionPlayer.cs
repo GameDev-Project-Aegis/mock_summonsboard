@@ -68,36 +68,6 @@ public class ActionPlayer : MonoBehaviour
         }
     }
 
-    //関数：float型の座標を引数で与えるとどのマス目かを返す関数
-    //返り値の型は長さ2の配列（int）
-    int[] GetBoardPoint(float mPosX, float mPosY)
-    {
-        
-        if (mPosX > -2.2 && mPosX < -1.1) {
-            PointX = 0;
-        }else if (mPosX > -1.1 && mPosX < 0) {
-            PointX = 1;
-        }else if (mPosX > 0 && mPosX < 1.1) {
-            PointX = 2;
-        }else if (mPosX > 1.1 && mPosX < 2.2) {
-            PointX = 3;
-        }
-
-        if (mPosY < 2.2 && mPosY > 1.1) {
-            PointY = 0;
-        }else if (mPosY < 1.1 && mPosY > 0) {
-            PointY = 1;
-        }else if (mPosY < 0 && mPosY > -1.1) {
-            PointY = 2;
-        }else if (mPosY < -1.1 && mPosY > -2.2) {
-            PointY = 3;
-        }
-
-        int[] arr = {PointX, PointY};
-
-        return arr;
-    }
-
     //関数：タップ時にハイライトを表示する関数
     public void SetHighLight(int InitialPointX, int InitialPointY)
     {
@@ -116,11 +86,6 @@ public class ActionPlayer : MonoBehaviour
         if(allyDrag != null){
             allyDrag.transform.position = mousePos;
         }
-
-        //座標からマス目を取得
-        PointArray = GetBoardPoint(mousePos.x, mousePos.y);
-        //HighLghtの移動
-        HighLight_D.transform.localPosition = new Vector3(PointValueXArray[PointArray[0]], PointValueYArray[PointArray[1]], 0);
     }
 
     //関数：モンスターをドロップしたときの処理を行う

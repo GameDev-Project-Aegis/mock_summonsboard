@@ -6,16 +6,25 @@ using UnityEngine.UI;
 
 public class BoardSurface : MonoBehaviour
 {
+    //ゲームマネージャーオブジェクトをアタッチする
     public GameObject ActionPlayer;
     ActionPlayer ActionPlayerClass;
     public GameObject ActionEnemy;
     ActionEnemy ActionEnemyClass;
 
+    public GameObject EffectAttack;
+    ActionEnemy EffectAttackClass;
+
     //駒オブジェクトをアタッチする
     public GameObject ally1;
+    ally Ally1Class;
     public GameObject ally2;
+    ally Ally2Class;
     public GameObject ally3;
+    ally Ally3Class;
     public GameObject ally4;
+    ally Ally4Class;
+
     public GameObject enemy1;
     public GameObject enemy2;
 
@@ -65,6 +74,7 @@ public class BoardSurface : MonoBehaviour
     private float PosZ;
     private Vector3 mousePos;
     private int[] PointArray = new int[2];
+    private int[] lastPointArray = new int[2];
     private int DragObjectNum;
     private int InitialPointX;
     private int InitialPointY;
@@ -112,6 +122,11 @@ public class BoardSurface : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Ally1Class = ally1.GetComponent<ally>();
+        Ally2Class = ally2.GetComponent<ally>();
+        Ally3Class = ally3.GetComponent<ally>();
+        Ally4Class = ally4.GetComponent<ally>();
+
         ActionPlayerClass = ActionPlayer.GetComponent<ActionPlayer>();
         ActionEnemyClass = ActionEnemy.GetComponent<ActionEnemy>();
 
@@ -123,7 +138,7 @@ public class BoardSurface : MonoBehaviour
         PlaceMonsterInitially();
 
         //アニメーション作成のために一時的にattack()を開始時に呼び出し
-        //ally1.GetComponent<ally1>().Attack();
+        //ally1.GetComponent<ally>().Attack();
 
         //SquareBoxにプレハブをセットする
         PrepareSquareBox();
@@ -138,9 +153,9 @@ public class BoardSurface : MonoBehaviour
         //プレイヤーターンの場合のみ実行
         if (PlayerTurn){
             mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-            PointArray = GetBoardPoint(mousePos.x, mousePos.y); //GetBoardPoint()は下で定義してるよ！
-            InitialPointX = PointArray[0];
-            InitialPointY = PointArray[1];
+            lastPointArray = GetBoardPoint(mousePos.x, mousePos.y); //GetBoardPoint()は下で定義してるよ！
+            InitialPointX = lastPointArray[0];
+            InitialPointY = lastPointArray[1];
 
             //タップした先のモンスターを返す関数（いない場合はnullを返す）
             //InitialPointX,InitialPointYもセットされる
@@ -156,6 +171,10 @@ public class BoardSurface : MonoBehaviour
 
                 //動けるマスの範囲の二次元配列を作成・Squareプレハブの非表示・Focusプレハブの表示
                 AvailableSquares = GenerateAvailableSquares(allyDrag,InitialPointX,InitialPointY,true);
+
+                //攻撃矢印アニメーションを呼び出す
+                Ally1Class.SwordEffectAction(lastPointArray,arrayBoard,moveAlly1);
+                //他3体分も
             }
             //敵駒をタップした場合の処理
             else {
@@ -174,8 +193,20 @@ public class BoardSurface : MonoBehaviour
             //モンスターをドラッグに合わせて移動させる
             ActionPlayerClass.DragMonster(mousePos,allyDrag,PosZ);
 
-            //ハイライトをドラッグに合わせて移動させる
-            // DragHighLight();
+            //現在のマウスポジションからマスの座標を取得
+            PointArray = GetBoardPoint(mousePos.x, mousePos.y);
+            //前フレームとマスの座標を比較し現在のマウスポジションが変更された場合のみ以下の処理を呼び出す
+            if(PointArray[0]!=lastPointArray[0]||PointArray[1]!=lastPointArray[1]){
+                //HighLghtの移動
+                HighLight_D.transform.localPosition = new Vector3(PointValueXArray[PointArray[0]], PointValueYArray[PointArray[1]], 0);
+            
+                //攻撃矢印アニメーションを呼び出す
+                allyDrag.GetComponent<ally>().SwordEffectAction(PointArray,arrayBoard,moveAlly1);
+                
+                //lastPointArrayの更新
+                lastPointArray[0] = PointArray[0];
+                lastPointArray[1] = PointArray[1];
+            }
             
             //座標が盤面から外に出た時に駒を初期位置に戻す
             if (mousePos.x < -2 || mousePos.x > 2 || mousePos.y < -2 || mousePos.y > 2){
@@ -203,9 +234,17 @@ public class BoardSurface : MonoBehaviour
                 if (immovable){
                     //プレイターターンを終了させる処理
                     PlayerTurn = false;
-                    // ActionEnemyTurn();
-                    ActionEnemyClass.ActionEnemyTurn(arrayBoard);
+
+                    //プレイヤーモンスターの攻撃アクション
+                    //
+
+                    //敵ターンのギミックを実行
+                    // ActionEnemyClass.ActionEnemyTurn(arrayBoard);
                 }
+
+                //攻撃矢印アニメーションを終了する
+                Ally1Class.SwordEffectStop();
+                //他３体分も
             }
             //敵駒がセットされていた場合の処理
             else {
