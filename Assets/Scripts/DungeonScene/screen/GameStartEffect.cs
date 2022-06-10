@@ -19,23 +19,23 @@ public class GameStartEffect : MonoBehaviour
     public GameObject smoke_target2;
 
     // Start is called before the first frame update
-    void Start()
-    {
-        // モンスターを非表示
-        ally1.SetActive(false);
-        ally2.SetActive(false);
-        ally3.SetActive(false);
-        ally4.SetActive(false);
-        // enemy1.GetComponent<Image>().enabled = false;
-        // enemy2.GetComponent<Image>().enabled = false;
-        enemy1.SetActive(false);
-        enemy2.SetActive(false);        
+    // void Start()
+    // {
+    //     // モンスターを非表示
+    //     ally1.SetActive(false);
+    //     ally2.SetActive(false);
+    //     ally3.SetActive(false);
+    //     ally4.SetActive(false);
+    //     // enemy1.GetComponent<Image>().enabled = false;
+    //     // enemy2.GetComponent<Image>().enabled = false;
+    //     enemy1.SetActive(false);
+    //     enemy2.SetActive(false);        
 
-        // windowを非表示
-        window.GetComponent<Renderer>().enabled = false;
+    //     // windowを非表示
+    //     window.GetComponent<Renderer>().enabled = false;
 
-        StartCoroutine(GameStart());
-    }
+    //     StartCoroutine(GameStart());
+    // }
 
     // Update is called once per frame
     void Update()
