@@ -111,4 +111,16 @@ public class ally : MonoBehaviour
         arrow07.SetActive(false);
         arrow08.SetActive(false);
     }
+
+    //攻撃時のアニメーション
+    public void PowerUp()
+    {
+        //モンスター自体がでっかくなる
+        //strengthが出現する
+    }
+
+    public void PowerCharge()
+    {
+        //
+    }
 }

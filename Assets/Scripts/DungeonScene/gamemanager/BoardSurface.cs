@@ -234,8 +234,12 @@ public class BoardSurface : MonoBehaviour
                 if (immovable){
                     //プレイターターンを終了させる処理
                     PlayerTurn = false;
-                    // ActionEnemyTurn();
-                    ActionEnemyClass.ActionEnemyTurn(arrayBoard);
+
+                    //プレイヤーモンスターの攻撃アクション
+                    //
+
+                    //敵ターンのギミックを実行
+                    // ActionEnemyClass.ActionEnemyTurn(arrayBoard);
                 }
 
                 //攻撃矢印アニメーションを終了する
