@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class BoardSurface : MonoBehaviour
 {
+    //ゲームマネージャーオブジェクトをアタッチする
     public GameObject ActionPlayer;
     ActionPlayer ActionPlayerClass;
     public GameObject ActionEnemy;
@@ -16,9 +17,14 @@ public class BoardSurface : MonoBehaviour
 
     //駒オブジェクトをアタッチする
     public GameObject ally1;
+    ally Ally1Class;
     public GameObject ally2;
+    ally Ally2Class;
     public GameObject ally3;
+    ally Ally3Class;
     public GameObject ally4;
+    ally Ally4Class;
+
     public GameObject enemy1;
     public GameObject enemy2;
 
@@ -116,6 +122,11 @@ public class BoardSurface : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Ally1Class = ally1.GetComponent<ally>();
+        Ally2Class = ally2.GetComponent<ally>();
+        Ally3Class = ally3.GetComponent<ally>();
+        Ally4Class = ally4.GetComponent<ally>();
+
         ActionPlayerClass = ActionPlayer.GetComponent<ActionPlayer>();
         ActionEnemyClass = ActionEnemy.GetComponent<ActionEnemy>();
 
@@ -162,7 +173,7 @@ public class BoardSurface : MonoBehaviour
                 AvailableSquares = GenerateAvailableSquares(allyDrag,InitialPointX,InitialPointY,true);
 
                 //攻撃矢印アニメーションを呼び出す
-                ally1.GetComponent<ally>().SwordEffectAction(PointArray,arrayBoard,moveAlly1);
+                Ally1Class.SwordEffectAction(lastPointArray,arrayBoard,moveAlly1);
                 //他3体分も
             }
             //敵駒をタップした場合の処理
@@ -190,8 +201,7 @@ public class BoardSurface : MonoBehaviour
                 HighLight_D.transform.localPosition = new Vector3(PointValueXArray[PointArray[0]], PointValueYArray[PointArray[1]], 0);
             
                 //攻撃矢印アニメーションを呼び出す
-                ally1.GetComponent<ally>().SwordEffectAction(PointArray,arrayBoard,moveAlly1);
-                //他3体分も
+                allyDrag.GetComponent<ally>().SwordEffectAction(PointArray,arrayBoard,moveAlly1);
                 
                 //lastPointArrayの更新
                 lastPointArray[0] = PointArray[0];
@@ -229,7 +239,7 @@ public class BoardSurface : MonoBehaviour
                 }
 
                 //攻撃矢印アニメーションを終了する
-                ally1.GetComponent<ally>().SwordEffectStop();
+                Ally1Class.SwordEffectStop();
                 //他３体分も
             }
             //敵駒がセットされていた場合の処理
