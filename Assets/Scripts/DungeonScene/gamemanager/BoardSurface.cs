@@ -12,8 +12,8 @@ public class BoardSurface : MonoBehaviour
     public GameObject ActionEnemy;
     ActionEnemy ActionEnemyClass;
 
-    public GameObject EffectAttack;
-    ActionEnemy EffectAttackClass;
+    public GameObject DirectAttack;
+    DirectAttack DirectAttackClass;
 
     //駒オブジェクトをアタッチする
     public GameObject ally1;
@@ -89,7 +89,7 @@ public class BoardSurface : MonoBehaviour
     //4行4列の配列を定義
     //行->Y位置、列->X位置
     //値はマスのステータスを表す（0->空, 1->ally1, 2->ally2, 3->ally3, 4->ally4, 5->enemy1, 6->enemy2,）
-    public int[,] arrayBoard = new int[4, 4]{
+    int[,] arrayBoard = new int[4, 4]{
         {0,0,0,0},
         {0,0,0,0},
         {0,0,0,0},
@@ -113,9 +113,6 @@ public class BoardSurface : MonoBehaviour
     //Squareプレハブを盤面状に格納するための配列
     GameObject[,] SquareBox = new GameObject[4,4];
 
-    //ドロップ可能か判定のためのbool値
-    bool immovable = false;
-
     //ターン判定のためのbool値（プレイヤーターン -> true, 敵ターン -> false）
     private bool PlayerTurn;
     
@@ -129,6 +126,7 @@ public class BoardSurface : MonoBehaviour
 
         ActionPlayerClass = ActionPlayer.GetComponent<ActionPlayer>();
         ActionEnemyClass = ActionEnemy.GetComponent<ActionEnemy>();
+        DirectAttackClass = DirectAttack.GetComponent<DirectAttack>();
 
         //マウスポイントから座標を取得するための準備
         mainCamera = Camera.main;
@@ -220,6 +218,9 @@ public class BoardSurface : MonoBehaviour
     {
         //プレイヤーターンかつallyDragに駒オブジェクトがセットされてる場合のみ実行
         if (PlayerTurn && allyDrag != null) {
+            //ドロップ可能か判定のためのbool値
+            bool immovable = false;
+
             //プレイヤー駒がセットされていた場合の処理
             if (allyDrag == ally1 || allyDrag == ally2 || allyDrag == ally3 || allyDrag == ally4){
                 //座標からマスを導出
@@ -231,15 +232,17 @@ public class BoardSurface : MonoBehaviour
                 //モンスターをドロップしたときの処理を行う関数
                 immovable = ActionPlayerClass.DropMonster(AvailableSquares,PointX,PointY,InitialPointX,InitialPointY,allyDrag,DragObjectNum);
                 ActionPlayerClass.InitializationDrag(allyDrag,Ally,immovable,InitialPointX,InitialPointY);
+                
+                //ドロップが成功した場合の処理
                 if (immovable){
-                    //プレイターターンを終了させる処理
+                    //プレイターターンを終了させる
                     PlayerTurn = false;
 
                     //プレイヤーモンスターの攻撃アクション
-                    //
+                    DirectAttackClass.AllyDirectAttack(arrayBoard);
 
                     //敵ターンのギミックを実行
-                    // ActionEnemyClass.ActionEnemyTurn(arrayBoard);
+                    ActionEnemyClass.ActionEnemyTurn(arrayBoard);
                 }
 
                 //攻撃矢印アニメーションを終了する

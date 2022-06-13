@@ -19,6 +19,7 @@ public class ally : MonoBehaviour
     public GameObject effect1;
     public GameObject effect2;
 
+    //これがごっつ時間かかることが判明した。作り直しかあ。。。
     public void Attack()
     {
         head1.GetComponent<Animator>().SetTrigger("attack");
@@ -113,14 +114,10 @@ public class ally : MonoBehaviour
     }
 
     //攻撃時のアニメーション
-    public void PowerUp()
+    public void Attack3()
     {
-        //モンスター自体がでっかくなる
-        //strengthが出現する
-    }
-
-    public void PowerCharge()
-    {
-        //
+        GetComponent<Animator>().SetTrigger("attack3");
+        // GetComponent<Animator>().SetTrigger("Left");
+        GetComponent<Animator>().SetTrigger("MultiDirection");
     }
 }
