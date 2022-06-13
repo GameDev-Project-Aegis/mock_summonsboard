@@ -4,37 +4,13 @@ using UnityEngine;
 
 public class ally : MonoBehaviour
 {
-    //モンスターのアニメーション
-    public GameObject head1;
-    public GameObject head2;
-    public GameObject head3;
-    public GameObject neck1;
-    public GameObject neck2;
-    public GameObject neck3;
-    public GameObject body;
-    public GameObject leg;
-    public GameObject tail;
-    public GameObject wing1;
-    public GameObject wing2;
-    public GameObject effect1;
-    public GameObject effect2;
-
-    //これがごっつ時間かかることが判明した。作り直しかあ。。。
-    public void Attack()
+    //攻撃時のアニメーション
+    public void Attack3()
     {
-        head1.GetComponent<Animator>().SetTrigger("attack");
-        head2.GetComponent<Animator>().SetTrigger("attack");
-        head3.GetComponent<Animator>().SetTrigger("attack");
-        neck1.GetComponent<Animator>().SetTrigger("attack");
-        neck2.GetComponent<Animator>().SetTrigger("attack");
-        neck3.GetComponent<Animator>().SetTrigger("attack");
-        body.GetComponent<Animator>().SetTrigger("attack");
-        leg.GetComponent<Animator>().SetTrigger("attack");
-        tail.GetComponent<Animator>().SetTrigger("attack");
-        wing1.GetComponent<Animator>().SetTrigger("attack");
-        wing2.GetComponent<Animator>().SetTrigger("attack");
-        effect1.GetComponent<Animator>().SetTrigger("attack");
-        effect2.GetComponent<Animator>().SetTrigger("attack");
+        // GetComponent<Animator>().SetTrigger("attack3");
+        GetComponent<Animator>().SetTrigger("combo12");
+        // GetComponent<Animator>().SetTrigger("Left");
+        GetComponent<Animator>().SetTrigger("MultiDirection");
     }
 
     //ドラッグ時のアニメーション
@@ -111,13 +87,5 @@ public class ally : MonoBehaviour
         arrow06.SetActive(false);
         arrow07.SetActive(false);
         arrow08.SetActive(false);
-    }
-
-    //攻撃時のアニメーション
-    public void Attack3()
-    {
-        GetComponent<Animator>().SetTrigger("attack3");
-        // GetComponent<Animator>().SetTrigger("Left");
-        GetComponent<Animator>().SetTrigger("MultiDirection");
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -44,17 +45,49 @@ public class DirectAttack : MonoBehaviour
                     arrayAround8[7] = ReturnSquareStatus(i+1,j+1,arrayBoard);
 
                     // //八方マスに攻撃モンスターが存在するか判定する
-                    // //ally1の場合
-                    // int ally1_index = Array.IndexOf(arrayAround8, 1);
-                    // //ally1が存在しない場合
-                    // if (ally1_index==-1){
-                    //     //
-                    // }
+                    int ally1_index = Array.IndexOf(arrayAround8, 1);
+                    int ally2_index = Array.IndexOf(arrayAround8, 2);
+                    int ally3_index = Array.IndexOf(arrayAround8, 3);
+                    int ally4_index = Array.IndexOf(arrayAround8, 4);
+
+                    int combo = 0;
+
+                    if(ally1_index!=-1){combo += 1;}
+                    if(ally2_index!=-1){combo += 1;}
+                    if(ally3_index!=-1){combo += 1;}
+                    if(ally4_index!=-1){combo += 1;}
+
+                    if(combo==0){
+                        //攻撃は行われない
+                    }
+                    else{
+                        if(ally1_index==0){
+                            //ally1は右下に攻撃する
+                        }else if(ally1_index==1){
+                            //ally1は右に攻撃する
+                        }else if(ally1_index==2){
+                            //ally1は右上に攻撃する
+                        }else if(ally1_index==3){
+                            //ally1は下に攻撃する
+                        }else if(ally1_index==4){
+                            //ally1は上に攻撃する
+                        }else if(ally1_index==5){
+                            //ally1は左下に攻撃する
+                        }else if(ally1_index==6){
+                            //ally1は左に攻撃する
+                        }else if(ally1_index==7){
+                            //ally1は左上に攻撃する
+                        }
+                    }
+                    //敵一体を複数で囲むパターン
+
+                    //敵一体を単体で攻撃するパターン
+                        //敵複数体を単体モンスターで攻撃するパターン
                 }
             }
         }
 
-        //接している攻撃モンスターの攻撃アニメーションを呼び出す
+        // //接している攻撃モンスターの攻撃アニメーションを呼び出す
         Ally1Class.Attack3();
     }
     //座標のステータスを確認する関数
