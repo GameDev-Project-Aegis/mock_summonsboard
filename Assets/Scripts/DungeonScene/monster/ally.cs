@@ -7,6 +7,12 @@ public class ally : MonoBehaviour
     //攻撃時のアニメーション
     public void Attack3()
     {
+        GetComponent<Animator>().SetTrigger("attack3");
+        // GetComponent<Animator>().SetTrigger("Left");
+        GetComponent<Animator>().SetTrigger("MultiDirection");
+    }
+    public void Combo3()
+    {
         // GetComponent<Animator>().SetTrigger("attack3");
         GetComponent<Animator>().SetTrigger("combo12");
         // GetComponent<Animator>().SetTrigger("Left");

@@ -101,6 +101,7 @@ public class ActionPlayer : MonoBehaviour
                 //配列arrayBoardの書き換え
                 BoardSurfaceClass.UpdateArrayBoard(InitialPointX,InitialPointY,0);  //元いたマスのステータスを0にする
                 BoardSurfaceClass.UpdateArrayBoard(PointX,PointY,DragObjectNum);    //移動した先のマスのステータスを駒の番号にする
+                BoardSurfaceClass.UpdateMonsterPoint(PointX,PointY,DragObjectNum);  //モンスター毎の配列の座標を書き換える
 
                 immovable = true;
                 break;

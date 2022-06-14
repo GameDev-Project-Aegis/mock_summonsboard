@@ -67,7 +67,7 @@ public class BoardSurface : MonoBehaviour
 
     //ドラッグ時のみドラッグする駒をセットするための空オブジェクト
     //「?」の記載はallyDragをnullと置けるようにするため（null許容型）
-    public GameObject? allyDrag;
+    private GameObject? allyDrag;
 
     //駒をタッチ操作する処理に必要な変数の定義
     private Camera mainCamera;
@@ -95,6 +95,11 @@ public class BoardSurface : MonoBehaviour
         {0,0,0,0},
         {0,0,0,0}
     };
+    //モンスター毎に座標を記憶させる
+    int[] PointAlly1 = new int[2];
+    int[] PointAlly2 = new int[2];
+    int[] PointAlly3 = new int[2];
+    int[] PointAlly4 = new int[2];
 
     //各モンスターの動く範囲のマスを配列としておく
     // 0 -> 矢印なし, 1 -> 一重矢印, 2 -> 二重矢印
@@ -171,8 +176,10 @@ public class BoardSurface : MonoBehaviour
                 AvailableSquares = GenerateAvailableSquares(allyDrag,InitialPointX,InitialPointY,true);
 
                 //攻撃矢印アニメーションを呼び出す
-                Ally1Class.SwordEffectAction(lastPointArray,arrayBoard,moveAlly1);
-                //他3体分も
+                Ally1Class.SwordEffectAction(PointAlly1,arrayBoard,moveAlly1);
+                Ally2Class.SwordEffectAction(PointAlly2,arrayBoard,moveAlly2);
+                Ally3Class.SwordEffectAction(PointAlly3,arrayBoard,moveAlly3);
+                Ally4Class.SwordEffectAction(PointAlly4,arrayBoard,moveAlly4);
             }
             //敵駒をタップした場合の処理
             else {
@@ -199,7 +206,7 @@ public class BoardSurface : MonoBehaviour
                 HighLight_D.transform.localPosition = new Vector3(PointValueXArray[PointArray[0]], PointValueYArray[PointArray[1]], 0);
             
                 //攻撃矢印アニメーションを呼び出す
-                allyDrag.GetComponent<ally>().SwordEffectAction(PointArray,arrayBoard,moveAlly1);
+                allyDrag.GetComponent<ally>().SwordEffectAction(PointArray,arrayBoard,moveAlly);
                 
                 //lastPointArrayの更新
                 lastPointArray[0] = PointArray[0];
@@ -218,11 +225,11 @@ public class BoardSurface : MonoBehaviour
     {
         //プレイヤーターンかつallyDragに駒オブジェクトがセットされてる場合のみ実行
         if (PlayerTurn && allyDrag != null) {
-            //ドロップ可能か判定のためのbool値
-            bool immovable = false;
-
             //プレイヤー駒がセットされていた場合の処理
             if (allyDrag == ally1 || allyDrag == ally2 || allyDrag == ally3 || allyDrag == ally4){
+                //ドロップ可能か判定のためのbool値
+                bool immovable = false;
+
                 //座標からマスを導出
                 mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
                 PointArray = GetBoardPoint(mousePos.x, mousePos.y);
@@ -235,6 +242,7 @@ public class BoardSurface : MonoBehaviour
                 
                 //ドロップが成功した場合の処理
                 if (immovable){
+
                     //プレイターターンを終了させる
                     PlayerTurn = false;
 
@@ -247,7 +255,9 @@ public class BoardSurface : MonoBehaviour
 
                 //攻撃矢印アニメーションを終了する
                 Ally1Class.SwordEffectStop();
-                //他３体分も
+                Ally2Class.SwordEffectStop();
+                Ally3Class.SwordEffectStop();
+                Ally4Class.SwordEffectStop();
             }
             //敵駒がセットされていた場合の処理
             else {
@@ -263,9 +273,17 @@ public class BoardSurface : MonoBehaviour
     {
         //①配列の設定（駒が初期配置されるマス目のステータスを変更）
         arrayBoard[1,3] = 1;   // ally1
+        PointAlly1[0] = 3;
+        PointAlly1[1] = 1;
         arrayBoard[2,3] = 2;  // ally2
+        PointAlly2[0] = 3;
+        PointAlly2[1] = 2;
         arrayBoard[3,3] = 3;  // ally3
+        PointAlly3[0] = 3;
+        PointAlly3[1] = 3;
         arrayBoard[3,2] = 4;  // ally4
+        PointAlly4[0] = 2;
+        PointAlly4[1] = 3;
         arrayBoard[1,0] = 11;  // enemy1
         arrayBoard[0,1] = 12;  // enemy2
         //②駒オブジェクトに座標を指定
@@ -677,6 +695,28 @@ public class BoardSurface : MonoBehaviour
     public void UpdateArrayBoard(int PointX, int PointY, int ObjectNum)
     {
         arrayBoard[PointY,PointX] = ObjectNum;
+    }
+
+    public void UpdateMonsterPoint(int PointX, int PointY, int Num)
+    {
+        switch (Num) {
+            case 1:
+                PointAlly1[0] = PointX;
+                PointAlly1[1] = PointY;
+                break;
+            case 2:
+                PointAlly2[0] = PointX;
+                PointAlly2[1] = PointY;
+                break;
+            case 3:
+                PointAlly3[0] = PointX;
+                PointAlly3[1] = PointY;
+                break;
+            case 4:
+                PointAlly4[0] = PointX;
+                PointAlly4[1] = PointY;
+                break;
+        }
     }
 
     //関数：フォーカスとスクエアのエフェクトを初期化する

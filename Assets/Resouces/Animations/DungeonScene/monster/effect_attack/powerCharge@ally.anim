@@ -20,17 +20,17 @@ AnimationClip:
       - serializedVersion: 3
         time: 0
         value: {x: 0, y: 0, z: 0}
-        inSlope: {x: 0, y: 0, z: 300}
-        outSlope: {x: 0, y: 0, z: 300}
+        inSlope: {x: 0, y: 0, z: 150}
+        outSlope: {x: 0, y: 0, z: 150}
         tangentMode: 0
         weightedMode: 0
         inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
         outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
       - serializedVersion: 3
         time: 0.33333334
-        value: {x: 0, y: 0, z: 100}
-        inSlope: {x: 0, y: 0, z: 300}
-        outSlope: {x: 0, y: 0, z: 300}
+        value: {x: 0, y: 0, z: 50}
+        inSlope: {x: 0, y: 0, z: 150}
+        outSlope: {x: 0, y: 0, z: 150}
         tangentMode: 0
         weightedMode: 0
         inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
@@ -45,17 +45,17 @@ AnimationClip:
       - serializedVersion: 3
         time: 0
         value: {x: 0, y: 0, z: 0}
-        inSlope: {x: 0, y: 0, z: -600}
-        outSlope: {x: 0, y: 0, z: -600}
+        inSlope: {x: 0, y: 0, z: -300}
+        outSlope: {x: 0, y: 0, z: -300}
         tangentMode: 0
         weightedMode: 0
         inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
         outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
       - serializedVersion: 3
         time: 0.33333334
-        value: {x: 0, y: 0, z: -200}
-        inSlope: {x: 0, y: 0, z: -600}
-        outSlope: {x: 0, y: 0, z: -600}
+        value: {x: 0, y: 0, z: -100}
+        inSlope: {x: 0, y: 0, z: -300}
+        outSlope: {x: 0, y: 0, z: -300}
         tangentMode: 0
         weightedMode: 0
         inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
@@ -701,17 +701,17 @@ AnimationClip:
       - serializedVersion: 3
         time: 0
         value: 0
-        inSlope: 300
-        outSlope: 300
+        inSlope: 150
+        outSlope: 150
         tangentMode: 34
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 0.33333334
-        value: 100
-        inSlope: 300
-        outSlope: 300
+        value: 50
+        inSlope: 150
+        outSlope: 150
         tangentMode: 34
         weightedMode: 0
         inWeight: 0.33333334
@@ -785,17 +785,17 @@ AnimationClip:
       - serializedVersion: 3
         time: 0
         value: 0
-        inSlope: -600
-        outSlope: -600
+        inSlope: -300
+        outSlope: -300
         tangentMode: 34
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 0.33333334
-        value: -200
-        inSlope: -600
-        outSlope: -600
+        value: -100
+        inSlope: -300
+        outSlope: -300
         tangentMode: 34
         weightedMode: 0
         inWeight: 0.33333334
@@ -1259,7 +1259,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: effect_attack/aureola
+    path: effect_attack/stars
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -1269,17 +1269,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: effect_attack/aureola
-    classID: 224
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.x
-    path: effect_attack/aureola
+    path: effect_attack/stars
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -1298,8 +1288,18 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
+    attribute: m_LocalEulerAngles.x
+    path: effect_attack/aureola
+    classID: 224
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: effect_attack/stars
+    path: effect_attack/aureola
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -1309,7 +1309,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: effect_attack/stars
+    path: effect_attack/aureola
     classID: 224
     script: {fileID: 0}
   m_HasGenericRootTransform: 0

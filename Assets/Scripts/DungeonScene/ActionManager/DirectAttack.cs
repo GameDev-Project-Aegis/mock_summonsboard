@@ -9,20 +9,20 @@ public class DirectAttack : MonoBehaviour
     BoardSurface BoardSurfaceClass;
 
     public GameObject ally1;
-    ally Ally1Class;
+    Animator Ally1Class;
     public GameObject ally2;
-    ally Ally2Class;
+    Animator Ally2Class;
     public GameObject ally3;
-    ally Ally3Class;
+    Animator Ally3Class;
     public GameObject ally4;
-    ally Ally4Class;
+    Animator Ally4Class;
 
     void Start()
     {
-        Ally1Class = ally1.GetComponent<ally>();
-        Ally2Class = ally2.GetComponent<ally>();
-        Ally3Class = ally3.GetComponent<ally>();
-        Ally4Class = ally4.GetComponent<ally>();
+        Ally1Class = ally1.GetComponent<Animator>();
+        Ally2Class = ally2.GetComponent<Animator>();
+        Ally3Class = ally3.GetComponent<Animator>();
+        Ally4Class = ally4.GetComponent<Animator>();
     }
 
     public void AllyDirectAttack(int[,] arrayBoard)
@@ -33,7 +33,7 @@ public class DirectAttack : MonoBehaviour
         //守備モンスターの配置を順に確認する
         for(int i=0; i<4; i++){
             for(int j=0; j<4; j++){
-                if(arrayBoard[i,j]==11){
+                if(arrayBoard[j,i]==11){
                     //八方のマスを確認する
                     arrayAround8[0] = ReturnSquareStatus(i-1,j-1,arrayBoard);
                     arrayAround8[1] = ReturnSquareStatus(i-1,j,arrayBoard);
@@ -61,22 +61,49 @@ public class DirectAttack : MonoBehaviour
                         //攻撃は行われない
                     }
                     else{
-                        if(ally1_index==0){
-                            //ally1は右下に攻撃する
-                        }else if(ally1_index==1){
-                            //ally1は右に攻撃する
-                        }else if(ally1_index==2){
-                            //ally1は右上に攻撃する
-                        }else if(ally1_index==3){
-                            //ally1は下に攻撃する
-                        }else if(ally1_index==4){
-                            //ally1は上に攻撃する
-                        }else if(ally1_index==5){
-                            //ally1は左下に攻撃する
-                        }else if(ally1_index==6){
-                            //ally1は左に攻撃する
-                        }else if(ally1_index==7){
-                            //ally1は左上に攻撃する
+                        if(ally1_index!=-1){
+                            switch (combo)
+                            {
+                                case 1:
+                                    Ally1Class.SetTrigger("attack3");
+                                    break;
+                                case 2:
+                                    Ally1Class.SetTrigger("combo6");
+                                    break;
+                                case 3:
+                                    Ally1Class.SetTrigger("combo9");
+                                    break;
+                                case 4:
+                                    Ally1Class.SetTrigger("combo12");
+                                    break;
+                            }
+                            switch (ally1_index)
+                            {
+                                case 0:
+                                    Ally1Class.SetTrigger("RightDown");
+                                    break;
+                                case 1:
+                                    Ally1Class.SetTrigger("Right");
+                                    break;
+                                case 2:
+                                    Ally1Class.SetTrigger("RightUp");
+                                    break;
+                                case 3:
+                                    Ally1Class.SetTrigger("Down");
+                                    break;
+                                case 4:
+                                    Ally1Class.SetTrigger("Up");
+                                    break;
+                                case 5:
+                                    Ally1Class.SetTrigger("LeftDown");
+                                    break;
+                                case 6:
+                                    Ally1Class.SetTrigger("Left");
+                                    break;
+                                case 7:
+                                    Ally1Class.SetTrigger("LeftUp");
+                                    break;
+                            }
                         }
                     }
                     //敵一体を複数で囲むパターン
@@ -88,7 +115,7 @@ public class DirectAttack : MonoBehaviour
         }
 
         // //接している攻撃モンスターの攻撃アニメーションを呼び出す
-        Ally1Class.Attack3();
+        // Ally1Class.Attack3();
     }
     //座標のステータスを確認する関数
     int ReturnSquareStatus(int PointX, int PointY, int[,] arrayBoard)
