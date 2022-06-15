@@ -17,6 +17,10 @@ public class DirectAttack : MonoBehaviour
     Animator Ally3Class;
     public GameObject ally4;
     Animator Ally4Class;
+    public GameObject enemy1;
+    Animator Enemy1Class;
+    public GameObject enemy2;
+    Animator Enemy2Class;
 
     //攻撃矢印があるかを判定するための配列
     int[] moveAlly1 = {1,2,1,0,0,2,2,2};
@@ -30,16 +34,11 @@ public class DirectAttack : MonoBehaviour
         Ally2Class = ally2.GetComponent<Animator>();
         Ally3Class = ally3.GetComponent<Animator>();
         Ally4Class = ally4.GetComponent<Animator>();
+        Enemy1Class = enemy1.GetComponent<Animator>();
+        Enemy2Class = enemy2.GetComponent<Animator>();
     }
 
     public IEnumerator AllyDirectAttack(int[,] arrayBoard)
-    {
-        //敵モンスター2体に関してまずコンボ攻撃を行う
-        yield return StartCoroutine(ComboDirectAttack(arrayBoard));
-        // yield return null;
-    }
-
-    IEnumerator ComboDirectAttack(int[,] arrayBoard)
     {
         int[] singleAttack11 = {0,10};
         int[] singleAttack12 = {0,10};
@@ -103,6 +102,8 @@ public class DirectAttack : MonoBehaviour
                                     break;
                             }
                         }
+                        Enemy1Class.SetTrigger("defence");
+                        Debug.Log("Enemy1Class.SetTrigger('defence');");
                         yield return new WaitForSeconds(1.5f);
                     }
                     //単体の攻撃が行われる場合
@@ -177,6 +178,7 @@ public class DirectAttack : MonoBehaviour
                                     break;
                             }
                         }
+                        Enemy2Class.SetTrigger("defence");
                         yield return new WaitForSeconds(1.5f);
                     }
                     //単体の攻撃が行われる場合
@@ -210,16 +212,20 @@ public class DirectAttack : MonoBehaviour
         //同一モンスターが２体同時攻撃を行う場合
         else if(singleAttack11[0]==singleAttack12[0]){
             SetSingleAttackAnimationTrigger(singleAttack11[0], 8);
+            Enemy1Class.SetTrigger("defence");
+            Enemy2Class.SetTrigger("defence");
             yield return new WaitForSeconds(1.2f);
         }
         //単体->単体の攻撃が行われる場合
         else{
             if(singleAttack11[0]!=0){
                 SetSingleAttackAnimationTrigger(singleAttack11[0], singleAttack11[1]);
+                Enemy1Class.SetTrigger("defence");
                 yield return new WaitForSeconds(1.2f);
             }
             if(singleAttack12[0]!=0){
                 SetSingleAttackAnimationTrigger(singleAttack12[0], singleAttack12[1]);
+                Enemy2Class.SetTrigger("defence");
                 yield return new WaitForSeconds(1.2f);
             }
         }

@@ -960,6 +960,8 @@ MonoBehaviour:
   ally2: {fileID: 694899140}
   ally3: {fileID: 1221376275}
   ally4: {fileID: 256524021}
+  enemy1: {fileID: 5979742265612026067}
+  enemy2: {fileID: 1507740154}
 --- !u!1001 &570805836
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3545,6 +3547,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 271859685}
     m_Modifications:
+    - target: {fileID: 1832319832179710473, guid: 8c699715b0d11483481cef5fbcdbf115, type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4090426417078280778, guid: 8c699715b0d11483481cef5fbcdbf115, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -5218,6 +5224,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 271859685}
     m_Modifications:
+    - target: {fileID: 1832319832179710473, guid: 8c699715b0d11483481cef5fbcdbf115, type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4090426417078280778, guid: 8c699715b0d11483481cef5fbcdbf115, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
