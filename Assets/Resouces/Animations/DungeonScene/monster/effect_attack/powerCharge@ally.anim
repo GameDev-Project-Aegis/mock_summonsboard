@@ -101,7 +101,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_AnchoredPosition.x
-    path: ally1_move
+    path: ally_move
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -138,7 +138,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_AnchoredPosition.y
-    path: ally1_move
+    path: ally_move
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -841,7 +841,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_AnchoredPosition.x
-    path: ally1_move
+    path: ally_move
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -878,7 +878,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_AnchoredPosition.y
-    path: ally1_move
+    path: ally_move
     classID: 224
     script: {fileID: 0}
   - curve:

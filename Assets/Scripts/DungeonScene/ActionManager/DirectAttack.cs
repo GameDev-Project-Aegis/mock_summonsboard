@@ -25,7 +25,7 @@ public class DirectAttack : MonoBehaviour
         Ally4Class = ally4.GetComponent<Animator>();
     }
 
-    public void AllyDirectAttack(int[,] arrayBoard)
+    public IEnumerator AllyDirectAttack(int[,] arrayBoard)
     {
         //周囲8マスのモンスターを判別する関数
         int[] arrayAround8 = new int[8];
@@ -50,6 +50,7 @@ public class DirectAttack : MonoBehaviour
                     int ally3_index = Array.IndexOf(arrayAround8, 3);
                     int ally4_index = Array.IndexOf(arrayAround8, 4);
 
+                    //何コンボが入るのかを計算
                     int combo = 0;
 
                     if(ally1_index!=-1){combo += 1;}
@@ -59,57 +60,83 @@ public class DirectAttack : MonoBehaviour
 
                     if(combo==0){
                         //攻撃は行われない
-                    }
-                    else{
-                        if(ally1_index!=-1){
-                            switch (combo)
-                            {
+                    }else if(combo>1){
+                        foreach(int I in arrayAround8){
+                            switch(I){
                                 case 1:
-                                    Ally1Class.SetTrigger("attack3");
+                                    SetAttackAnimationTrigger(Ally1Class,combo,ally1_index);
+                                    yield return new WaitForSeconds(0.33f);
+                                    combo -= 1;
                                     break;
                                 case 2:
-                                    Ally1Class.SetTrigger("combo6");
+                                    SetAttackAnimationTrigger(Ally2Class,combo,ally2_index);
+                                    yield return new WaitForSeconds(0.33f);
+                                    combo -= 1;
                                     break;
                                 case 3:
-                                    Ally1Class.SetTrigger("combo9");
+                                    SetAttackAnimationTrigger(Ally3Class,combo,ally3_index);
+                                    yield return new WaitForSeconds(0.33f);
+                                    combo -= 1;
                                     break;
                                 case 4:
-                                    Ally1Class.SetTrigger("combo12");
-                                    break;
-                            }
-                            switch (ally1_index)
-                            {
-                                case 0:
-                                    Ally1Class.SetTrigger("RightDown");
-                                    break;
-                                case 1:
-                                    Ally1Class.SetTrigger("Right");
-                                    break;
-                                case 2:
-                                    Ally1Class.SetTrigger("RightUp");
-                                    break;
-                                case 3:
-                                    Ally1Class.SetTrigger("Down");
-                                    break;
-                                case 4:
-                                    Ally1Class.SetTrigger("Up");
-                                    break;
-                                case 5:
-                                    Ally1Class.SetTrigger("LeftDown");
-                                    break;
-                                case 6:
-                                    Ally1Class.SetTrigger("Left");
-                                    break;
-                                case 7:
-                                    Ally1Class.SetTrigger("LeftUp");
+                                    SetAttackAnimationTrigger(Ally4Class,combo,ally4_index);
+                                    yield return new WaitForSeconds(0.33f);
+                                    combo -= 1;
                                     break;
                             }
                         }
+
+                        // if(ally1_index!=-1){
+                        //     //コンボしている場合をまず考える
+                        //     switch (combo)
+                        //     {
+                        //         // case 1:
+                        //         //     Ally1Class.SetTrigger("attack");
+                        //         //     break;
+                        //         case 2:
+                        //             Ally1Class.SetTrigger("combo2");
+                        //             break;
+                        //         case 3:
+                        //             Ally1Class.SetTrigger("combo3");
+                        //             break;
+                        //         case 4:
+                        //             Ally1Class.SetTrigger("combo4");
+                        //             break;
+                        //     }
+                        //     switch (ally1_index)
+                        //     {
+                        //         case 0:
+                        //             Ally1Class.SetTrigger("RightDown");
+                        //             break;
+                        //         case 1:
+                        //             Ally1Class.SetTrigger("Right");
+                        //             break;
+                        //         case 2:
+                        //             Ally1Class.SetTrigger("RightUp");
+                        //             break;
+                        //         case 3:
+                        //             Ally1Class.SetTrigger("Down");
+                        //             break;
+                        //         case 4:
+                        //             Ally1Class.SetTrigger("Up");
+                        //             break;
+                        //         case 5:
+                        //             Ally1Class.SetTrigger("LeftDown");
+                        //             break;
+                        //         case 6:
+                        //             Ally1Class.SetTrigger("Left");
+                        //             break;
+                        //         case 7:
+                        //             Ally1Class.SetTrigger("LeftUp");
+                        //             break;
+                        //     }
+                        // }
                     }
                     //敵一体を複数で囲むパターン
 
                     //敵一体を単体で攻撃するパターン
                         //敵複数体を単体モンスターで攻撃するパターン
+                    break;
                 }
             }
         }
@@ -117,6 +144,7 @@ public class DirectAttack : MonoBehaviour
         // //接している攻撃モンスターの攻撃アニメーションを呼び出す
         // Ally1Class.Attack3();
     }
+
     //座標のステータスを確認する関数
     int ReturnSquareStatus(int PointX, int PointY, int[,] arrayBoard)
     {
@@ -125,5 +153,56 @@ public class DirectAttack : MonoBehaviour
         }else{
             return 0;
         }
+    }
+
+    //コンボ数とオブジェクトからアニメーションを呼び出す関数
+    void SetAttackAnimationTrigger(Animator AllyClass, int combo, int ally_index){
+        switch(combo){
+            case 1:
+                AllyClass.SetTrigger("combo1");
+                break;
+            case 2:
+                AllyClass.SetTrigger("combo2");
+                break;
+            case 3:
+                AllyClass.SetTrigger("combo3");
+                break;
+            case 4:
+                AllyClass.SetTrigger("combo4");
+                break;
+        }
+        switch(ally_index){
+            case 0:
+                AllyClass.SetTrigger("RightDown");
+                break;
+            case 1:
+                AllyClass.SetTrigger("Right");
+                break;
+            case 2:
+                AllyClass.SetTrigger("RightUp");
+                break;
+            case 3:
+                AllyClass.SetTrigger("Down");
+                break;
+            case 4:
+                AllyClass.SetTrigger("Up");
+                break;
+            case 5:
+                AllyClass.SetTrigger("LeftDown");
+                break;
+            case 6:
+                AllyClass.SetTrigger("Left");
+                break;
+            case 7:
+                AllyClass.SetTrigger("LeftUp");
+                break;
+        }
+    }
+
+    IEnumerator WaitPowerCharge()
+    {
+        // 1秒間待つ
+        yield return new WaitForSeconds(0.2f);
+
     }
 }

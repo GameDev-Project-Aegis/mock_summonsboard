@@ -620,7 +620,7 @@ GameObject:
   - component: {fileID: 240181481}
   - component: {fileID: 240181482}
   m_Layer: 5
-  m_Name: ally1_move
+  m_Name: ally_move
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

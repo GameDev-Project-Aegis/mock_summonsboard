@@ -247,7 +247,7 @@ public class BoardSurface : MonoBehaviour
                     PlayerTurn = false;
 
                     //プレイヤーモンスターの攻撃アクション
-                    DirectAttackClass.AllyDirectAttack(arrayBoard);
+                    StartCoroutine(DirectAttackClass.AllyDirectAttack(arrayBoard));
 
                     //敵ターンのギミックを実行
                     ActionEnemyClass.ActionEnemyTurn(arrayBoard);

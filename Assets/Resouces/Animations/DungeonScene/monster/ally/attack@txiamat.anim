@@ -83,7 +83,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: ally1_move/wing2
+    path: ally_move/wing2
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -153,7 +153,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: ally1_move/wing1
+    path: ally_move/wing1
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -205,7 +205,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: ally1_move/neck2
+    path: ally_move/neck2
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -257,7 +257,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: ally1_move/neck3
+    path: ally_move/neck3
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -309,7 +309,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: ally1_move/head3
+    path: ally_move/head3
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -361,7 +361,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: ally1_move/head2
+    path: ally_move/head2
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -413,7 +413,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: ally1_move/neck1
+    path: ally_move/neck1
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -465,7 +465,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: ally1_move/tail
+    path: ally_move/tail
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -508,7 +508,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: ally1_move/body
+    path: ally_move/body
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -560,7 +560,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: ally1_move/leg
+    path: ally_move/leg
   m_PositionCurves: []
   m_ScaleCurves:
   - curve:
@@ -614,7 +614,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: ally1_move/effect1
+    path: ally_move/effect1
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -666,7 +666,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: ally1_move/effect2
+    path: ally_move/effect2
   m_FloatCurves:
   - curve:
       serializedVersion: 2
@@ -720,7 +720,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_AnchoredPosition.x
-    path: ally1_move/tail
+    path: ally_move/tail
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -775,7 +775,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_AnchoredPosition.y
-    path: ally1_move/tail
+    path: ally_move/tail
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -830,7 +830,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_AnchoredPosition.x
-    path: ally1_move/neck2
+    path: ally_move/neck2
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -885,7 +885,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_AnchoredPosition.y
-    path: ally1_move/neck2
+    path: ally_move/neck2
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -940,7 +940,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_AnchoredPosition.x
-    path: ally1_move/head3
+    path: ally_move/head3
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -995,7 +995,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_AnchoredPosition.y
-    path: ally1_move/head3
+    path: ally_move/head3
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -1050,7 +1050,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_AnchoredPosition.x
-    path: ally1_move/head1
+    path: ally_move/head1
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -1105,7 +1105,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_AnchoredPosition.y
-    path: ally1_move/head1
+    path: ally_move/head1
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -1142,7 +1142,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_AnchoredPosition.x
-    path: ally1_move/effect2
+    path: ally_move/effect2
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -1179,7 +1179,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_AnchoredPosition.y
-    path: ally1_move/effect2
+    path: ally_move/effect2
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -1630,7 +1630,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalScale.x
-    path: ally1_move/effect1
+    path: ally_move/effect1
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -1685,7 +1685,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalScale.y
-    path: ally1_move/effect1
+    path: ally_move/effect1
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -1740,7 +1740,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalScale.z
-    path: ally1_move/effect1
+    path: ally_move/effect1
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -1813,7 +1813,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.x
-    path: ally1_move/wing2
+    path: ally_move/wing2
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -1886,7 +1886,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.y
-    path: ally1_move/wing2
+    path: ally_move/wing2
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -1959,7 +1959,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.z
-    path: ally1_move/wing2
+    path: ally_move/wing2
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -2032,7 +2032,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.x
-    path: ally1_move/wing1
+    path: ally_move/wing1
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -2105,7 +2105,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.y
-    path: ally1_move/wing1
+    path: ally_move/wing1
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -2178,7 +2178,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.z
-    path: ally1_move/wing1
+    path: ally_move/wing1
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -2233,7 +2233,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_AnchoredPosition.x
-    path: ally1_move/tail
+    path: ally_move/tail
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -2288,7 +2288,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_AnchoredPosition.y
-    path: ally1_move/tail
+    path: ally_move/tail
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -2343,7 +2343,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_AnchoredPosition.x
-    path: ally1_move/neck2
+    path: ally_move/neck2
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -2398,7 +2398,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_AnchoredPosition.y
-    path: ally1_move/neck2
+    path: ally_move/neck2
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -2453,7 +2453,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.x
-    path: ally1_move/neck2
+    path: ally_move/neck2
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -2508,7 +2508,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.y
-    path: ally1_move/neck2
+    path: ally_move/neck2
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -2563,7 +2563,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.z
-    path: ally1_move/neck2
+    path: ally_move/neck2
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -2618,7 +2618,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.x
-    path: ally1_move/neck3
+    path: ally_move/neck3
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -2673,7 +2673,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.y
-    path: ally1_move/neck3
+    path: ally_move/neck3
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -2728,7 +2728,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.z
-    path: ally1_move/neck3
+    path: ally_move/neck3
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -2783,7 +2783,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_AnchoredPosition.x
-    path: ally1_move/head3
+    path: ally_move/head3
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -2838,7 +2838,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_AnchoredPosition.y
-    path: ally1_move/head3
+    path: ally_move/head3
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -2893,7 +2893,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.x
-    path: ally1_move/head3
+    path: ally_move/head3
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -2948,7 +2948,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.y
-    path: ally1_move/head3
+    path: ally_move/head3
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -3003,7 +3003,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.z
-    path: ally1_move/head3
+    path: ally_move/head3
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -3058,7 +3058,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.x
-    path: ally1_move/head2
+    path: ally_move/head2
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -3113,7 +3113,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.y
-    path: ally1_move/head2
+    path: ally_move/head2
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -3168,7 +3168,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.z
-    path: ally1_move/head2
+    path: ally_move/head2
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -3223,7 +3223,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_AnchoredPosition.x
-    path: ally1_move/head1
+    path: ally_move/head1
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -3278,7 +3278,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_AnchoredPosition.y
-    path: ally1_move/head1
+    path: ally_move/head1
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -3333,7 +3333,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalScale.x
-    path: ally1_move/effect2
+    path: ally_move/effect2
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -3388,7 +3388,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalScale.y
-    path: ally1_move/effect2
+    path: ally_move/effect2
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -3443,7 +3443,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalScale.z
-    path: ally1_move/effect2
+    path: ally_move/effect2
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -3480,7 +3480,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_AnchoredPosition.x
-    path: ally1_move/effect2
+    path: ally_move/effect2
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -3517,7 +3517,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_AnchoredPosition.y
-    path: ally1_move/effect2
+    path: ally_move/effect2
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -3563,7 +3563,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.x
-    path: ally1_move/neck1
+    path: ally_move/neck1
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -3609,7 +3609,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.y
-    path: ally1_move/neck1
+    path: ally_move/neck1
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -3664,7 +3664,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.z
-    path: ally1_move/neck1
+    path: ally_move/neck1
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -3719,7 +3719,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.x
-    path: ally1_move/tail
+    path: ally_move/tail
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -3774,7 +3774,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.y
-    path: ally1_move/tail
+    path: ally_move/tail
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -3829,7 +3829,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.z
-    path: ally1_move/tail
+    path: ally_move/tail
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -3857,7 +3857,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.x
-    path: ally1_move/body
+    path: ally_move/body
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -3885,7 +3885,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.y
-    path: ally1_move/body
+    path: ally_move/body
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -3931,7 +3931,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.z
-    path: ally1_move/body
+    path: ally_move/body
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -3986,7 +3986,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.x
-    path: ally1_move/leg
+    path: ally_move/leg
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -4041,7 +4041,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.y
-    path: ally1_move/leg
+    path: ally_move/leg
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -4096,7 +4096,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.z
-    path: ally1_move/leg
+    path: ally_move/leg
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -4291,7 +4291,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: ally1_move/neck3
+    path: ally_move/neck3
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -4301,7 +4301,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: ally1_move/neck3
+    path: ally_move/neck3
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -4311,7 +4311,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: ally1_move/neck3
+    path: ally_move/neck3
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -4321,7 +4321,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: ally1_move/wing1
+    path: ally_move/wing1
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -4331,7 +4331,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: ally1_move/wing1
+    path: ally_move/wing1
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -4341,7 +4341,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: ally1_move/wing1
+    path: ally_move/wing1
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -4351,7 +4351,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: ally1_move/leg
+    path: ally_move/leg
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -4361,7 +4361,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: ally1_move/leg
+    path: ally_move/leg
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -4371,7 +4371,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: ally1_move/leg
+    path: ally_move/leg
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -4381,7 +4381,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: ally1_move/neck1
+    path: ally_move/neck1
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -4391,7 +4391,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: ally1_move/neck1
+    path: ally_move/neck1
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -4401,7 +4401,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: ally1_move/neck1
+    path: ally_move/neck1
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -4411,7 +4411,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: ally1_move/body
+    path: ally_move/body
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -4421,7 +4421,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: ally1_move/body
+    path: ally_move/body
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -4431,7 +4431,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: ally1_move/body
+    path: ally_move/body
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -4441,7 +4441,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: ally1_move/head2
+    path: ally_move/head2
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -4451,7 +4451,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: ally1_move/head2
+    path: ally_move/head2
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -4461,7 +4461,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: ally1_move/head2
+    path: ally_move/head2
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -4471,7 +4471,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: ally1_move/neck2
+    path: ally_move/neck2
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -4481,7 +4481,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: ally1_move/neck2
+    path: ally_move/neck2
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -4491,7 +4491,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: ally1_move/neck2
+    path: ally_move/neck2
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -4501,7 +4501,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: ally1_move/tail
+    path: ally_move/tail
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -4511,7 +4511,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: ally1_move/tail
+    path: ally_move/tail
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -4521,7 +4521,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: ally1_move/tail
+    path: ally_move/tail
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -4531,7 +4531,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: ally1_move/head3
+    path: ally_move/head3
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -4541,7 +4541,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: ally1_move/head3
+    path: ally_move/head3
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -4551,7 +4551,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: ally1_move/head3
+    path: ally_move/head3
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -4561,7 +4561,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: ally1_move/wing2
+    path: ally_move/wing2
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -4571,7 +4571,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: ally1_move/wing2
+    path: ally_move/wing2
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -4581,7 +4581,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: ally1_move/wing2
+    path: ally_move/wing2
     classID: 224
     script: {fileID: 0}
   m_HasGenericRootTransform: 0
