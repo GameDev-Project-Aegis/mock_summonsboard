@@ -18,6 +18,10 @@ public class GameStartEffect : MonoBehaviour
     public GameObject smoke_target1;
     public GameObject smoke_target2;
 
+    // オブジェクト参照（？）
+    public GameObject TurnStart;
+    TurnStart TurnStartClass;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -62,6 +66,12 @@ public class GameStartEffect : MonoBehaviour
 
         // LogoSlideInメソッドの呼び出し
         LogoSlideIn();
+
+        yield return new WaitForSeconds(0.8f);
+
+        // TurnStartクラス内のStartPlayerコルーチンの呼び出し
+        TurnStartClass = TurnStart.GetComponent<TurnStart>();
+        StartCoroutine(TurnStartClass.StartPlayer());
     }
 
     // 味方を画面内に登場させるコルーチン
