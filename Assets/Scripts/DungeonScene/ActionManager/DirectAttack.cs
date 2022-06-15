@@ -18,6 +18,12 @@ public class DirectAttack : MonoBehaviour
     public GameObject ally4;
     Animator Ally4Class;
 
+    //攻撃矢印があるかを判定するための配列
+    int[] moveAlly1 = {1,2,1,0,0,2,2,2};
+    int[] moveAlly2 = {1,2,1,1,0,1,2,1};
+    int[] moveAlly3 = {1,1,1,0,0,1,1,1};
+    int[] moveAlly4 = {1,2,0,1,1,0,2,0};
+
     void Start()
     {
         Ally1Class = ally1.GetComponent<Animator>();
@@ -42,14 +48,14 @@ public class DirectAttack : MonoBehaviour
             for(int j=0; j<4; j++){
                 if(arrayBoard[j,i]==11){
                     //八方のマスを確認する
-                    arrayAround8[0] = ReturnSquareStatus(i-1,j-1,arrayBoard);
-                    arrayAround8[1] = ReturnSquareStatus(i-1,j,arrayBoard);
-                    arrayAround8[2] = ReturnSquareStatus(i-1,j+1,arrayBoard);
-                    arrayAround8[3] = ReturnSquareStatus(i,j-1,arrayBoard);
-                    arrayAround8[4] = ReturnSquareStatus(i,j+1,arrayBoard);
-                    arrayAround8[5] = ReturnSquareStatus(i+1,j-1,arrayBoard);
-                    arrayAround8[6] = ReturnSquareStatus(i+1,j,arrayBoard);
-                    arrayAround8[7] = ReturnSquareStatus(i+1,j+1,arrayBoard);
+                    arrayAround8[0] = ReturnSquareStatus(i-1,j-1,arrayBoard,7);
+                    arrayAround8[1] = ReturnSquareStatus(i-1,j,arrayBoard,6);
+                    arrayAround8[2] = ReturnSquareStatus(i-1,j+1,arrayBoard,5);
+                    arrayAround8[3] = ReturnSquareStatus(i,j-1,arrayBoard,4);
+                    arrayAround8[4] = ReturnSquareStatus(i,j+1,arrayBoard,3);
+                    arrayAround8[5] = ReturnSquareStatus(i+1,j-1,arrayBoard,2);
+                    arrayAround8[6] = ReturnSquareStatus(i+1,j,arrayBoard,1);
+                    arrayAround8[7] = ReturnSquareStatus(i+1,j+1,arrayBoard,0);
 
                     // //八方マスに攻撃モンスターが存在するか判定する
                     int ally1_index = Array.IndexOf(arrayAround8, 1);
@@ -101,14 +107,14 @@ public class DirectAttack : MonoBehaviour
                 }
                 if(arrayBoard[j,i]==12){
                     //八方のマスを確認する
-                    arrayAround8[0] = ReturnSquareStatus(i-1,j-1,arrayBoard);
-                    arrayAround8[1] = ReturnSquareStatus(i-1,j,arrayBoard);
-                    arrayAround8[2] = ReturnSquareStatus(i-1,j+1,arrayBoard);
-                    arrayAround8[3] = ReturnSquareStatus(i,j-1,arrayBoard);
-                    arrayAround8[4] = ReturnSquareStatus(i,j+1,arrayBoard);
-                    arrayAround8[5] = ReturnSquareStatus(i+1,j-1,arrayBoard);
-                    arrayAround8[6] = ReturnSquareStatus(i+1,j,arrayBoard);
-                    arrayAround8[7] = ReturnSquareStatus(i+1,j+1,arrayBoard);
+                    arrayAround8[0] = ReturnSquareStatus(i-1,j-1,arrayBoard,7);
+                    arrayAround8[1] = ReturnSquareStatus(i-1,j,arrayBoard,6);
+                    arrayAround8[2] = ReturnSquareStatus(i-1,j+1,arrayBoard,5);
+                    arrayAround8[3] = ReturnSquareStatus(i,j-1,arrayBoard,4);
+                    arrayAround8[4] = ReturnSquareStatus(i,j+1,arrayBoard,3);
+                    arrayAround8[5] = ReturnSquareStatus(i+1,j-1,arrayBoard,2);
+                    arrayAround8[6] = ReturnSquareStatus(i+1,j,arrayBoard,1);
+                    arrayAround8[7] = ReturnSquareStatus(i+1,j+1,arrayBoard,0);
 
                     // //八方マスに攻撃モンスターが存在するか判定する
                     int ally1_index = Array.IndexOf(arrayAround8, 1);
@@ -163,10 +169,44 @@ public class DirectAttack : MonoBehaviour
     }
 
     //座標のステータスを確認する関数
-    int ReturnSquareStatus(int PointX, int PointY, int[,] arrayBoard)
+    int ReturnSquareStatus(int PointX, int PointY, int[,] arrayBoard, int attackIndex)
     {
         if(PointX >= 0 && PointX < 4 && PointY >= 0 && PointY < 4){
-            return arrayBoard[PointY,PointX];
+            int ObjectNum = arrayBoard[PointY,PointX];
+            switch(ObjectNum){
+                case 0:
+                    return 0;
+                case 1:
+                    if(moveAlly1[attackIndex]!=0){
+                        return 1;
+                    }else{
+                        return 0;
+                    }
+                case 2:
+                    if(moveAlly2[attackIndex]!=0){
+                        return 2;
+                    }else{
+                        return 0;
+                    }
+                case 3:
+                    if(moveAlly3[attackIndex]!=0){
+                        return 3;
+                    }else{
+                        return 0;
+                    }
+                case 4:
+                    if(moveAlly4[attackIndex]!=0){
+                        return 4;
+                    }else{
+                        return 0;
+                    }
+                case 11:
+                    return 0;
+                case 12:
+                    return 0;
+                default:
+                    return 0;
+            }
         }else{
             return 0;
         }
