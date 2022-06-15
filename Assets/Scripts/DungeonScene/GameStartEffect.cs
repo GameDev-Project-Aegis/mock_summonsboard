@@ -67,11 +67,15 @@ public class GameStartEffect : MonoBehaviour
         // LogoSlideInメソッドの呼び出し
         LogoSlideIn();
 
-        yield return new WaitForSeconds(0.8f);
+        yield return new WaitForSeconds(1.5f);
 
-        // TurnStartクラス内のStartPlayerコルーチンの呼び出し
         TurnStartClass = TurnStart.GetComponent<TurnStart>();
-        StartCoroutine(TurnStartClass.StartPlayer());
+
+        // // TurnStartクラス内のStartPlayerメソッドの呼び出し
+        // TurnStartClass.StartPlayer();
+
+        // TurnStartクラス内のStartEnemyメソッドの呼び出し
+        TurnStartClass.StartEnemy();
     }
 
     // 味方を画面内に登場させるコルーチン
