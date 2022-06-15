@@ -239,25 +239,17 @@ public class BoardSurface : MonoBehaviour
                 //モンスターをドロップしたときの処理を行う関数
                 immovable = ActionPlayerClass.DropMonster(AvailableSquares,PointX,PointY,InitialPointX,InitialPointY,allyDrag,DragObjectNum);
                 ActionPlayerClass.InitializationDrag(allyDrag,Ally,immovable,InitialPointX,InitialPointY);
-                
-                //ドロップが成功した場合の処理
-                if (immovable){
-
-                    //プレイターターンを終了させる
-                    PlayerTurn = false;
-
-                    //プレイヤーモンスターの攻撃アクション
-                    StartCoroutine(DirectAttackClass.AllyDirectAttack(arrayBoard));
-
-                    //敵ターンのギミックを実行
-                    ActionEnemyClass.ActionEnemyTurn(arrayBoard);
-                }
 
                 //攻撃矢印アニメーションを終了する
                 Ally1Class.SwordEffectStop();
                 Ally2Class.SwordEffectStop();
                 Ally3Class.SwordEffectStop();
                 Ally4Class.SwordEffectStop();
+                
+                //ドロップが成功した場合の処理
+                if (immovable){
+                    StartCoroutine(ProcessAfterDrop(arrayBoard));
+                }
             }
             //敵駒がセットされていた場合の処理
             else {
@@ -731,6 +723,19 @@ public class BoardSurface : MonoBehaviour
                 SquareBox[i,j].SetActive(true);
             }
         }
+    }
+
+    //ドロップが終了した後の処理（コルーチン）
+    IEnumerator ProcessAfterDrop(int[,] arrayBoard)
+    {
+        //プレイターターンを終了させる
+        PlayerTurn = false;
+        //プレイヤーモンスターの攻撃アクション
+        yield return StartCoroutine(DirectAttackClass.AllyDirectAttack(arrayBoard));
+        //敵ターンのギミックを実行
+        StartCoroutine(ActionEnemyClass.ActionEnemyTurn(arrayBoard));
+
+        yield return null;
     }
 
     //プレイヤーターンを切り替える関数

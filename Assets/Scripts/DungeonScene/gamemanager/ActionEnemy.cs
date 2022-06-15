@@ -21,7 +21,7 @@ public class ActionEnemy : MonoBehaviour
     }
 
     //関数：相手ターンの一連の処理を行う関数
-    public void ActionEnemyTurn(int[,] arrayBoard)
+    public IEnumerator ActionEnemyTurn(int[,] arrayBoard)
     {
         int EnemyNum = 0;
 
@@ -40,8 +40,6 @@ public class ActionEnemy : MonoBehaviour
                     EnemyNum = arrayBoard[j,i];
                     EnemyPointX = i;
                     EnemyPointY = j;
-                    Debug.Log("EnemyPointX: "+EnemyPointX);
-                    Debug.Log("EnemyPointY: "+EnemyPointY);
 
                     //取得した駒のフォーカスエフェクトを呼び出す
                     if (EnemyNum==11){
@@ -67,7 +65,7 @@ public class ActionEnemy : MonoBehaviour
                             JudgeOtherMonster(11,allyDrag,arrayBoard);
                         }
                     }
-                    return;
+                    yield break;
                 }
             }
         }
