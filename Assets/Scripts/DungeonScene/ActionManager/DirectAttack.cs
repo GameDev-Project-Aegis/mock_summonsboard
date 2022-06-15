@@ -41,6 +41,9 @@ public class DirectAttack : MonoBehaviour
 
     IEnumerator ComboDirectAttack(int[,] arrayBoard)
     {
+        int[] singleAttack11 = {0,10};
+        int[] singleAttack12 = {0,10};
+
         //周囲8マスのモンスターを格納する配列
         int[] arrayAround8 = new int[8];
 
@@ -73,7 +76,9 @@ public class DirectAttack : MonoBehaviour
 
                     if(combo==0){
                         //攻撃は行われない
-                    }else if(combo>1){
+                    }
+                    //複数体によるコンボ攻撃が行われる場合
+                    else if(combo>1){
                         foreach(int I in arrayAround8){
                             switch(I){
                                 case 1:
@@ -100,10 +105,25 @@ public class DirectAttack : MonoBehaviour
                         }
                         yield return new WaitForSeconds(1.5f);
                     }
-                    //敵一体を複数で囲むパターン
-
-                    //敵一体を単体で攻撃するパターン
-                        //敵複数体を単体モンスターで攻撃するパターン
+                    //単体の攻撃が行われる場合
+                    else if(combo==1){
+                        if(ally1_index!=-1){
+                            singleAttack11[0] = 1;
+                            singleAttack11[1] = ally1_index;
+                        }
+                        if(ally2_index!=-1){
+                            singleAttack11[0] = 2;
+                            singleAttack11[1] = ally2_index;
+                        }
+                        if(ally3_index!=-1){
+                            singleAttack11[0] = 3;
+                            singleAttack11[1] = ally3_index;
+                        }
+                        if(ally4_index!=-1){
+                            singleAttack11[0] = 4;
+                            singleAttack11[1] = ally4_index;
+                        }
+                    }
                 }
                 if(arrayBoard[j,i]==12){
                     //八方のマスを確認する
@@ -159,11 +179,48 @@ public class DirectAttack : MonoBehaviour
                         }
                         yield return new WaitForSeconds(1.5f);
                     }
-                    //敵一体を複数で囲むパターン
-
-                    //敵一体を単体で攻撃するパターン
-                        //敵複数体を単体モンスターで攻撃するパターン
+                    //単体の攻撃が行われる場合
+                    else if(combo==1){
+                        if(ally1_index!=-1){
+                            singleAttack12[0] = 1;
+                            singleAttack12[1] = ally1_index;
+                        }
+                        if(ally2_index!=-1){
+                            singleAttack12[0] = 2;
+                            singleAttack12[1] = ally2_index;
+                        }
+                        if(ally3_index!=-1){
+                            singleAttack12[0] = 3;
+                            singleAttack12[1] = ally3_index;
+                        }
+                        if(ally4_index!=-1){
+                            singleAttack12[0] = 4;
+                            singleAttack12[1] = ally4_index;
+                        }
+                    }
                 }
+            }
+        }
+
+        //単体攻撃の判定を行う
+        //単体攻撃がない場合
+        if(singleAttack11[0]==0&&singleAttack12[0]==0){
+            // yield break;
+        }
+        //同一モンスターが２体同時攻撃を行う場合
+        else if(singleAttack11[0]==singleAttack12[0]){
+            SetSingleAttackAnimationTrigger(singleAttack11[0], 8);
+            yield return new WaitForSeconds(1.2f);
+        }
+        //単体->単体の攻撃が行われる場合
+        else{
+            if(singleAttack11[0]!=0){
+                SetSingleAttackAnimationTrigger(singleAttack11[0], singleAttack11[1]);
+                yield return new WaitForSeconds(1.2f);
+            }
+            if(singleAttack12[0]!=0){
+                SetSingleAttackAnimationTrigger(singleAttack12[0], singleAttack12[1]);
+                yield return new WaitForSeconds(1.2f);
             }
         }
     }
@@ -213,7 +270,8 @@ public class DirectAttack : MonoBehaviour
     }
 
     //コンボ数とオブジェクトからアニメーションを呼び出す関数
-    void SetAttackAnimationTrigger(Animator AllyClass, int combo, int ally_index){
+    void SetAttackAnimationTrigger(Animator AllyClass, int combo, int ally_index)
+    {
         switch(combo){
             case 1:
                 AllyClass.SetTrigger("combo1");
@@ -253,6 +311,141 @@ public class DirectAttack : MonoBehaviour
             case 7:
                 AllyClass.SetTrigger("LeftUp");
                 break;
+        }
+    }
+
+    //単体攻撃のアニメーションを呼び出す関数
+    void SetSingleAttackAnimationTrigger(int singleAttack, int ally_index)
+    {
+        switch(singleAttack){
+            case 1:
+                Ally1Class.SetTrigger("attack");
+                switch(ally_index){
+                    case 0:
+                        Ally1Class.SetTrigger("RightDown");
+                        return;
+                    case 1:
+                        Ally1Class.SetTrigger("Right");
+                        return;
+                    case 2:
+                        Ally1Class.SetTrigger("RightUp");
+                        return;
+                    case 3:
+                        Ally1Class.SetTrigger("Down");
+                        return;
+                    case 4:
+                        Ally1Class.SetTrigger("Up");
+                        return;
+                    case 5:
+                        Ally1Class.SetTrigger("LeftDown");
+                        return;
+                    case 6:
+                        Ally1Class.SetTrigger("Left");
+                        return;
+                    case 7:
+                        Ally1Class.SetTrigger("LeftUp");
+                        return;
+                    case 8:
+                        Ally1Class.SetTrigger("MultiDirection");
+                        return;
+                }
+                return;
+            case 2:
+                Ally2Class.SetTrigger("attack");
+                switch(ally_index){
+                    case 0:
+                        Ally2Class.SetTrigger("RightDown");
+                        return;
+                    case 1:
+                        Ally2Class.SetTrigger("Right");
+                        return;
+                    case 2:
+                        Ally2Class.SetTrigger("RightUp");
+                        return;
+                    case 3:
+                        Ally2Class.SetTrigger("Down");
+                        return;
+                    case 4:
+                        Ally2Class.SetTrigger("Up");
+                        return;
+                    case 5:
+                        Ally2Class.SetTrigger("LeftDown");
+                        return;
+                    case 6:
+                        Ally2Class.SetTrigger("Left");
+                        return;
+                    case 7:
+                        Ally2Class.SetTrigger("LeftUp");
+                        return;
+                    case 8:
+                        Ally2Class.SetTrigger("MultiDirection");
+                        return;
+                }
+                return;
+            case 3:
+                Ally3Class.SetTrigger("attack");
+                switch(ally_index){
+                    case 0:
+                        Ally3Class.SetTrigger("RightDown");
+                        return;
+                    case 1:
+                        Ally3Class.SetTrigger("Right");
+                        return;
+                    case 2:
+                        Ally3Class.SetTrigger("RightUp");
+                        return;
+                    case 3:
+                        Ally3Class.SetTrigger("Down");
+                        return;
+                    case 4:
+                        Ally3Class.SetTrigger("Up");
+                        return;
+                    case 5:
+                        Ally3Class.SetTrigger("LeftDown");
+                        return;
+                    case 6:
+                        Ally3Class.SetTrigger("Left");
+                        return;
+                    case 7:
+                        Ally3Class.SetTrigger("LeftUp");
+                        return;
+                    case 8:
+                        Ally3Class.SetTrigger("MultiDirection");
+                        return;
+                }
+                return;
+            case 4:
+                Ally4Class.SetTrigger("attack");
+                switch(ally_index){
+                    case 0:
+                        Ally4Class.SetTrigger("RightDown");
+                        return;
+                    case 1:
+                        Ally4Class.SetTrigger("Right");
+                        return;
+                    case 2:
+                        Ally4Class.SetTrigger("RightUp");
+                        return;
+                    case 3:
+                        Ally4Class.SetTrigger("Down");
+                        return;
+                    case 4:
+                        Ally4Class.SetTrigger("Up");
+                        return;
+                    case 5:
+                        Ally4Class.SetTrigger("LeftDown");
+                        return;
+                    case 6:
+                        Ally4Class.SetTrigger("Left");
+                        return;
+                    case 7:
+                        Ally4Class.SetTrigger("LeftUp");
+                        return;
+                    case 8:
+                        Ally4Class.SetTrigger("MultiDirection");
+                        return;
+                }
+                return;
         }
     }
 }
