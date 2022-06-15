@@ -102,9 +102,8 @@ public class DirectAttack : MonoBehaviour
                                     break;
                             }
                         }
-                        Enemy1Class.SetTrigger("defence");
-                        Debug.Log("Enemy1Class.SetTrigger('defence');");
                         yield return new WaitForSeconds(1.5f);
+                        Enemy1Class.SetTrigger("defence");
                     }
                     //単体の攻撃が行われる場合
                     else if(combo==1){
@@ -178,8 +177,8 @@ public class DirectAttack : MonoBehaviour
                                     break;
                             }
                         }
-                        Enemy2Class.SetTrigger("defence");
                         yield return new WaitForSeconds(1.5f);
+                        Enemy2Class.SetTrigger("defence");
                     }
                     //単体の攻撃が行われる場合
                     else if(combo==1){
@@ -212,21 +211,21 @@ public class DirectAttack : MonoBehaviour
         //同一モンスターが２体同時攻撃を行う場合
         else if(singleAttack11[0]==singleAttack12[0]){
             SetSingleAttackAnimationTrigger(singleAttack11[0], 8);
+            yield return new WaitForSeconds(1.2f);
             Enemy1Class.SetTrigger("defence");
             Enemy2Class.SetTrigger("defence");
-            yield return new WaitForSeconds(1.2f);
         }
         //単体->単体の攻撃が行われる場合
         else{
             if(singleAttack11[0]!=0){
                 SetSingleAttackAnimationTrigger(singleAttack11[0], singleAttack11[1]);
-                Enemy1Class.SetTrigger("defence");
                 yield return new WaitForSeconds(1.2f);
+                Enemy1Class.SetTrigger("defence");
             }
             if(singleAttack12[0]!=0){
                 SetSingleAttackAnimationTrigger(singleAttack12[0], singleAttack12[1]);
-                Enemy2Class.SetTrigger("defence");
                 yield return new WaitForSeconds(1.2f);
+                Enemy2Class.SetTrigger("defence");
             }
         }
     }
