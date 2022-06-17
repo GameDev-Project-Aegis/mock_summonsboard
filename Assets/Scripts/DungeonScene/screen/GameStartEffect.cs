@@ -8,7 +8,10 @@ public class GameStartEffect : MonoBehaviour
     public GameObject backShadow;
     public GameObject imageGame;
     public GameObject imageStart;
-    public GameObject window;
+    public GameObject ally1_window;
+    public GameObject ally2_window;
+    public GameObject ally3_window;
+    public GameObject ally4_window;
     public GameObject ally1;
     public GameObject ally2;
     public GameObject ally3;
@@ -36,7 +39,10 @@ public class GameStartEffect : MonoBehaviour
         enemy2.SetActive(false);        
 
         // windowを非表示
-        window.GetComponent<Renderer>().enabled = false;
+        ally1_window.GetComponent<Renderer>().enabled = false;
+        ally2_window.GetComponent<Renderer>().enabled = false;
+        ally3_window.GetComponent<Renderer>().enabled = false;
+        ally4_window.GetComponent<Renderer>().enabled = false;
 
         StartCoroutine(GameStart());
     }
@@ -128,11 +134,20 @@ public class GameStartEffect : MonoBehaviour
     void LogoSlideIn()
     {
         // windowを下に移動した後に表示
-        window.transform.position = new Vector3(0, -230, -5400);
-        window.GetComponent<Renderer>().enabled = true;
+        ally1_window.transform.position = new Vector3(0, -230, -5400);
+        ally2_window.transform.position = new Vector3(0, -230, -5400);
+        ally3_window.transform.position = new Vector3(0, -230, -5400);
+        ally4_window.transform.position = new Vector3(0, -230, -5400);
+        ally1_window.GetComponent<Renderer>().enabled = true;
+        ally2_window.GetComponent<Renderer>().enabled = true;
+        ally3_window.GetComponent<Renderer>().enabled = true;
+        ally4_window.GetComponent<Renderer>().enabled = true;
 
         // 各アニメーションの呼び出し
-        window.GetComponent<Animator>().SetTrigger("PopUp");
+        ally1_window.GetComponent<Animator>().SetTrigger("PopUp");
+        ally2_window.GetComponent<Animator>().SetTrigger("PopUp");
+        ally3_window.GetComponent<Animator>().SetTrigger("PopUp");
+        ally4_window.GetComponent<Animator>().SetTrigger("PopUp");
         imageGame.GetComponent<Animator>().SetTrigger("SlideIn");
         imageStart.GetComponent<Animator>().SetTrigger("SlideIn");
     }
