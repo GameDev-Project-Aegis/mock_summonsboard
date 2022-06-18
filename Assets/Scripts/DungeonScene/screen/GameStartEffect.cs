@@ -39,10 +39,10 @@ public class GameStartEffect : MonoBehaviour
         enemy2.SetActive(false);        
 
         // windowを非表示
-        ally1_window.GetComponent<Renderer>().enabled = false;
-        ally2_window.GetComponent<Renderer>().enabled = false;
-        ally3_window.GetComponent<Renderer>().enabled = false;
-        ally4_window.GetComponent<Renderer>().enabled = false;
+        ally1_window.GetComponent<Image>().enabled = false;
+        ally2_window.GetComponent<Image>().enabled = false;
+        ally3_window.GetComponent<Image>().enabled = false;
+        ally4_window.GetComponent<Image>().enabled = false;
 
         StartCoroutine(GameStart());
     }
@@ -138,10 +138,10 @@ public class GameStartEffect : MonoBehaviour
         ally2_window.transform.position = new Vector3(0, -230, -5400);
         ally3_window.transform.position = new Vector3(0, -230, -5400);
         ally4_window.transform.position = new Vector3(0, -230, -5400);
-        ally1_window.GetComponent<Renderer>().enabled = true;
-        ally2_window.GetComponent<Renderer>().enabled = true;
-        ally3_window.GetComponent<Renderer>().enabled = true;
-        ally4_window.GetComponent<Renderer>().enabled = true;
+        ally1_window.GetComponent<Image>().enabled = true;
+        ally2_window.GetComponent<Image>().enabled = true;
+        ally3_window.GetComponent<Image>().enabled = true;
+        ally4_window.GetComponent<Image>().enabled = true;
 
         // 各アニメーションの呼び出し
         ally1_window.GetComponent<Animator>().SetTrigger("PopUp");
