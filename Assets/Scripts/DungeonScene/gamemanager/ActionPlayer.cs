@@ -124,7 +124,5 @@ public class ActionPlayer : MonoBehaviour
         //HighLightの解除
         HighLight_O.GetComponent<Animator>().SetTrigger("outOriginally");
         HighLight_D.GetComponent<Animator>().SetTrigger("outDistination");
-
-        BoardSurfaceClass.InitializationEffect();
     }
 }
