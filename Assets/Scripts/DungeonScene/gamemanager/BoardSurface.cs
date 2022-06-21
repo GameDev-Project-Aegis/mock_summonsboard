@@ -12,8 +12,13 @@ public class BoardSurface : MonoBehaviour
     public GameObject ActionEnemy;
     ActionEnemy ActionEnemyClass;
 
+    //アクションマネージャーオブジェクトをアタッチする
     public GameObject DirectAttack;
     DirectAttack DirectAttackClass;
+
+    //スクリーンマネージャーオブジェクトをアタッチする
+    public GameObject TurnStart;
+    TurnStart TurnStartClass;
 
     //駒オブジェクトをアタッチする
     public GameObject ally1;
@@ -136,6 +141,7 @@ public class BoardSurface : MonoBehaviour
         ActionPlayerClass = ActionPlayer.GetComponent<ActionPlayer>();
         ActionEnemyClass = ActionEnemy.GetComponent<ActionEnemy>();
         DirectAttackClass = DirectAttack.GetComponent<DirectAttack>();
+        TurnStartClass = TurnStart.GetComponent<TurnStart>();
 
         //マウスポイントから座標を取得するための準備
         mainCamera = Camera.main;
@@ -148,7 +154,8 @@ public class BoardSurface : MonoBehaviour
         PrepareSquareBox();
 
         //プレイヤーターンをセットする
-        TurnPlayerTurn();
+        //ゲーム開始エフェクトが終了するまではfalseとする
+        PlayerTurn = false;
     }
 
     void Update () {
@@ -762,12 +769,22 @@ public class BoardSurface : MonoBehaviour
     {
         //プレイターターンを終了させる
         PlayerTurn = false;
+
         //プレイヤーモンスターの攻撃アクション
         yield return StartCoroutine(DirectAttackClass.AllyDirectAttack(arrayBoard));
-        //敵ターンのギミックを実行
-        StartCoroutine(ActionEnemyClass.ActionEnemyTurn(arrayBoard));
 
-        yield return null;
+        //敵ターン開始のエフェクトの発動
+        TurnStartClass.StartEnemy();
+        yield return new WaitForSeconds(1.5f);
+
+        //敵ターンのギミックを実行
+        yield return StartCoroutine(ActionEnemyClass.ActionEnemyTurn(arrayBoard));
+
+        //プレイヤーターンに切り替えるギミックの実行
+        TurnStartClass.StartPlayer();
+        yield return new WaitForSeconds(1.5f);
+
+        // yield return null;
     }
 
     //プレイヤーターンを切り替える関数

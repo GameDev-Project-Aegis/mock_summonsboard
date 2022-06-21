@@ -55,8 +55,9 @@ public class ActionEnemy : MonoBehaviour
                     if(DistinationSquare[0] != 10){
                         //取得した駒のアニメーションを実行する
                         EnemyMoveAnimation(DistinationSquare,EnemyPointX,EnemyPointY,allyDrag);
+                        yield return new WaitForSeconds(1);
                         //アニメーション終了後の処理
-                        StartCoroutine(ProcessAfterAnimation(EnemyPointX,EnemyPointY,DistinationSquare[0],DistinationSquare[1],EnemyNum,allyDrag));
+                        yield return StartCoroutine(ProcessAfterAnimation(EnemyPointX,EnemyPointY,DistinationSquare[0],DistinationSquare[1],EnemyNum,allyDrag));
                     }else{
                         //もし移動可能なマスがなかった場合、同じ処理を違うコマに変更して再度行う
                         if(EnemyNum==11){
@@ -174,7 +175,7 @@ public class ActionEnemy : MonoBehaviour
     }
 
     //関数：もし移動可能なマスがなかった場合、同じ処理を違うコマに変更して再度行う
-    void JudgeOtherMonster(int OtherEnemyNum, GameObject? allyDrag, int[,] arrayBoard)
+     private IEnumerator JudgeOtherMonster(int OtherEnemyNum, GameObject? allyDrag, int[,] arrayBoard)
     {
         int EnemyNum;
         int EnemyPointX;
@@ -200,13 +201,14 @@ public class ActionEnemy : MonoBehaviour
 
                     if(DistinationSquare[0]!=10){
                         EnemyMoveAnimation(DistinationSquare,EnemyPointX,EnemyPointY,allyDrag);
-                        StartCoroutine(ProcessAfterAnimation(EnemyPointX,EnemyPointY,DistinationSquare[0],DistinationSquare[1],EnemyNum,allyDrag));
+                        yield return new WaitForSeconds(1);
+                        yield return StartCoroutine(ProcessAfterAnimation(EnemyPointX,EnemyPointY,DistinationSquare[0],DistinationSquare[1],EnemyNum,allyDrag));
                     }else{
                         //この駒も移動だ出来ない場合敵ターンを終了する
                         BoardSurfaceClass.InitializationEffect();
                         BoardSurfaceClass.TurnPlayerTurn();
                     }
-                    return;
+                    yield return null;
                 }
             }
         }
@@ -215,9 +217,6 @@ public class ActionEnemy : MonoBehaviour
     // コルーチン本体
     private IEnumerator ProcessAfterAnimation(int EnemyPointX,int EnemyPointY, int DistinationX, int DistinationY, int EnemyNum, GameObject? allyDrag)
     {
-        // 1秒間待つ
-        yield return new WaitForSeconds(1);
-
         //敵オブジェクトの座標の指定し直し
         allyDrag.transform.localPosition = new Vector3(PointValueXArray[DistinationX], PointValueYArray[DistinationY], 0);
         
@@ -230,5 +229,7 @@ public class ActionEnemy : MonoBehaviour
 
         //プレイヤーターンをに切り替える
         BoardSurfaceClass.TurnPlayerTurn();
+
+        yield return new WaitForSeconds(0.2f);
     }
 }
