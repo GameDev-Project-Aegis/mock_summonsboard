@@ -120,6 +120,10 @@ public class BoardSurface : MonoBehaviour
 
     //ターン判定のためのbool値（プレイヤーターン -> true, 敵ターン -> false）
     private bool PlayerTurn;
+
+    //ダブルタップ判定に必要な変数
+    private bool isDoubleTapStart; //タップ認識中のフラグ
+    private float doubleTapTime; //タップ開始からの累積時間
     
     // Start is called before the first frame update
     void Start()
@@ -140,14 +144,41 @@ public class BoardSurface : MonoBehaviour
         //駒を初期配置に置く
         PlaceMonsterInitially();
 
-        //アニメーション作成のために一時的にattack()を開始時に呼び出し
-        //ally1.GetComponent<ally>().Attack();
-
         //SquareBoxにプレハブをセットする
         PrepareSquareBox();
 
         //プレイヤーターンをセットする
         TurnPlayerTurn();
+    }
+
+    void Update () {
+        //ダブルタップの判定
+        if (isDoubleTapStart){
+            doubleTapTime += Time.deltaTime;
+            if (doubleTapTime < 0.2f) {
+                if (Input.GetMouseButtonDown (0)) {
+                    isDoubleTapStart = false;
+                    doubleTapTime = 0.0f;
+                    Ally1Class.SwordEffectStop();
+                    Ally2Class.SwordEffectStop();
+                    Ally3Class.SwordEffectStop();
+                    Ally4Class.SwordEffectStop();
+                    Ally.alpha = 1.0f;   
+                    HighLight_O.GetComponent<Animator>().SetTrigger("outOriginally");
+                    HighLight_D.GetComponent<Animator>().SetTrigger("outDistination");
+                    InitializationEffect();
+                    StartCoroutine(ProcessAfterDrop(arrayBoard));
+                }
+            } else {
+                 isDoubleTapStart = false;
+                 doubleTapTime = 0.0f;
+            }
+        } else {
+            if (Input.GetMouseButtonDown (0)) {
+
+                isDoubleTapStart = true;
+            }
+        }
     }
 
     // タップ時
@@ -239,6 +270,7 @@ public class BoardSurface : MonoBehaviour
                 //モンスターをドロップしたときの処理を行う関数
                 immovable = ActionPlayerClass.DropMonster(AvailableSquares,PointX,PointY,InitialPointX,InitialPointY,allyDrag,DragObjectNum);
                 ActionPlayerClass.InitializationDrag(allyDrag,Ally,immovable,InitialPointX,InitialPointY);
+                InitializationEffect();
 
                 //攻撃矢印アニメーションを終了する
                 Ally1Class.SwordEffectStop();
