@@ -10,17 +10,13 @@ public class TurnStart : MonoBehaviour
     public GameObject turn_circle3;
     public GameObject imagePlayer;
     public GameObject imageEnemy;
+    
+    public GameObject BoardSurface;
+    BoardSurface BoardSurfaceClass;
 
-    // Start is called before the first frame update
     void Start()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        BoardSurfaceClass = BoardSurface.GetComponent<BoardSurface>();
     }
 
     // 青い円陣と"Player"の文字を表示する
@@ -31,6 +27,7 @@ public class TurnStart : MonoBehaviour
         turn_circle2.GetComponent<Animator>().SetTrigger("RotatePlayer");
         turn_circle3.GetComponent<Animator>().SetTrigger("RotatePlayer");
         imagePlayer.GetComponent<Animator>().SetTrigger("FadeIn");
+        BoardSurfaceClass.TurnPlayerTurn();
     }
 
     // 赤い円陣と"Enemy"の文字を表示する

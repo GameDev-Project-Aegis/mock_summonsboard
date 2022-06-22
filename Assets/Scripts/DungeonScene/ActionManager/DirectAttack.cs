@@ -28,6 +28,9 @@ public class DirectAttack : MonoBehaviour
     int[] moveAlly3 = {1,1,1,0,0,1,1,1};
     int[] moveAlly4 = {1,2,0,1,1,0,2,0};
 
+    int[] singleAttack11 = {0,10};
+    int[] singleAttack12 = {0,10};
+
     void Start()
     {
         Ally1Class = ally1.GetComponent<Animator>();
@@ -40,15 +43,52 @@ public class DirectAttack : MonoBehaviour
 
     public IEnumerator AllyDirectAttack(int[,] arrayBoard)
     {
-        int[] singleAttack11 = {0,10};
-        int[] singleAttack12 = {0,10};
+        singleAttack11[0] = 0;
+        singleAttack11[1] = 10;
+        singleAttack12[0] = 0;
+        singleAttack12[1] = 10;
 
         //周囲8マスのモンスターを格納する配列
         int[] arrayAround8 = new int[8];
 
+        //コンボ攻撃を順に行う
+        yield return StartCoroutine(AllyComboAttack(arrayBoard, arrayAround8, 11));
+        yield return StartCoroutine(AllyComboAttack(arrayBoard, arrayAround8, 12));
+
+        //単体攻撃の判定を行う
+        //単体攻撃がない場合
+        if(singleAttack11[0]==0&&singleAttack12[0]==0){
+            // yield break;
+        }
+        //同一モンスターが２体同時攻撃を行う場合
+        else if(singleAttack11[0]==singleAttack12[0]){
+            SetSingleAttackAnimationTrigger(singleAttack11[0], 8);
+            yield return new WaitForSeconds(0.9f);
+            Enemy1Class.SetTrigger("defence");
+            Enemy2Class.SetTrigger("defence");
+        }
+        //単体->単体の攻撃が行われる場合
+        else{
+            if(singleAttack11[0]!=0){
+                SetSingleAttackAnimationTrigger(singleAttack11[0], singleAttack11[1]);
+                yield return new WaitForSeconds(0.9f);
+                Enemy1Class.SetTrigger("defence");
+            }
+            if(singleAttack12[0]!=0){
+                SetSingleAttackAnimationTrigger(singleAttack12[0], singleAttack12[1]);
+                yield return new WaitForSeconds(0.9f);
+                Enemy2Class.SetTrigger("defence");
+            }
+        }
+        
+        yield return new WaitForSeconds(0.5f);
+    }
+
+    IEnumerator AllyComboAttack(int[,] arrayBoard, int[] arrayAround8, int EnemyNum)
+    {
         for(int i=0; i<4; i++){
             for(int j=0; j<4; j++){
-                if(arrayBoard[j,i]==11){
+                if(arrayBoard[j,i]==EnemyNum){
                     //八方のマスを確認する
                     arrayAround8[0] = ReturnSquareStatus(i-1,j-1,arrayBoard,7);
                     arrayAround8[1] = ReturnSquareStatus(i-1,j,arrayBoard,6);
@@ -102,130 +142,59 @@ public class DirectAttack : MonoBehaviour
                                     break;
                             }
                         }
-                        yield return new WaitForSeconds(1.5f);
-                        Enemy1Class.SetTrigger("defence");
+                        yield return new WaitForSeconds(0.5f);
+                        switch (EnemyNum) {
+                            case 11:
+                                Enemy1Class.SetTrigger("defence");
+                                break;
+                            case 12:
+                                Enemy2Class.SetTrigger("defence");
+                                break;
+                        }
+                        yield return new WaitForSeconds(1);
                     }
-                    //単体の攻撃が行われる場合
                     else if(combo==1){
-                        if(ally1_index!=-1){
-                            singleAttack11[0] = 1;
-                            singleAttack11[1] = ally1_index;
-                        }
-                        if(ally2_index!=-1){
-                            singleAttack11[0] = 2;
-                            singleAttack11[1] = ally2_index;
-                        }
-                        if(ally3_index!=-1){
-                            singleAttack11[0] = 3;
-                            singleAttack11[1] = ally3_index;
-                        }
-                        if(ally4_index!=-1){
-                            singleAttack11[0] = 4;
-                            singleAttack11[1] = ally4_index;
+                        //単体の攻撃が行われる場合
+                        switch (EnemyNum) {
+                            case 11:
+                                if(ally1_index!=-1){
+                                    singleAttack11[0] = 1;
+                                    singleAttack11[1] = ally1_index;
+                                }
+                                if(ally2_index!=-1){
+                                    singleAttack11[0] = 2;
+                                    singleAttack11[1] = ally2_index;
+                                }
+                                if(ally3_index!=-1){
+                                    singleAttack11[0] = 3;
+                                    singleAttack11[1] = ally3_index;
+                                }
+                                if(ally4_index!=-1){
+                                    singleAttack11[0] = 4;
+                                    singleAttack11[1] = ally4_index;
+                                }
+                                break;
+                            case 12:
+                                if(ally1_index!=-1){
+                                    singleAttack12[0] = 1;
+                                    singleAttack12[1] = ally1_index;
+                                }
+                                if(ally2_index!=-1){
+                                    singleAttack12[0] = 2;
+                                    singleAttack12[1] = ally2_index;
+                                }
+                                if(ally3_index!=-1){
+                                    singleAttack12[0] = 3;
+                                    singleAttack12[1] = ally3_index;
+                                }
+                                if(ally4_index!=-1){
+                                    singleAttack12[0] = 4;
+                                    singleAttack12[1] = ally4_index;
+                                }
+                                break;
                         }
                     }
                 }
-                if(arrayBoard[j,i]==12){
-                    //八方のマスを確認する
-                    arrayAround8[0] = ReturnSquareStatus(i-1,j-1,arrayBoard,7);
-                    arrayAround8[1] = ReturnSquareStatus(i-1,j,arrayBoard,6);
-                    arrayAround8[2] = ReturnSquareStatus(i-1,j+1,arrayBoard,5);
-                    arrayAround8[3] = ReturnSquareStatus(i,j-1,arrayBoard,4);
-                    arrayAround8[4] = ReturnSquareStatus(i,j+1,arrayBoard,3);
-                    arrayAround8[5] = ReturnSquareStatus(i+1,j-1,arrayBoard,2);
-                    arrayAround8[6] = ReturnSquareStatus(i+1,j,arrayBoard,1);
-                    arrayAround8[7] = ReturnSquareStatus(i+1,j+1,arrayBoard,0);
-
-                    // //八方マスに攻撃モンスターが存在するか判定する
-                    int ally1_index = Array.IndexOf(arrayAround8, 1);
-                    int ally2_index = Array.IndexOf(arrayAround8, 2);
-                    int ally3_index = Array.IndexOf(arrayAround8, 3);
-                    int ally4_index = Array.IndexOf(arrayAround8, 4);
-
-                    //何コンボが入るのかを計算
-                    int combo = 0;
-
-                    if(ally1_index!=-1){combo += 1;}
-                    if(ally2_index!=-1){combo += 1;}
-                    if(ally3_index!=-1){combo += 1;}
-                    if(ally4_index!=-1){combo += 1;}
-
-                    if(combo==0){
-                        //攻撃は行われない
-                    }else if(combo>1){
-                        foreach(int I in arrayAround8){
-                            switch(I){
-                                case 1:
-                                    SetAttackAnimationTrigger(Ally1Class,combo,ally1_index);
-                                    yield return new WaitForSeconds(0.33f);
-                                    combo -= 1;
-                                    break;
-                                case 2:
-                                    SetAttackAnimationTrigger(Ally2Class,combo,ally2_index);
-                                    yield return new WaitForSeconds(0.33f);
-                                    combo -= 1;
-                                    break;
-                                case 3:
-                                    SetAttackAnimationTrigger(Ally3Class,combo,ally3_index);
-                                    yield return new WaitForSeconds(0.33f);
-                                    combo -= 1;
-                                    break;
-                                case 4:
-                                    SetAttackAnimationTrigger(Ally4Class,combo,ally4_index);
-                                    yield return new WaitForSeconds(0.33f);
-                                    combo -= 1;
-                                    break;
-                            }
-                        }
-                        yield return new WaitForSeconds(1.5f);
-                        Enemy2Class.SetTrigger("defence");
-                    }
-                    //単体の攻撃が行われる場合
-                    else if(combo==1){
-                        if(ally1_index!=-1){
-                            singleAttack12[0] = 1;
-                            singleAttack12[1] = ally1_index;
-                        }
-                        if(ally2_index!=-1){
-                            singleAttack12[0] = 2;
-                            singleAttack12[1] = ally2_index;
-                        }
-                        if(ally3_index!=-1){
-                            singleAttack12[0] = 3;
-                            singleAttack12[1] = ally3_index;
-                        }
-                        if(ally4_index!=-1){
-                            singleAttack12[0] = 4;
-                            singleAttack12[1] = ally4_index;
-                        }
-                    }
-                }
-            }
-        }
-
-        //単体攻撃の判定を行う
-        //単体攻撃がない場合
-        if(singleAttack11[0]==0&&singleAttack12[0]==0){
-            // yield break;
-        }
-        //同一モンスターが２体同時攻撃を行う場合
-        else if(singleAttack11[0]==singleAttack12[0]){
-            SetSingleAttackAnimationTrigger(singleAttack11[0], 8);
-            yield return new WaitForSeconds(1.2f);
-            Enemy1Class.SetTrigger("defence");
-            Enemy2Class.SetTrigger("defence");
-        }
-        //単体->単体の攻撃が行われる場合
-        else{
-            if(singleAttack11[0]!=0){
-                SetSingleAttackAnimationTrigger(singleAttack11[0], singleAttack11[1]);
-                yield return new WaitForSeconds(1.2f);
-                Enemy1Class.SetTrigger("defence");
-            }
-            if(singleAttack12[0]!=0){
-                SetSingleAttackAnimationTrigger(singleAttack12[0], singleAttack12[1]);
-                yield return new WaitForSeconds(1.2f);
-                Enemy2Class.SetTrigger("defence");
             }
         }
     }
