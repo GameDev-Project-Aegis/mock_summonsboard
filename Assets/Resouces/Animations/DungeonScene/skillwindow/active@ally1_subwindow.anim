@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: skill@ally1_window
+  m_Name: active@ally1_subwindow
   serializedVersion: 6
   m_Legacy: 0
   m_Compressed: 0
