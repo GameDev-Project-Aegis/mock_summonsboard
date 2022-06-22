@@ -21,13 +21,15 @@ public class GameStartEffect : MonoBehaviour
     public GameObject smoke_target1;
     public GameObject smoke_target2;
 
-    // オブジェクト参照（？）
+    // オブジェクト参照
     public GameObject TurnStart;
     TurnStart TurnStartClass;
 
     // Start is called before the first frame update
     void Start()
     {
+        TurnStartClass = TurnStart.GetComponent<TurnStart>();
+        
         // モンスターを非表示
         ally1.SetActive(false);
         ally2.SetActive(false);
@@ -45,12 +47,6 @@ public class GameStartEffect : MonoBehaviour
         ally4_window.GetComponent<Image>().enabled = false;
 
         StartCoroutine(GameStart());
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     IEnumerator GameStart()
@@ -75,44 +71,29 @@ public class GameStartEffect : MonoBehaviour
 
         yield return new WaitForSeconds(1.5f);
 
-        TurnStartClass = TurnStart.GetComponent<TurnStart>();
-
-        // // TurnStartクラス内のStartPlayerメソッドの呼び出し
-        // TurnStartClass.StartPlayer();
-
-        // TurnStartクラス内のStartEnemyメソッドの呼び出し
-        TurnStartClass.StartEnemy();
+        // TurnStartクラス内のStartPlayerメソッドの呼び出し
+        TurnStartClass.StartPlayer();
     }
 
     // 味方を画面内に登場させるコルーチン
     IEnumerator AllySlideIn()
     {
         // 味方を画面外に移動
-        ally1.transform.localPosition = new Vector3(160, 0, 0);
-        ally2.transform.localPosition = new Vector3(160, 0, 0);
-        ally3.transform.localPosition = new Vector3(160, 0, 0);
-        ally4.transform.localPosition = new Vector3(160, 0, 0);
+        // ally1.transform.localPosition = new Vector3(160, 0, 0);
+        // ally2.transform.localPosition = new Vector3(160, 0, 0);
+        // ally3.transform.localPosition = new Vector3(160, 0, 0);
+        // ally4.transform.localPosition = new Vector3(160, 0, 0);
 
         // 味方を表示
-        ally1.SetActive(true);
-        ally2.SetActive(true);
-        ally3.SetActive(true);
-        ally4.SetActive(true);
 
         // 味方を画面内に登場させる
-        ally2.GetComponent<Animator>().SetTrigger("SlideIn");
-
+        ally2.SetActive(true);
         yield return new WaitForSeconds(0.1f);
-
-        ally3.GetComponent<Animator>().SetTrigger("SlideIn");
-
+        ally3.SetActive(true);
         yield return new WaitForSeconds(0.1f);
-
-        ally4.GetComponent<Animator>().SetTrigger("SlideIn");
-
+        ally4.SetActive(true);
         yield return new WaitForSeconds(0.5f);
-
-        ally1.GetComponent<Animator>().SetTrigger("SlideIn");
+        ally1.SetActive(true);
     }
 
     // 敵を画面内に登場させるコルーチン

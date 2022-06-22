@@ -538,11 +538,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7035113931305847562, guid: d92da9147082f47deb2f9f4a324052c7, type: 3}
   m_PrefabInstance: {fileID: 1623988390}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &356626951 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5191066770322905756, guid: 197ec64d51e654d1881aa7c6c7535493, type: 3}
-  m_PrefabInstance: {fileID: 1221376273}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &410262792
 GameObject:
   m_ObjectHideFlags: 0
@@ -1181,8 +1176,8 @@ MonoBehaviour:
   ally2: {fileID: 694899140}
   ally3: {fileID: 1221376275}
   ally4: {fileID: 256524021}
-  enemy1: {fileID: 5979742265612026067}
-  enemy2: {fileID: 1507740154}
+  enemy1: {fileID: 5979742265612026068}
+  enemy2: {fileID: 1507740155}
 --- !u!1 &518760210 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1190578586008810459, guid: cd299a9ad88024a9bb19a5f8b39c864c, type: 3}
@@ -1781,6 +1776,7 @@ MonoBehaviour:
   ActionPlayer: {fileID: 1498074242}
   ActionEnemy: {fileID: 248037391}
   DirectAttack: {fileID: 517912424}
+  TurnStart: {fileID: 1711489470}
   ally1: {fileID: 1289358027}
   ally2: {fileID: 694899140}
   ally3: {fileID: 1221376275}
@@ -2091,11 +2087,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!1 &750022307 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5191066770322905756, guid: 197ec64d51e654d1881aa7c6c7535493, type: 3}
-  m_PrefabInstance: {fileID: 694899138}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &820088440
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3581,11 +3572,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5191066768982665251, guid: 197ec64d51e654d1881aa7c6c7535493, type: 3}
   m_PrefabInstance: {fileID: 5191066770253931247}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1302773397 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5191066770322905756, guid: 197ec64d51e654d1881aa7c6c7535493, type: 3}
-  m_PrefabInstance: {fileID: 256524019}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1378016558
 GameObject:
   m_ObjectHideFlags: 0
@@ -3643,10 +3629,10 @@ MonoBehaviour:
   imageGame: {fileID: 1784279305}
   imageStart: {fileID: 1242506493}
   window: {fileID: 719099382}
-  ally1: {fileID: 1749395778}
-  ally2: {fileID: 750022307}
-  ally3: {fileID: 356626951}
-  ally4: {fileID: 1302773397}
+  ally1: {fileID: 1289358027}
+  ally2: {fileID: 694899140}
+  ally3: {fileID: 1221376275}
+  ally4: {fileID: 256524021}
   enemy1: {fileID: 5979742265612026067}
   enemy2: {fileID: 1507740154}
   smoke_target1: {fileID: 8015313556025505348}
@@ -4064,6 +4050,11 @@ RectTransform:
 --- !u!1 &1507740154 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4629867094963196570, guid: 8c699715b0d11483481cef5fbcdbf115, type: 3}
+  m_PrefabInstance: {fileID: 1507740152}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1507740155 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5038368861235851821, guid: 8c699715b0d11483481cef5fbcdbf115, type: 3}
   m_PrefabInstance: {fileID: 1507740152}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1512238251
@@ -4879,11 +4870,7 @@ MonoBehaviour:
   turn_circle3: {fileID: 518760210}
   imagePlayer: {fileID: 562385057}
   imageEnemy: {fileID: 457282981}
---- !u!1 &1749395778 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5191066770322905756, guid: 197ec64d51e654d1881aa7c6c7535493, type: 3}
-  m_PrefabInstance: {fileID: 5191066770253931247}
-  m_PrefabAsset: {fileID: 0}
+  BoardSurface: {fileID: 676779776}
 --- !u!1001 &1752503667
 PrefabInstance:
   m_ObjectHideFlags: 0
