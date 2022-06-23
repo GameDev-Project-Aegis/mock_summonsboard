@@ -17,7 +17,8 @@ public class SkillWindow : MonoBehaviour
     public GameObject ally2_subwindow;
     public GameObject ally3_subwindow;
     public GameObject ally4_subwindow;
-    public GameObject cancel;
+    public GameObject cancel_a;
+    public GameObject cancel_b;
 
 
     // ally1のウィンドウを押された時の処理
@@ -35,7 +36,8 @@ public class SkillWindow : MonoBehaviour
         ally3_window.GetComponent<Button>().interactable = false;
         ally4_window.GetComponent<Button>().interactable = false;
         // cancelボタンを有効化
-        cancel.SetActive(true);
+        cancel_a.SetActive(true);
+        cancel_b.SetActive(true);
     }
 
     // ally2のウィンドウを押された時の処理
@@ -57,7 +59,8 @@ public class SkillWindow : MonoBehaviour
         ally3_window.GetComponent<Button>().interactable = false;
         ally4_window.GetComponent<Button>().interactable = false;
         // cancelボタンを有効化
-        cancel.SetActive(true);
+        cancel_a.SetActive(true);
+        cancel_b.SetActive(true);
     }
 
     // ally3のウィンドウを押された時の処理
@@ -79,7 +82,8 @@ public class SkillWindow : MonoBehaviour
         ally3_window.GetComponent<Button>().interactable = false;
         ally4_window.GetComponent<Button>().interactable = false;
         // cancelボタンを有効化
-        cancel.SetActive(true);
+        cancel_a.SetActive(true);
+        cancel_b.SetActive(true);
     }
 
     // ally4のウィンドウを押された時の処理
@@ -101,14 +105,16 @@ public class SkillWindow : MonoBehaviour
         ally3_window.GetComponent<Button>().interactable = false;
         ally4_window.GetComponent<Button>().interactable = false;
         // cancelボタンを有効化
-        cancel.SetActive(true);
+        cancel_a.SetActive(true);
+        cancel_b.SetActive(true);
     }
 
     // cancelを押された時の処理
     public void ClickCancel()
     {
         // cancelボタンを無効化
-        cancel.SetActive(false);
+        cancel_a.SetActive(false);
+        cancel_b.SetActive(false);
         // 全てのallyのウィンドウのボタン機能を有効化
         ally1_window.GetComponent<Button>().interactable = true;
         ally2_window.GetComponent<Button>().interactable = true;
