@@ -66,6 +66,7 @@ public class DirectAttack : MonoBehaviour
             yield return new WaitForSeconds(0.9f);
             Enemy1Class.SetTrigger("defence");
             Enemy2Class.SetTrigger("defence");
+            yield return new WaitForSeconds(0.5f);
         }
         //単体->単体の攻撃が行われる場合
         else{
@@ -73,11 +74,13 @@ public class DirectAttack : MonoBehaviour
                 SetSingleAttackAnimationTrigger(singleAttack11[0], singleAttack11[1]);
                 yield return new WaitForSeconds(0.9f);
                 Enemy1Class.SetTrigger("defence");
+                yield return new WaitForSeconds(0.5f);
             }
             if(singleAttack12[0]!=0){
                 SetSingleAttackAnimationTrigger(singleAttack12[0], singleAttack12[1]);
                 yield return new WaitForSeconds(0.9f);
                 Enemy2Class.SetTrigger("defence");
+                yield return new WaitForSeconds(0.5f);
             }
         }
         
