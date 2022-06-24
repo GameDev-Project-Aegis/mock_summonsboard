@@ -175,14 +175,17 @@ public class BoardSurface : MonoBehaviour
                     HighLight_D.GetComponent<Animator>().SetTrigger("outDistination");
                     InitializationEffect();
                     StartCoroutine(ProcessAfterDrop(arrayBoard));
+                    isDoubleTapStart = false;
+                    doubleTapTime = 0.0f;
                 }
-            } else {
-                 isDoubleTapStart = false;
-                 doubleTapTime = 0.0f;
+            }else{
+                isDoubleTapStart = false;
+                doubleTapTime = 0.0f;
             }
         } else {
-            if (Input.GetMouseButtonDown (0)) {
-
+            //ダブルタップの開始時
+            mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+            if (mousePos.x > -2 && mousePos.x < 2 && mousePos.y > -2 && mousePos.y < 2 && PlayerTurn == true && Input.GetMouseButtonDown (0)) {
                 isDoubleTapStart = true;
             }
         }
