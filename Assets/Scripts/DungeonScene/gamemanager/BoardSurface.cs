@@ -105,6 +105,8 @@ public class BoardSurface : MonoBehaviour
     int[] PointAlly2 = new int[2];
     int[] PointAlly3 = new int[2];
     int[] PointAlly4 = new int[2];
+    int[] PointEnemy1 = new int[2];
+    int[] PointEnemy2 = new int[2];
 
     //各モンスターの動く範囲のマスを配列としておく
     // 0 -> 矢印なし, 1 -> 一重矢印, 2 -> 二重矢印
@@ -302,6 +304,32 @@ public class BoardSurface : MonoBehaviour
         allyDrag = null;
     }
 
+    //ドロップが終了した後の処理（コルーチン）
+    IEnumerator ProcessAfterDrop(int[,] arrayBoard)
+    {
+        //プレイターターンを終了させる
+        PlayerTurn = false;
+
+        //プレイヤーモンスターの攻撃アクション
+        yield return StartCoroutine(DirectAttackClass.AllyDirectAttack(arrayBoard));
+
+        //敵ターン開始のエフェクトの発動
+        TurnStartClass.StartEnemy();
+        yield return new WaitForSeconds(1.5f);
+
+        //敵ターンのギミックを実行
+        yield return StartCoroutine(ActionEnemyClass.ActionEnemyTurn(arrayBoard));
+
+        //敵モンスターの攻撃アクション
+        Debug.Log("enemy attack!!");
+
+        //プレイヤーターンに切り替えるギミックの実行
+        TurnStartClass.StartPlayer();
+        yield return new WaitForSeconds(1.5f);
+
+        // yield return null;
+    }
+
     //関数：駒を初期配置に置く
     void PlaceMonsterInitially()
     {
@@ -319,7 +347,11 @@ public class BoardSurface : MonoBehaviour
         PointAlly4[0] = 2;
         PointAlly4[1] = 3;
         arrayBoard[1,0] = 11;  // enemy1
+        PointEnemy1[0] = 0;
+        PointEnemy1[1] = 1;
         arrayBoard[0,1] = 12;  // enemy2
+        PointEnemy2[0] = 1;
+        PointEnemy2[1] = 0;
         //②駒オブジェクトに座標を指定
         ally1.transform.localPosition = new Vector3(105, 35, 0);
         ally2.transform.localPosition = new Vector3(105, -35, 0);
@@ -764,6 +796,7 @@ public class BoardSurface : MonoBehaviour
         arrayBoard[PointY,PointX] = ObjectNum;
     }
 
+    //モンスターの座標を書き換える関数
     public void UpdateMonsterPoint(int PointX, int PointY, int Num)
     {
         switch (Num) {
@@ -783,6 +816,14 @@ public class BoardSurface : MonoBehaviour
                 PointAlly4[0] = PointX;
                 PointAlly4[1] = PointY;
                 break;
+            case 11:
+                PointEnemy1[0] = PointX;
+                PointEnemy1[1] = PointY;
+                break;
+            case 12:
+                PointEnemy2[0] = PointX;
+                PointEnemy2[1] = PointY;
+                break;
         }
     }
 
@@ -800,32 +841,40 @@ public class BoardSurface : MonoBehaviour
         }
     }
 
-    //ドロップが終了した後の処理（コルーチン）
-    IEnumerator ProcessAfterDrop(int[,] arrayBoard)
-    {
-        //プレイターターンを終了させる
-        PlayerTurn = false;
-
-        //プレイヤーモンスターの攻撃アクション
-        yield return StartCoroutine(DirectAttackClass.AllyDirectAttack(arrayBoard));
-
-        //敵ターン開始のエフェクトの発動
-        TurnStartClass.StartEnemy();
-        yield return new WaitForSeconds(1.5f);
-
-        //敵ターンのギミックを実行
-        yield return StartCoroutine(ActionEnemyClass.ActionEnemyTurn(arrayBoard));
-
-        //プレイヤーターンに切り替えるギミックの実行
-        TurnStartClass.StartPlayer();
-        yield return new WaitForSeconds(1.5f);
-
-        // yield return null;
-    }
-
-    //プレイヤーターンを切り替える関数
+    //関数：プレイヤーターンを切り替える
     public void TurnPlayerTurn()
     {
         PlayerTurn = true;
+    }
+
+    //関数：モンスターのHPが0になった時の処理
+    public void ExtinguishMonster(int ObjectNum)
+    {
+        switch(ObjectNum){
+            case 1:
+                ally1.SetActive(false);
+                arrayBoard[PointAlly1[1],PointAlly1[0]] = 0;
+                break;
+            case 2:
+                ally2.SetActive(false);
+                arrayBoard[PointAlly2[1],PointAlly2[0]] = 0;
+                break;
+            case 3:
+                ally3.SetActive(false);
+                arrayBoard[PointAlly3[1],PointAlly3[0]] = 0;
+                break;
+            case 4:
+                ally4.SetActive(false);
+                arrayBoard[PointAlly4[1],PointAlly4[0]] = 0;
+                break;
+            case 11:
+                enemy1.SetActive(false);
+                arrayBoard[PointEnemy1[1],PointEnemy1[0]] = 0;
+                break;
+            case 12:
+                enemy2.SetActive(false);
+                arrayBoard[PointEnemy2[1],PointEnemy2[0]] = 0;
+                break;
+        }
     }
 }
