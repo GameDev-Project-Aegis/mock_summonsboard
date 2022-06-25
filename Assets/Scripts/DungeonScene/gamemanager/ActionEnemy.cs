@@ -48,6 +48,7 @@ public class ActionEnemy : MonoBehaviour
                         allyDrag = enemy2;
                     }
                     AvailableSquares = BoardSurfaceClass.GenerateAvailableSquares(allyDrag,EnemyPointX,EnemyPointY,false);
+                    allyDrag.transform.SetAsLastSibling();
 
                     //駒の移動先を決定する関数
                     DistinationSquare = CalculateDistinationSquare(AvailableSquares);
@@ -223,6 +224,7 @@ public class ActionEnemy : MonoBehaviour
         //配列arrayBoardの書き換え
         BoardSurfaceClass.UpdateArrayBoard(EnemyPointX,EnemyPointY,0);    //元いたマスのステータスを0にする
         BoardSurfaceClass.UpdateArrayBoard(DistinationX,DistinationY,EnemyNum); //新たに移動したマスに値を書き換える
+        BoardSurfaceClass.UpdateMonsterPoint(DistinationX,DistinationY,EnemyNum);  //モンスター毎の配列の座標を書き換える
         
         //フォーカスアニメーションの解除
         BoardSurfaceClass.InitializationEffect();
