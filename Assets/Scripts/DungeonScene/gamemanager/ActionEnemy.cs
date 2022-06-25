@@ -48,6 +48,7 @@ public class ActionEnemy : MonoBehaviour
                         allyDrag = enemy2;
                     }
                     AvailableSquares = BoardSurfaceClass.GenerateAvailableSquares(allyDrag,EnemyPointX,EnemyPointY,false);
+                    allyDrag.transform.SetAsLastSibling();
 
                     //駒の移動先を決定する関数
                     DistinationSquare = CalculateDistinationSquare(AvailableSquares);
