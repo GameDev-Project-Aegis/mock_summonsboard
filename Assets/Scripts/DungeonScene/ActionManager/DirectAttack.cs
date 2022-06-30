@@ -21,6 +21,10 @@ public class DirectAttack : MonoBehaviour
     Animator Enemy1Class;
     public GameObject enemy2;
     Animator Enemy2Class;
+    public GameObject enemy3;
+    Animator Enemy3Class;
+    public GameObject enemy4;
+    Animator Enemy4Class;
 
     //攻撃矢印があるかを判定するための配列
     int[] moveAlly1 = {1,2,1,0,0,2,2,2};
@@ -30,6 +34,8 @@ public class DirectAttack : MonoBehaviour
 
     int[] singleAttack11 = {0,10};
     int[] singleAttack12 = {0,10};
+    int[] singleAttack13 = {0,10};
+    int[] singleAttack14 = {0,10};
 
     //モンスターの攻撃力
     int PowerOffenceAlly1 = 200;
@@ -38,6 +44,8 @@ public class DirectAttack : MonoBehaviour
     int PowerOffenceAlly4 = 200;
     int PowerOffenceEnemy1 = 50;
     int PowerOffenceEnemy2 = 50;
+    int PowerOffenceEnemy3 = 50;
+    int PowerOffenceEnemy4 = 50;
 
     //モンスターの防御力
     int PowerDefenceAlly1 = 100;
@@ -46,6 +54,8 @@ public class DirectAttack : MonoBehaviour
     int PowerDefenceAlly4 = 100;
     int PowerDefenceEnemy1 = 100;
     int PowerDefenceEnemy2 = 500;
+    int PowerDefenceEnemy3 = 50;
+    int PowerDefenceEnemy4 = 50;
 
     void Start()
     {
@@ -57,9 +67,11 @@ public class DirectAttack : MonoBehaviour
         Ally4Class = ally4.GetComponent<Animator>();
         Enemy1Class = enemy1.GetComponent<Animator>();
         Enemy2Class = enemy2.GetComponent<Animator>();
+        Enemy3Class = enemy3.GetComponent<Animator>();
+        Enemy4Class = enemy4.GetComponent<Animator>();
     }
 
-    public IEnumerator AllyDirectAttack(int[,] arrayBoard)
+    public IEnumerator AllyDirectAttack1stArea(int[,] arrayBoard)
     {
         singleAttack11[0] = 0;
         singleAttack11[1] = 10;
@@ -157,7 +169,107 @@ public class DirectAttack : MonoBehaviour
                 }
             }
         }
-        
+        yield return new WaitForSeconds(0.5f);
+    }
+
+    public IEnumerator AllyDirectAttack2ndArea(int[,] arrayBoard)
+    {
+        singleAttack13[0] = 0;
+        singleAttack13[1] = 10;
+        singleAttack14[0] = 0;
+        singleAttack14[1] = 10;
+
+        //周囲8マスのモンスターを格納する配列
+        int[] arrayAround8 = new int[8];
+
+        //コンボ攻撃を順に行う
+        yield return StartCoroutine(AllyComboAttack(arrayBoard, arrayAround8, 13));
+        yield return StartCoroutine(AllyComboAttack(arrayBoard, arrayAround8, 14));
+
+        //単体攻撃の判定を行う
+        //単体攻撃がない場合
+        if(singleAttack13[0]==0&&singleAttack14[0]==0){
+            // yield break;
+        }else{
+            //ダメージ計算関数に渡すパラメータ
+            int AttackAlly1 = 0;
+            int AttackAlly2 = 0;
+            int AttackAlly3 = 0;
+            int AttackAlly4 = 0;
+
+            //同一モンスターが２体同時攻撃を行う場合
+            if(singleAttack13[0]==singleAttack14[0]){
+                SetSingleAttackAnimationTrigger(singleAttack13[0], 8);
+                yield return new WaitForSeconds(0.9f);
+                Enemy3Class.SetTrigger("defence");
+                Enemy4Class.SetTrigger("defence");
+                switch(singleAttack13[0]){
+                    case 1:
+                        AttackAlly1 = 1;
+                        break;
+                    case 2:
+                        AttackAlly2 = 1;
+                        break;
+                    case 3:
+                        AttackAlly3 = 1;
+                        break;
+                    case 4:
+                        AttackAlly4 = 1;
+                        break;
+                }
+                yield return new WaitForSeconds(0.1f);
+                DamageCalculation(13,AttackAlly1,AttackAlly2,AttackAlly3,AttackAlly4,0,0);
+                DamageCalculation(14,AttackAlly1,AttackAlly2,AttackAlly3,AttackAlly4,0,0);
+                yield return new WaitForSeconds(0.4f);
+            }
+            //単体->単体の攻撃が行われる場合
+            else{
+                if(singleAttack13[0]!=0){
+                    SetSingleAttackAnimationTrigger(singleAttack13[0], singleAttack13[1]);
+                    yield return new WaitForSeconds(0.8f);
+                    Enemy3Class.SetTrigger("defence");
+                    switch(singleAttack13[0]){
+                        case 1:
+                            AttackAlly1 = 1;
+                            break;
+                        case 2:
+                            AttackAlly2 = 1;
+                            break;
+                        case 3:
+                            AttackAlly3 = 1;
+                            break;
+                        case 4:
+                            AttackAlly4 = 1;
+                            break;
+                    }
+                    yield return new WaitForSeconds(0.1f);
+                    DamageCalculation(13,AttackAlly1,AttackAlly2,AttackAlly3,AttackAlly4,0,0);
+                    yield return new WaitForSeconds(0.4f);
+                }
+                if(singleAttack14[0]!=0){
+                    SetSingleAttackAnimationTrigger(singleAttack14[0], singleAttack14[1]);
+                    yield return new WaitForSeconds(0.8f);
+                    Enemy4Class.SetTrigger("defence");
+                    switch(singleAttack14[0]){
+                        case 1:
+                            AttackAlly1 = 1;
+                            break;
+                        case 2:
+                            AttackAlly2 = 1;
+                            break;
+                        case 3:
+                            AttackAlly3 = 1;
+                            break;
+                        case 4:
+                            AttackAlly4 = 1;
+                            break;
+                    }
+                    yield return new WaitForSeconds(0.1f);
+                    DamageCalculation(14,AttackAlly1,AttackAlly2,AttackAlly3,AttackAlly4,0,0);
+                    yield return new WaitForSeconds(0.4f);
+                }
+            }
+        }
         yield return new WaitForSeconds(0.5f);
     }
 
@@ -237,6 +349,12 @@ public class DirectAttack : MonoBehaviour
                             case 12:
                                 Enemy2Class.SetTrigger("defence");
                                 break;
+                            case 13:
+                                Enemy3Class.SetTrigger("defence");
+                                break;
+                            case 14:
+                                Enemy4Class.SetTrigger("defence");
+                                break;
                         }
                         yield return new WaitForSeconds(0.1f);
                         DamageCalculation(EnemyNum,AttackAlly1,AttackAlly2,AttackAlly3,AttackAlly4,0,0);
@@ -279,6 +397,42 @@ public class DirectAttack : MonoBehaviour
                                 if(ally4_index!=-1){
                                     singleAttack12[0] = 4;
                                     singleAttack12[1] = ally4_index;
+                                }
+                                break;
+                            case 13:
+                                if(ally1_index!=-1){
+                                    singleAttack13[0] = 1;
+                                    singleAttack13[1] = ally1_index;
+                                }
+                                if(ally2_index!=-1){
+                                    singleAttack13[0] = 2;
+                                    singleAttack13[1] = ally2_index;
+                                }
+                                if(ally3_index!=-1){
+                                    singleAttack13[0] = 3;
+                                    singleAttack13[1] = ally3_index;
+                                }
+                                if(ally4_index!=-1){
+                                    singleAttack13[0] = 4;
+                                    singleAttack13[1] = ally4_index;
+                                }
+                                break;
+                            case 14:
+                                if(ally1_index!=-1){
+                                    singleAttack14[0] = 1;
+                                    singleAttack14[1] = ally1_index;
+                                }
+                                if(ally2_index!=-1){
+                                    singleAttack14[0] = 2;
+                                    singleAttack14[1] = ally2_index;
+                                }
+                                if(ally3_index!=-1){
+                                    singleAttack14[0] = 3;
+                                    singleAttack14[1] = ally3_index;
+                                }
+                                if(ally4_index!=-1){
+                                    singleAttack14[0] = 4;
+                                    singleAttack14[1] = ally4_index;
                                 }
                                 break;
                         }
@@ -516,7 +670,7 @@ public class DirectAttack : MonoBehaviour
     //必要なパラメータは以下
     //  ダメージを受けるモンスター
     //  ダメージを与えるモンスター
-    void DamageCalculation(int Wounded, int AttackAlly1, int AttackAlly2, int AttackAlly3, int AttackAlly4, int AttackEnemy11, int AttackEnemy2)
+    void DamageCalculation(int Wounded, int AttackAlly1, int AttackAlly2, int AttackAlly3, int AttackAlly4, int AttackEnemy1, int AttackEnemy2)
     {
         //3アタック->*1.00
         //6コンボ->*1.75
@@ -535,6 +689,12 @@ public class DirectAttack : MonoBehaviour
                 break;
             case 12:
                 Damage -= PowerDefenceEnemy2;
+                break;
+            case 13:
+                Damage -= PowerDefenceEnemy3;
+                break;
+            case 14:
+                Damage -= PowerDefenceEnemy4;
                 break;
         }
         if(Damage < 0){

@@ -10,6 +10,8 @@ public class ActionEnemy : MonoBehaviour
     
     public GameObject enemy1;
     public GameObject enemy2;
+    public GameObject enemy3;
+    public GameObject enemy4;
 
     //マス目に対応するlocal座標を配列としたもの
     float[] PointValueXArray = {-105, -35, 35, 105};
@@ -36,7 +38,7 @@ public class ActionEnemy : MonoBehaviour
         //Enemyの中で一番X座標が小さい駒を取得
         for(int i=0; i<4; i++){
             for(int j=0; j<4; j++){
-                if (arrayBoard[j,i]==11 || arrayBoard[j,i]==12){
+                if (arrayBoard[j,i]==11 || arrayBoard[j,i]==12 || arrayBoard[j,i]==13 || arrayBoard[j,i]==14){
                     EnemyNum = arrayBoard[j,i];
                     EnemyPointX = i;
                     EnemyPointY = j;
@@ -46,6 +48,10 @@ public class ActionEnemy : MonoBehaviour
                         allyDrag = enemy1;
                     } else if (EnemyNum==12){
                         allyDrag = enemy2;
+                    } else if (EnemyNum==13){
+                        allyDrag = enemy3;
+                    } else if (EnemyNum==14){
+                        allyDrag = enemy4;
                     }
                     AvailableSquares = BoardSurfaceClass.GenerateAvailableSquares(allyDrag,EnemyPointX,EnemyPointY,false);
                     allyDrag.transform.SetAsLastSibling();
@@ -65,6 +71,10 @@ public class ActionEnemy : MonoBehaviour
                             JudgeOtherMonster(12,allyDrag,arrayBoard);
                         }else if(EnemyNum==12){
                             JudgeOtherMonster(11,allyDrag,arrayBoard);
+                        }else if(EnemyNum==13){
+                            JudgeOtherMonster(14,allyDrag,arrayBoard);
+                        }else if(EnemyNum==14){
+                            JudgeOtherMonster(13,allyDrag,arrayBoard);
                         }
                     }
                     yield break;
@@ -196,6 +206,10 @@ public class ActionEnemy : MonoBehaviour
                         allyDrag = enemy1;
                     } else if (EnemyNum==12){
                         allyDrag = enemy2;
+                    } else if (EnemyNum==13){
+                        allyDrag = enemy3;
+                    } else if (EnemyNum==14){
+                        allyDrag = enemy4;
                     }
                     AvailableSquares = BoardSurfaceClass.GenerateAvailableSquares(allyDrag,EnemyPointX,EnemyPointY,false);
                     DistinationSquare = CalculateDistinationSquare(AvailableSquares);
