@@ -347,6 +347,8 @@ public class BoardSurface : MonoBehaviour
 
             //敵ターンのギミックを実行
             yield return StartCoroutine(ActionEnemyClass.ActionEnemyTurn(arrayBoard));
+            //敵モンスターの攻撃アクション
+            yield return StartCoroutine(DirectAttackClass.EnemyDirectAttack(arrayBoard));
 
             //プレイヤーターンに切り替えるギミックの実行
             TurnStartClass.StartPlayer();
@@ -908,18 +910,26 @@ public class BoardSurface : MonoBehaviour
             case 1:
                 ally1.SetActive(false);
                 arrayBoard[PointAlly1[1],PointAlly1[0]] = 0;
+                PointAlly1[0]=10;
+                PointAlly1[1]=10;
                 break;
             case 2:
                 ally2.SetActive(false);
                 arrayBoard[PointAlly2[1],PointAlly2[0]] = 0;
+                PointAlly2[0]=10;
+                PointAlly2[1]=10;
                 break;
             case 3:
                 ally3.SetActive(false);
                 arrayBoard[PointAlly3[1],PointAlly3[0]] = 0;
+                PointAlly3[0]=10;
+                PointAlly3[1]=10;
                 break;
             case 4:
                 ally4.SetActive(false);
                 arrayBoard[PointAlly4[1],PointAlly4[0]] = 0;
+                PointAlly4[0]=10;
+                PointAlly4[1]=10;
                 break;
             case 11:
                 enemy1.SetActive(false);

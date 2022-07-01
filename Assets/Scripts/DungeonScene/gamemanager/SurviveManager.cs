@@ -8,8 +8,8 @@ public class SurviveManager : MonoBehaviour
     int ally2HP = 10000;
     int ally3HP = 10000;
     int ally4HP = 10000;
-    int enemy1HP = 3;
-    int enemy2HP = 3;
+    int enemy1HP = 1500;
+    int enemy2HP = 1000;
     int enemy3HP = 2000;
     int enemy4HP = 2000;
     // int boss1HP = 10000;
@@ -29,6 +29,7 @@ public class SurviveManager : MonoBehaviour
         switch(ObjectNum){
             case 1:
                 ally1HP -= Damage;
+                Debug.Log("ally1 HP:"+ally1HP);
                 if(ally1HP < 0){
                     //HP0以下になったら死ぬ
                     BoardSurfaceClass.ExtinguishMonster(1);
@@ -36,19 +37,22 @@ public class SurviveManager : MonoBehaviour
                 break;
             case 2:
                 ally2HP -= Damage;
-                if(ally1HP < 0){
+                Debug.Log("ally2 HP:"+ally2HP);
+                if(ally2HP < 0){
                     BoardSurfaceClass.ExtinguishMonster(2);
                 }
                 break;
             case 3:
                 ally3HP -= Damage;
-                if(ally1HP < 0){
+                Debug.Log("ally3 HP:"+ally3HP);
+                if(ally3HP < 0){
                     BoardSurfaceClass.ExtinguishMonster(3);
                 }
                 break;
             case 4:
                 ally4HP -= Damage;
-                if(ally1HP < 0){
+                Debug.Log("ally4 HP:"+ally4HP);
+                if(ally4HP < 0){
                     BoardSurfaceClass.ExtinguishMonster(4);
                 }
                 break;
