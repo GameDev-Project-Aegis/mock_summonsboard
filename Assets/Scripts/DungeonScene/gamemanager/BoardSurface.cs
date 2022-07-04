@@ -22,6 +22,8 @@ public class BoardSurface : MonoBehaviour
     TurnStart TurnStartClass;
     public GameObject StepNext;
     StepNext StepNextClass;
+    public GameObject GameOver;
+    GameOver GameOverClass;
 
     //駒オブジェクトをアタッチする
     public GameObject ally1;
@@ -134,12 +136,12 @@ public class BoardSurface : MonoBehaviour
     //Squareプレハブを盤面状に格納するための配列
     GameObject[,] SquareBox = new GameObject[4,4];
 
-    //ターン判定のためのbool値（プレイヤーターン -> true, 敵ターン -> false）
-    private bool PlayerTurn;
-
     //ダブルタップ判定に必要な変数
     private bool isDoubleTapStart; //タップ認識中のフラグ
     private float doubleTapTime; //タップ開始からの累積時間
+
+    //ターン判定のためのbool値（プレイヤーターン -> true, 敵ターン -> false）
+    private bool PlayerTurn;
 
     //次の面に進む判定のためのbool値
     bool win_board = false;
@@ -347,10 +349,17 @@ public class BoardSurface : MonoBehaviour
 
             //敵ターンのギミックを実行
             yield return StartCoroutine(ActionEnemyClass.ActionEnemyTurn(arrayBoard));
+            //敵モンスターの攻撃アクション
+            yield return StartCoroutine(DirectAttackClass.EnemyDirectAttack(arrayBoard));
 
-            //プレイヤーターンに切り替えるギミックの実行
-            TurnStartClass.StartPlayer();
-            yield return new WaitForSeconds(1.5f);
+            //味方が全て破壊された場合にゲームオーバー表示へ
+            if(AllAllyDefeated()){
+                GameOver.SetActive(true);
+            }else{
+                //プレイヤーターンに切り替えるギミックの実行
+                TurnStartClass.StartPlayer();
+                yield return new WaitForSeconds(1.5f);
+            }
 
         }else{
             //２面敵モンスターの配置の決定
@@ -908,18 +917,26 @@ public class BoardSurface : MonoBehaviour
             case 1:
                 ally1.SetActive(false);
                 arrayBoard[PointAlly1[1],PointAlly1[0]] = 0;
+                PointAlly1[0]=10;
+                PointAlly1[1]=10;
                 break;
             case 2:
                 ally2.SetActive(false);
                 arrayBoard[PointAlly2[1],PointAlly2[0]] = 0;
+                PointAlly2[0]=10;
+                PointAlly2[1]=10;
                 break;
             case 3:
                 ally3.SetActive(false);
                 arrayBoard[PointAlly3[1],PointAlly3[0]] = 0;
+                PointAlly3[0]=10;
+                PointAlly3[1]=10;
                 break;
             case 4:
                 ally4.SetActive(false);
                 arrayBoard[PointAlly4[1],PointAlly4[0]] = 0;
+                PointAlly4[0]=10;
+                PointAlly4[1]=10;
                 break;
             case 11:
                 enemy1.SetActive(false);
@@ -948,7 +965,16 @@ public class BoardSurface : MonoBehaviour
         }
     }
 
-    //関数：モンスターが盤面に残っていることの判定
+    //関数：味方モンスターが盤面に残っていることの判定
+    bool AllAllyDefeated()
+    {
+        if (PointAlly1[0]==10 && PointAlly2[0]==10 && PointAlly3[0]==10 && PointAlly4[0]==10){
+            return true;
+        }
+        return false;
+    }
+
+    //関数：敵モンスターが盤面に残っていることの判定
     bool AllEnemyDefeated()
     {
         if (PointEnemy1[0]==10 && PointEnemy2[0]==10 && PointEnemy3[0]==10 && PointEnemy4[0]==10){

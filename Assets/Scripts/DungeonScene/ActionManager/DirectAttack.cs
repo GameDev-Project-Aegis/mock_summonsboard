@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 using UnityEngine;
 
 public class DirectAttack : MonoBehaviour
@@ -31,7 +32,15 @@ public class DirectAttack : MonoBehaviour
     int[] moveAlly2 = {1,2,1,1,0,1,2,1};
     int[] moveAlly3 = {1,1,1,0,0,1,1,1};
     int[] moveAlly4 = {1,2,0,1,1,0,2,0};
+    int[] moveEnemy1 = {0,1,0,0,0,2,0,2};
+    int[] moveEnemy2 = {0,1,0,1,1,0,1,0};
+    int[] moveEnemy3 = {0,2,0,1,1,0,2,0};
+    int[] moveEnemy4 = {0,2,0,1,1,0,2,0};
 
+    int[] singleAttack1 = {0,10};
+    int[] singleAttack2 = {0,10};
+    int[] singleAttack3 = {0,10};
+    int[] singleAttack4 = {0,10};
     int[] singleAttack11 = {0,10};
     int[] singleAttack12 = {0,10};
     int[] singleAttack13 = {0,10};
@@ -42,10 +51,10 @@ public class DirectAttack : MonoBehaviour
     int PowerOffenceAlly2 = 200;
     int PowerOffenceAlly3 = 200;
     int PowerOffenceAlly4 = 200;
-    int PowerOffenceEnemy1 = 50;
-    int PowerOffenceEnemy2 = 50;
-    int PowerOffenceEnemy3 = 50;
-    int PowerOffenceEnemy4 = 50;
+    int PowerOffenceEnemy1 = 100;
+    int PowerOffenceEnemy2 = 100;
+    int PowerOffenceEnemy3 = 150;
+    int PowerOffenceEnemy4 = 150;
 
     //モンスターの防御力
     int PowerDefenceAlly1 = 100;
@@ -117,8 +126,8 @@ public class DirectAttack : MonoBehaviour
                         break;
                 }
                 yield return new WaitForSeconds(0.1f);
-                DamageCalculation(11,AttackAlly1,AttackAlly2,AttackAlly3,AttackAlly4,0,0);
-                DamageCalculation(12,AttackAlly1,AttackAlly2,AttackAlly3,AttackAlly4,0,0);
+                DamageCalculationEnemy(11,AttackAlly1,AttackAlly2,AttackAlly3,AttackAlly4);
+                DamageCalculationEnemy(12,AttackAlly1,AttackAlly2,AttackAlly3,AttackAlly4);
                 yield return new WaitForSeconds(0.4f);
             }
             //単体->単体の攻撃が行われる場合
@@ -142,7 +151,7 @@ public class DirectAttack : MonoBehaviour
                             break;
                     }
                     yield return new WaitForSeconds(0.1f);
-                    DamageCalculation(11,AttackAlly1,AttackAlly2,AttackAlly3,AttackAlly4,0,0);
+                    DamageCalculationEnemy(11,AttackAlly1,AttackAlly2,AttackAlly3,AttackAlly4);
                     yield return new WaitForSeconds(0.4f);
                 }
                 if(singleAttack12[0]!=0){
@@ -164,7 +173,7 @@ public class DirectAttack : MonoBehaviour
                             break;
                     }
                     yield return new WaitForSeconds(0.1f);
-                    DamageCalculation(12,AttackAlly1,AttackAlly2,AttackAlly3,AttackAlly4,0,0);
+                    DamageCalculationEnemy(12,AttackAlly1,AttackAlly2,AttackAlly3,AttackAlly4);
                     yield return new WaitForSeconds(0.4f);
                 }
             }
@@ -218,8 +227,8 @@ public class DirectAttack : MonoBehaviour
                         break;
                 }
                 yield return new WaitForSeconds(0.1f);
-                DamageCalculation(13,AttackAlly1,AttackAlly2,AttackAlly3,AttackAlly4,0,0);
-                DamageCalculation(14,AttackAlly1,AttackAlly2,AttackAlly3,AttackAlly4,0,0);
+                DamageCalculationEnemy(13,AttackAlly1,AttackAlly2,AttackAlly3,AttackAlly4);
+                DamageCalculationEnemy(14,AttackAlly1,AttackAlly2,AttackAlly3,AttackAlly4);
                 yield return new WaitForSeconds(0.4f);
             }
             //単体->単体の攻撃が行われる場合
@@ -243,7 +252,7 @@ public class DirectAttack : MonoBehaviour
                             break;
                     }
                     yield return new WaitForSeconds(0.1f);
-                    DamageCalculation(13,AttackAlly1,AttackAlly2,AttackAlly3,AttackAlly4,0,0);
+                    DamageCalculationEnemy(13,AttackAlly1,AttackAlly2,AttackAlly3,AttackAlly4);
                     yield return new WaitForSeconds(0.4f);
                 }
                 if(singleAttack14[0]!=0){
@@ -265,7 +274,264 @@ public class DirectAttack : MonoBehaviour
                             break;
                     }
                     yield return new WaitForSeconds(0.1f);
-                    DamageCalculation(14,AttackAlly1,AttackAlly2,AttackAlly3,AttackAlly4,0,0);
+                    DamageCalculationEnemy(14,AttackAlly1,AttackAlly2,AttackAlly3,AttackAlly4);
+                    yield return new WaitForSeconds(0.4f);
+                }
+            }
+        }
+        yield return new WaitForSeconds(0.5f);
+    }
+
+    public IEnumerator EnemyDirectAttack(int[,] arrayBoard)
+    {
+        singleAttack1[0] = 0;
+        singleAttack1[1] = 10;
+        singleAttack2[0] = 0;
+        singleAttack2[1] = 10;
+        singleAttack3[0] = 0;
+        singleAttack3[1] = 10;
+        singleAttack4[0] = 0;
+        singleAttack4[1] = 10;
+
+        //周囲8マスのモンスターを格納する配列
+        int[] arrayAround8 = new int[8];
+
+        //コンボ攻撃を順に行う
+        yield return StartCoroutine(EnemyComboAttack(arrayBoard, arrayAround8, 1));
+        yield return StartCoroutine(EnemyComboAttack(arrayBoard, arrayAround8, 2));
+        yield return StartCoroutine(EnemyComboAttack(arrayBoard, arrayAround8, 3));
+        yield return StartCoroutine(EnemyComboAttack(arrayBoard, arrayAround8, 4));
+
+        //単体攻撃の判定を行う
+        //単体攻撃がない場合
+        if(singleAttack1[0]==0&&singleAttack2[0]==0&&singleAttack3[0]==0&&singleAttack4[0]==0){
+            // yield break;
+        }else{
+            //ダメージ計算関数に渡すパラメータ
+            int AttackEnemy1 = 0;
+            int AttackEnemy2 = 0;
+            int AttackEnemy3 = 0;
+            int AttackEnemy4 = 0;
+
+            //同一モンスターが２体同時攻撃を行う場合
+
+            //攻撃を受けるモンスターのリストを作成し重複を抽出
+            List<int> SingleAttackCheck = new List<int>(){
+                singleAttack1[0],
+                singleAttack2[0],
+                singleAttack3[0],
+                singleAttack4[0]
+            };
+
+            int duplicates11 = SingleAttackCheck.Count(s => s == 11);
+            int duplicates12 = SingleAttackCheck.Count(s => s == 12);
+            int duplicates13 = SingleAttackCheck.Count(s => s == 13);
+            int duplicates14 = SingleAttackCheck.Count(s => s == 14);
+
+
+            //enemy1が攻撃を行う場合
+            if(duplicates11 > 1){
+                SetSingleAttackAnimationTrigger(11, 8);
+                yield return new WaitForSeconds(0.9f);
+                if(singleAttack1[0]==11){
+                    Ally1Class.SetTrigger("defence");
+                    DamageCalculationAlly(1,1,0,0,0);
+                }
+                if(singleAttack2[0]==11){
+                    Ally2Class.SetTrigger("defence");
+                    DamageCalculationAlly(2,1,0,0,0);
+                }
+                if(singleAttack3[0]==11){
+                    Ally3Class.SetTrigger("defence");
+                    DamageCalculationAlly(3,1,0,0,0);
+                }
+                if(singleAttack4[0]==11){
+                    Ally4Class.SetTrigger("defence");
+                    DamageCalculationAlly(4,1,0,0,0);
+                }
+                yield return new WaitForSeconds(0.5f);
+            }
+            //enemy1が単体に行う攻撃
+            else{
+                if(singleAttack1[0]==11){
+                    SetSingleAttackAnimationTrigger(11, singleAttack1[1]);
+                    yield return new WaitForSeconds(0.8f);
+                    Ally1Class.SetTrigger("defence");
+                    DamageCalculationAlly(1,1,0,0,0);
+                    yield return new WaitForSeconds(0.5f);
+                }else if(singleAttack2[0]==11){
+                    SetSingleAttackAnimationTrigger(11, singleAttack2[1]);
+                    yield return new WaitForSeconds(0.8f);
+                    Ally2Class.SetTrigger("defence");
+                    DamageCalculationAlly(2,1,0,0,0);
+                    yield return new WaitForSeconds(0.5f);
+                }else if(singleAttack3[0]==11){
+                    SetSingleAttackAnimationTrigger(11, singleAttack3[1]);
+                    yield return new WaitForSeconds(0.8f);
+                    Ally3Class.SetTrigger("defence");
+                    DamageCalculationAlly(3,1,0,0,0);
+                    yield return new WaitForSeconds(0.5f);
+                }else if(singleAttack4[0]==11){
+                    SetSingleAttackAnimationTrigger(11, singleAttack4[1]);
+                    yield return new WaitForSeconds(0.8f);
+                    Ally4Class.SetTrigger("defence");
+                    DamageCalculationAlly(4,1,0,0,0);
+                    yield return new WaitForSeconds(0.5f);
+                }
+            }
+            //enemy2
+            if(duplicates12 > 1){
+                SetSingleAttackAnimationTrigger(12, 8);
+                yield return new WaitForSeconds(0.9f);
+                if(singleAttack1[0]==12){
+                    Ally1Class.SetTrigger("defence");
+                    DamageCalculationAlly(1,0,1,0,0);
+                }
+                if(singleAttack2[0]==12){
+                    Ally2Class.SetTrigger("defence");
+                    DamageCalculationAlly(2,0,1,0,0);
+                }
+                if(singleAttack3[0]==12){
+                    Ally3Class.SetTrigger("defence");
+                    DamageCalculationAlly(3,0,1,0,0);
+                }
+                if(singleAttack4[0]==12){
+                    Ally4Class.SetTrigger("defence");
+                    DamageCalculationAlly(4,0,1,0,0);
+                }
+                yield return new WaitForSeconds(0.5f);
+            }else{
+                if(singleAttack1[0]==12){
+                    SetSingleAttackAnimationTrigger(12, singleAttack1[1]);
+                    yield return new WaitForSeconds(0.8f);
+                    Ally1Class.SetTrigger("defence");
+                    yield return new WaitForSeconds(0.1f);
+                    DamageCalculationAlly(1,0,1,0,0);
+                    yield return new WaitForSeconds(0.4f);
+                }else if(singleAttack2[0]==12){
+                    SetSingleAttackAnimationTrigger(12, singleAttack2[1]);
+                    yield return new WaitForSeconds(0.8f);
+                    Ally2Class.SetTrigger("defence");
+                    yield return new WaitForSeconds(0.1f);
+                    DamageCalculationAlly(2,0,1,0,0);
+                    yield return new WaitForSeconds(0.4f);
+                }else if(singleAttack3[0]==12){
+                    SetSingleAttackAnimationTrigger(12, singleAttack3[1]);
+                    yield return new WaitForSeconds(0.8f);
+                    Ally3Class.SetTrigger("defence");
+                    yield return new WaitForSeconds(0.1f);
+                    DamageCalculationAlly(3,0,1,0,0);
+                    yield return new WaitForSeconds(0.4f);
+                }else if(singleAttack4[0]==12){
+                    SetSingleAttackAnimationTrigger(12, singleAttack4[1]);
+                    yield return new WaitForSeconds(0.8f);
+                    Ally4Class.SetTrigger("defence");
+                    yield return new WaitForSeconds(0.1f);
+                    DamageCalculationAlly(4,0,1,0,0);
+                    yield return new WaitForSeconds(0.4f);
+                }
+            }
+            //enemy3
+            if(duplicates13 > 1){
+                SetSingleAttackAnimationTrigger(13, 8);
+                yield return new WaitForSeconds(0.9f);
+                if(singleAttack1[0]==13){
+                    Ally1Class.SetTrigger("defence");
+                    DamageCalculationAlly(1,0,0,1,0);
+                }
+                if(singleAttack2[0]==13){
+                    Ally2Class.SetTrigger("defence");
+                    DamageCalculationAlly(2,0,0,1,0);
+                }
+                if(singleAttack3[0]==13){
+                    Ally3Class.SetTrigger("defence");
+                    DamageCalculationAlly(3,0,0,1,0);
+                }
+                if(singleAttack4[0]==13){
+                    Ally4Class.SetTrigger("defence");
+                    DamageCalculationAlly(4,0,0,1,0);
+                }
+                yield return new WaitForSeconds(0.5f);
+            }else{
+                if(singleAttack1[0]==13){
+                    SetSingleAttackAnimationTrigger(13, singleAttack1[1]);
+                    yield return new WaitForSeconds(0.8f);
+                    Ally1Class.SetTrigger("defence");
+                    yield return new WaitForSeconds(0.1f);
+                    DamageCalculationAlly(1,0,0,1,0);
+                    yield return new WaitForSeconds(0.4f);
+                }else if(singleAttack2[0]==13){
+                    SetSingleAttackAnimationTrigger(13, singleAttack2[1]);
+                    yield return new WaitForSeconds(0.8f);
+                    Ally2Class.SetTrigger("defence");
+                    yield return new WaitForSeconds(0.1f);
+                    DamageCalculationAlly(2,0,0,1,0);
+                    yield return new WaitForSeconds(0.4f);
+                }else if(singleAttack3[0]==13){
+                    SetSingleAttackAnimationTrigger(13, singleAttack3[1]);
+                    yield return new WaitForSeconds(0.8f);
+                    Ally3Class.SetTrigger("defence");
+                    yield return new WaitForSeconds(0.1f);
+                    DamageCalculationAlly(3,0,0,1,0);
+                    yield return new WaitForSeconds(0.4f);
+                }else if(singleAttack4[0]==13){
+                    SetSingleAttackAnimationTrigger(13, singleAttack4[1]);
+                    yield return new WaitForSeconds(0.8f);
+                    Ally4Class.SetTrigger("defence");
+                    yield return new WaitForSeconds(0.1f);
+                    DamageCalculationAlly(4,0,0,1,0);
+                    yield return new WaitForSeconds(0.4f);
+                }
+            }
+            //enemy4
+            if(duplicates14 > 1){
+                SetSingleAttackAnimationTrigger(14, 8);
+                yield return new WaitForSeconds(0.9f);
+                if(singleAttack1[0]==14){
+                    Ally1Class.SetTrigger("defence");
+                    DamageCalculationAlly(1,0,0,0,1);
+                }
+                if(singleAttack2[0]==14){
+                    Ally2Class.SetTrigger("defence");
+                    DamageCalculationAlly(2,0,0,0,1);
+                }
+                if(singleAttack3[0]==14){
+                    Ally3Class.SetTrigger("defence");
+                    DamageCalculationAlly(3,0,0,0,1);
+                }
+                if(singleAttack4[0]==14){
+                    Ally4Class.SetTrigger("defence");
+                    DamageCalculationAlly(4,0,0,0,1);
+                }
+                yield return new WaitForSeconds(0.5f);
+            }else{
+                if(singleAttack1[0]==14){
+                    SetSingleAttackAnimationTrigger(14, singleAttack1[1]);
+                    yield return new WaitForSeconds(0.8f);
+                    Ally1Class.SetTrigger("defence");
+                    yield return new WaitForSeconds(0.1f);
+                    DamageCalculationAlly(1,0,0,0,1);
+                    yield return new WaitForSeconds(0.4f);
+                }else if(singleAttack2[0]==14){
+                    SetSingleAttackAnimationTrigger(14, singleAttack2[1]);
+                    yield return new WaitForSeconds(0.8f);
+                    Ally2Class.SetTrigger("defence");
+                    yield return new WaitForSeconds(0.1f);
+                    DamageCalculationAlly(2,0,0,0,1);
+                    yield return new WaitForSeconds(0.4f);
+                }else if(singleAttack3[0]==14){
+                    SetSingleAttackAnimationTrigger(14, singleAttack3[1]);
+                    yield return new WaitForSeconds(0.8f);
+                    Ally3Class.SetTrigger("defence");
+                    yield return new WaitForSeconds(0.1f);
+                    DamageCalculationAlly(3,0,0,0,1);
+                    yield return new WaitForSeconds(0.4f);
+                }else if(singleAttack4[0]==14){
+                    SetSingleAttackAnimationTrigger(14, singleAttack4[1]);
+                    yield return new WaitForSeconds(0.8f);
+                    Ally4Class.SetTrigger("defence");
+                    yield return new WaitForSeconds(0.1f);
+                    DamageCalculationAlly(4,0,0,0,1);
                     yield return new WaitForSeconds(0.4f);
                 }
             }
@@ -357,7 +623,7 @@ public class DirectAttack : MonoBehaviour
                                 break;
                         }
                         yield return new WaitForSeconds(0.1f);
-                        DamageCalculation(EnemyNum,AttackAlly1,AttackAlly2,AttackAlly3,AttackAlly4,0,0);
+                        DamageCalculationEnemy(EnemyNum,AttackAlly1,AttackAlly2,AttackAlly3,AttackAlly4);
                         yield return new WaitForSeconds(0.9f);
                     }
                     else if(combo==1){
@@ -442,6 +708,178 @@ public class DirectAttack : MonoBehaviour
         }
     }
 
+    IEnumerator EnemyComboAttack(int[,] arrayBoard, int[] arrayAround8, int EnemyNum)
+    {
+        //ダメージ計算関数に渡すパラメータ
+        int AttackEnemy1 = 0;
+        int AttackEnemy2 = 0;
+        int AttackEnemy3 = 0;
+        int AttackEnemy4 = 0;
+
+        for(int i=0; i<4; i++){
+            for(int j=0; j<4; j++){
+                if(arrayBoard[j,i]==EnemyNum){
+                    //八方のマスを確認する
+                    arrayAround8[0] = ReturnSquareStatus(i-1,j-1,arrayBoard,7);
+                    arrayAround8[1] = ReturnSquareStatus(i-1,j,arrayBoard,6);
+                    arrayAround8[2] = ReturnSquareStatus(i-1,j+1,arrayBoard,5);
+                    arrayAround8[3] = ReturnSquareStatus(i,j-1,arrayBoard,4);
+                    arrayAround8[4] = ReturnSquareStatus(i,j+1,arrayBoard,3);
+                    arrayAround8[5] = ReturnSquareStatus(i+1,j-1,arrayBoard,2);
+                    arrayAround8[6] = ReturnSquareStatus(i+1,j,arrayBoard,1);
+                    arrayAround8[7] = ReturnSquareStatus(i+1,j+1,arrayBoard,0);
+
+                    // //八方マスに攻撃モンスターが存在するか判定する
+                    int enemy1_index = Array.IndexOf(arrayAround8, 11);
+                    int enemy2_index = Array.IndexOf(arrayAround8, 12);
+                    int enemy3_index = Array.IndexOf(arrayAround8, 13);
+                    int enemy4_index = Array.IndexOf(arrayAround8, 14);
+
+                    //何コンボが入るのかを計算
+                    int combo = 0;
+
+                    if(enemy1_index!=-1){combo += 1;}
+                    if(enemy2_index!=-1){combo += 1;}
+                    if(enemy3_index!=-1){combo += 1;}
+                    if(enemy4_index!=-1){combo += 1;}
+
+                    if(combo==0){
+                        //攻撃は行われない
+                    }
+                    //複数体によるコンボ攻撃が行われる場合
+                    else if(combo>1){
+                        foreach(int I in arrayAround8){
+                            switch(I){
+                                case 11:
+                                    SetAttackAnimationTrigger(Enemy1Class,combo,enemy1_index);
+                                    yield return new WaitForSeconds(0.33f);
+                                    combo -= 1;
+                                    AttackEnemy1 = 1;
+                                    break;
+                                case 12:
+                                    SetAttackAnimationTrigger(Enemy2Class,combo,enemy2_index);
+                                    yield return new WaitForSeconds(0.33f);
+                                    combo -= 1;
+                                    AttackEnemy2 = 1;
+                                    break;
+                                case 13:
+                                    SetAttackAnimationTrigger(Enemy3Class,combo,enemy3_index);
+                                    yield return new WaitForSeconds(0.33f);
+                                    combo -= 1;
+                                    AttackEnemy3 = 1;
+                                    break;
+                                case 14:
+                                    SetAttackAnimationTrigger(Enemy4Class,combo,enemy4_index);
+                                    yield return new WaitForSeconds(0.33f);
+                                    combo -= 1;
+                                    AttackEnemy4 = 1;
+                                    break;
+                            }
+                        }
+                        yield return new WaitForSeconds(0.8f);
+                        switch (EnemyNum) {
+                            case 1:
+                                Ally1Class.SetTrigger("defence");
+                                break;
+                            case 2:
+                                Ally2Class.SetTrigger("defence");
+                                break;
+                            case 3:
+                                Ally3Class.SetTrigger("defence");
+                                break;
+                            case 4:
+                                Ally4Class.SetTrigger("defence");
+                                break;
+                        }
+                        yield return new WaitForSeconds(0.1f);
+                        DamageCalculationAlly(EnemyNum,AttackEnemy1,AttackEnemy2,AttackEnemy3,AttackEnemy4);
+                        yield return new WaitForSeconds(0.9f);
+                    }
+                    else if(combo==1){
+                        //単体の攻撃が行われる場合
+                        switch (EnemyNum) {
+                            case 1:
+                                if(enemy1_index!=-1){
+                                    singleAttack1[0] = 11;
+                                    singleAttack1[1] = enemy1_index;
+                                }
+                                if(enemy2_index!=-1){
+                                    singleAttack1[0] = 12;
+                                    singleAttack1[1] = enemy2_index;
+                                }
+                                if(enemy3_index!=-1){
+                                    singleAttack1[0] = 13;
+                                    singleAttack1[1] = enemy3_index;
+                                }
+                                if(enemy4_index!=-1){
+                                    singleAttack1[0] = 14;
+                                    singleAttack1[1] = enemy4_index;
+                                }
+                                break;
+                            case 2:
+                                if(enemy1_index!=-1){
+                                    singleAttack2[0] = 11;
+                                    singleAttack2[1] = enemy1_index;
+                                }
+                                if(enemy2_index!=-1){
+                                    singleAttack2[0] = 12;
+                                    singleAttack2[1] = enemy2_index;
+                                }
+                                if(enemy3_index!=-1){
+                                    singleAttack2[0] = 13;
+                                    singleAttack2[1] = enemy3_index;
+                                }
+                                if(enemy4_index!=-1){
+                                    singleAttack2[0] = 14;
+                                    singleAttack2[1] = enemy4_index;
+                                }
+                                break;
+                            case 3:
+                                if(enemy1_index!=-1){
+                                    singleAttack3[0] = 11;
+                                    singleAttack3[1] = enemy1_index;
+                                }
+                                if(enemy2_index!=-1){
+                                    singleAttack3[0] = 12;
+                                    singleAttack3[1] = enemy2_index;
+                                }
+                                if(enemy3_index!=-1){
+                                    singleAttack3[0] = 13;
+                                    singleAttack3[1] = enemy3_index;
+                                }
+                                if(enemy4_index!=-1){
+                                    singleAttack3[0] = 14;
+                                    singleAttack3[1] = enemy4_index;
+                                }
+                                break;
+                            case 4:
+                                if(enemy1_index!=-1){
+                                    singleAttack4[0] = 11;
+                                    singleAttack4[1] = enemy1_index;
+                                }
+                                if(enemy2_index!=-1){
+                                    singleAttack4[0] = 12;
+                                    singleAttack4[1] = enemy2_index;
+                                }
+                                if(enemy3_index!=-1){
+                                    singleAttack4[0] = 13;
+                                    singleAttack4[1] = enemy3_index;
+                                }
+                                if(enemy4_index!=-1){
+                                    singleAttack4[0] = 14;
+                                    singleAttack4[1] = enemy4_index;
+                                }
+                                break;
+                        }
+                    }
+
+                //ココアとで消します
+                yield return null;
+                }
+            }
+        }
+    }
+
     //座標のステータスを確認する関数
     int ReturnSquareStatus(int PointX, int PointY, int[,] arrayBoard, int attackIndex)
     {
@@ -475,9 +913,29 @@ public class DirectAttack : MonoBehaviour
                         return 0;
                     }
                 case 11:
-                    return 0;
+                    if(moveEnemy1[attackIndex]!=0){
+                        return 11;
+                    }else{
+                        return 0;
+                    }
                 case 12:
-                    return 0;
+                    if(moveEnemy2[attackIndex]!=0){
+                        return 12;
+                    }else{
+                        return 0;
+                    }
+                case 13:
+                    if(moveEnemy3[attackIndex]!=0){
+                        return 13;
+                    }else{
+                        return 0;
+                    }
+                case 14:
+                    if(moveEnemy4[attackIndex]!=0){
+                        return 14;
+                    }else{
+                        return 0;
+                    }
                 default:
                     return 0;
             }
@@ -663,6 +1121,134 @@ public class DirectAttack : MonoBehaviour
                         return;
                 }
                 return;
+            case 11:
+                Enemy1Class.SetTrigger("attack");
+                switch(ally_index){
+                    case 0:
+                        Enemy1Class.SetTrigger("RightDown");
+                        return;
+                    case 1:
+                        Enemy1Class.SetTrigger("Right");
+                        return;
+                    case 2:
+                        Enemy1Class.SetTrigger("RightUp");
+                        return;
+                    case 3:
+                        Enemy1Class.SetTrigger("Down");
+                        return;
+                    case 4:
+                        Enemy1Class.SetTrigger("Up");
+                        return;
+                    case 5:
+                        Enemy1Class.SetTrigger("LeftDown");
+                        return;
+                    case 6:
+                        Enemy1Class.SetTrigger("Left");
+                        return;
+                    case 7:
+                        Enemy1Class.SetTrigger("LeftUp");
+                        return;
+                    case 8:
+                        Enemy1Class.SetTrigger("MultiDirection");
+                        return;
+                }
+                return;
+            case 12:
+                Enemy2Class.SetTrigger("attack");
+                switch(ally_index){
+                    case 0:
+                        Enemy2Class.SetTrigger("RightDown");
+                        return;
+                    case 1:
+                        Enemy2Class.SetTrigger("Right");
+                        return;
+                    case 2:
+                        Enemy2Class.SetTrigger("RightUp");
+                        return;
+                    case 3:
+                        Enemy2Class.SetTrigger("Down");
+                        return;
+                    case 4:
+                        Enemy2Class.SetTrigger("Up");
+                        return;
+                    case 5:
+                        Enemy2Class.SetTrigger("LeftDown");
+                        return;
+                    case 6:
+                        Enemy2Class.SetTrigger("Left");
+                        return;
+                    case 7:
+                        Enemy2Class.SetTrigger("LeftUp");
+                        return;
+                    case 8:
+                        Enemy2Class.SetTrigger("MultiDirection");
+                        return;
+                }
+                return;
+            case 13:
+                Enemy3Class.SetTrigger("attack");
+                switch(ally_index){
+                    case 0:
+                        Enemy3Class.SetTrigger("RightDown");
+                        return;
+                    case 1:
+                        Enemy3Class.SetTrigger("Right");
+                        return;
+                    case 2:
+                        Enemy3Class.SetTrigger("RightUp");
+                        return;
+                    case 3:
+                        Enemy3Class.SetTrigger("Down");
+                        return;
+                    case 4:
+                        Enemy3Class.SetTrigger("Up");
+                        return;
+                    case 5:
+                        Enemy3Class.SetTrigger("LeftDown");
+                        return;
+                    case 6:
+                        Enemy3Class.SetTrigger("Left");
+                        return;
+                    case 7:
+                        Enemy3Class.SetTrigger("LeftUp");
+                        return;
+                    case 8:
+                        Enemy3Class.SetTrigger("MultiDirection");
+                        return;
+                }
+                return;
+            case 14:
+                Enemy4Class.SetTrigger("attack");
+                switch(ally_index){
+                    case 0:
+                        Enemy4Class.SetTrigger("RightDown");
+                        return;
+                    case 1:
+                        Enemy4Class.SetTrigger("Right");
+                        return;
+                    case 2:
+                        Enemy4Class.SetTrigger("RightUp");
+                        return;
+                    case 3:
+                        Enemy4Class.SetTrigger("Down");
+                        return;
+                    case 4:
+                        Enemy4Class.SetTrigger("Up");
+                        return;
+                    case 5:
+                        Enemy4Class.SetTrigger("LeftDown");
+                        return;
+                    case 6:
+                        Enemy4Class.SetTrigger("Left");
+                        return;
+                    case 7:
+                        Enemy4Class.SetTrigger("LeftUp");
+                        return;
+                    case 8:
+                        Enemy4Class.SetTrigger("MultiDirection");
+                        return;
+                }
+                return;
         }
     }
 
@@ -670,7 +1256,7 @@ public class DirectAttack : MonoBehaviour
     //必要なパラメータは以下
     //  ダメージを受けるモンスター
     //  ダメージを与えるモンスター
-    void DamageCalculation(int Wounded, int AttackAlly1, int AttackAlly2, int AttackAlly3, int AttackAlly4, int AttackEnemy1, int AttackEnemy2)
+    void DamageCalculationEnemy(int Wounded, int AttackAlly1, int AttackAlly2, int AttackAlly3, int AttackAlly4)
     {
         //3アタック->*1.00
         //6コンボ->*1.75
@@ -701,6 +1287,40 @@ public class DirectAttack : MonoBehaviour
             Damage = 0;
         }
         Debug.Log(Damage);
+
+        SurviveManagerClass.HPdamage(Wounded,Damage);
+    }
+
+    void DamageCalculationAlly(int Wounded, int AttackEnemy1, int AttackEnemy2, int AttackEnemy3, int AttackEnemy4)
+    {
+        //3アタック->*1.00
+        //6コンボ->*1.75
+        //9コンボ->*2.13
+        //12コンボ->*2.50
+        int combo = (AttackEnemy1+AttackEnemy2+AttackEnemy3+AttackEnemy4)*3;
+        Debug.Log(combo);
+
+        double damage = PowerOffenceEnemy1*AttackEnemy1*3+PowerOffenceEnemy2*AttackEnemy2*3+PowerOffenceEnemy3*AttackEnemy3*3+PowerOffenceEnemy4*AttackEnemy4*3;
+        damage = damage*((combo-3)*0.125+1);
+        int Damage = Convert.ToInt32(damage);
+
+        switch(Wounded){
+            case 1:
+                Damage -= PowerDefenceAlly1;
+                break;
+            case 2:
+                Damage -= PowerDefenceAlly2;
+                break;
+            case 3:
+                Damage -= PowerDefenceAlly3;
+                break;
+            case 4:
+                Damage -= PowerDefenceAlly4;
+                break;
+        }
+        if(Damage < 0){
+            Damage = 0;
+        }
 
         SurviveManagerClass.HPdamage(Wounded,Damage);
     }
