@@ -335,25 +335,21 @@ public class DirectAttack : MonoBehaviour
                 yield return new WaitForSeconds(0.9f);
                 if(singleAttack1[0]==11){
                     Ally1Class.SetTrigger("defence");
-                    yield return new WaitForSeconds(0.1f);
                     DamageCalculationAlly(1,1,0,0,0);
                 }
                 if(singleAttack2[0]==11){
                     Ally2Class.SetTrigger("defence");
-                    yield return new WaitForSeconds(0.1f);
                     DamageCalculationAlly(2,1,0,0,0);
                 }
                 if(singleAttack3[0]==11){
                     Ally3Class.SetTrigger("defence");
-                    yield return new WaitForSeconds(0.1f);
                     DamageCalculationAlly(3,1,0,0,0);
                 }
                 if(singleAttack4[0]==11){
                     Ally4Class.SetTrigger("defence");
-                    yield return new WaitForSeconds(0.1f);
                     DamageCalculationAlly(4,1,0,0,0);
                 }
-                yield return new WaitForSeconds(0.4f);
+                yield return new WaitForSeconds(0.5f);
             }
             //enemy1が単体に行う攻撃
             else{
@@ -361,30 +357,26 @@ public class DirectAttack : MonoBehaviour
                     SetSingleAttackAnimationTrigger(11, singleAttack1[1]);
                     yield return new WaitForSeconds(0.8f);
                     Ally1Class.SetTrigger("defence");
-                    yield return new WaitForSeconds(0.1f);
                     DamageCalculationAlly(1,1,0,0,0);
-                    yield return new WaitForSeconds(0.4f);
+                    yield return new WaitForSeconds(0.5f);
                 }else if(singleAttack2[0]==11){
                     SetSingleAttackAnimationTrigger(11, singleAttack2[1]);
                     yield return new WaitForSeconds(0.8f);
                     Ally2Class.SetTrigger("defence");
-                    yield return new WaitForSeconds(0.1f);
                     DamageCalculationAlly(2,1,0,0,0);
-                    yield return new WaitForSeconds(0.4f);
+                    yield return new WaitForSeconds(0.5f);
                 }else if(singleAttack3[0]==11){
                     SetSingleAttackAnimationTrigger(11, singleAttack3[1]);
                     yield return new WaitForSeconds(0.8f);
                     Ally3Class.SetTrigger("defence");
-                    yield return new WaitForSeconds(0.1f);
                     DamageCalculationAlly(3,1,0,0,0);
-                    yield return new WaitForSeconds(0.4f);
+                    yield return new WaitForSeconds(0.5f);
                 }else if(singleAttack4[0]==11){
                     SetSingleAttackAnimationTrigger(11, singleAttack4[1]);
                     yield return new WaitForSeconds(0.8f);
                     Ally4Class.SetTrigger("defence");
-                    yield return new WaitForSeconds(0.1f);
                     DamageCalculationAlly(4,1,0,0,0);
-                    yield return new WaitForSeconds(0.4f);
+                    yield return new WaitForSeconds(0.5f);
                 }
             }
             //enemy2
@@ -393,25 +385,21 @@ public class DirectAttack : MonoBehaviour
                 yield return new WaitForSeconds(0.9f);
                 if(singleAttack1[0]==12){
                     Ally1Class.SetTrigger("defence");
-                    yield return new WaitForSeconds(0.1f);
                     DamageCalculationAlly(1,0,1,0,0);
                 }
                 if(singleAttack2[0]==12){
                     Ally2Class.SetTrigger("defence");
-                    yield return new WaitForSeconds(0.1f);
                     DamageCalculationAlly(2,0,1,0,0);
                 }
                 if(singleAttack3[0]==12){
                     Ally3Class.SetTrigger("defence");
-                    yield return new WaitForSeconds(0.1f);
                     DamageCalculationAlly(3,0,1,0,0);
                 }
                 if(singleAttack4[0]==12){
                     Ally4Class.SetTrigger("defence");
-                    yield return new WaitForSeconds(0.1f);
                     DamageCalculationAlly(4,0,1,0,0);
                 }
-                yield return new WaitForSeconds(0.4f);
+                yield return new WaitForSeconds(0.5f);
             }else{
                 if(singleAttack1[0]==12){
                     SetSingleAttackAnimationTrigger(12, singleAttack1[1]);
@@ -449,25 +437,21 @@ public class DirectAttack : MonoBehaviour
                 yield return new WaitForSeconds(0.9f);
                 if(singleAttack1[0]==13){
                     Ally1Class.SetTrigger("defence");
-                    yield return new WaitForSeconds(0.1f);
                     DamageCalculationAlly(1,0,0,1,0);
                 }
                 if(singleAttack2[0]==13){
                     Ally2Class.SetTrigger("defence");
-                    yield return new WaitForSeconds(0.1f);
                     DamageCalculationAlly(2,0,0,1,0);
                 }
                 if(singleAttack3[0]==13){
                     Ally3Class.SetTrigger("defence");
-                    yield return new WaitForSeconds(0.1f);
                     DamageCalculationAlly(3,0,0,1,0);
                 }
                 if(singleAttack4[0]==13){
                     Ally4Class.SetTrigger("defence");
-                    yield return new WaitForSeconds(0.1f);
                     DamageCalculationAlly(4,0,0,1,0);
                 }
-                yield return new WaitForSeconds(0.4f);
+                yield return new WaitForSeconds(0.5f);
             }else{
                 if(singleAttack1[0]==13){
                     SetSingleAttackAnimationTrigger(13, singleAttack1[1]);
@@ -505,25 +489,21 @@ public class DirectAttack : MonoBehaviour
                 yield return new WaitForSeconds(0.9f);
                 if(singleAttack1[0]==14){
                     Ally1Class.SetTrigger("defence");
-                    yield return new WaitForSeconds(0.1f);
                     DamageCalculationAlly(1,0,0,0,1);
                 }
                 if(singleAttack2[0]==14){
                     Ally2Class.SetTrigger("defence");
-                    yield return new WaitForSeconds(0.1f);
                     DamageCalculationAlly(2,0,0,0,1);
                 }
                 if(singleAttack3[0]==14){
                     Ally3Class.SetTrigger("defence");
-                    yield return new WaitForSeconds(0.1f);
                     DamageCalculationAlly(3,0,0,0,1);
                 }
                 if(singleAttack4[0]==14){
                     Ally4Class.SetTrigger("defence");
-                    yield return new WaitForSeconds(0.1f);
                     DamageCalculationAlly(4,0,0,0,1);
                 }
-                yield return new WaitForSeconds(0.4f);
+                yield return new WaitForSeconds(0.5f);
             }else{
                 if(singleAttack1[0]==14){
                     SetSingleAttackAnimationTrigger(14, singleAttack1[1]);
@@ -1326,22 +1306,21 @@ public class DirectAttack : MonoBehaviour
 
         switch(Wounded){
             case 1:
-                Damage -= PowerDefenceEnemy1;
+                Damage -= PowerDefenceAlly1;
                 break;
             case 2:
-                Damage -= PowerDefenceEnemy2;
+                Damage -= PowerDefenceAlly2;
                 break;
             case 3:
-                Damage -= PowerDefenceEnemy3;
+                Damage -= PowerDefenceAlly3;
                 break;
             case 4:
-                Damage -= PowerDefenceEnemy4;
+                Damage -= PowerDefenceAlly4;
                 break;
         }
         if(Damage < 0){
             Damage = 0;
         }
-        Debug.Log(Damage);
 
         SurviveManagerClass.HPdamage(Wounded,Damage);
     }
