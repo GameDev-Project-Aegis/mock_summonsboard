@@ -14,6 +14,8 @@ public class ActionPlayer : MonoBehaviour
     public GameObject ally4;
     public GameObject enemy1;
     public GameObject enemy2;
+    public GameObject enemy3;
+    public GameObject enemy4;
     
     //HighLight(originally)をアタッチ
     public GameObject HighLight_O;
@@ -63,6 +65,12 @@ public class ActionPlayer : MonoBehaviour
         }else if (arrayBoard[InitialPointY,InitialPointX] == 12) {
             BoardSurfaceClass.UpdateDragObjectNum(12);
             return enemy2;
+        }else if (arrayBoard[InitialPointY,InitialPointX] == 13) {
+            BoardSurfaceClass.UpdateDragObjectNum(13);
+            return enemy3;
+        }else if (arrayBoard[InitialPointY,InitialPointX] == 14) {
+            BoardSurfaceClass.UpdateDragObjectNum(14);
+            return enemy4;
         }else{
             return null;
         }

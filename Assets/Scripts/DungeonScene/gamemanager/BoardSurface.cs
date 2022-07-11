@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Random = System.Random;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,6 +20,10 @@ public class BoardSurface : MonoBehaviour
     //スクリーンマネージャーオブジェクトをアタッチする
     public GameObject TurnStart;
     TurnStart TurnStartClass;
+    public GameObject StepNext;
+    StepNext StepNextClass;
+    public GameObject GameOver;
+    GameOver GameOverClass;
 
     //駒オブジェクトをアタッチする
     public GameObject ally1;
@@ -32,6 +37,8 @@ public class BoardSurface : MonoBehaviour
 
     public GameObject enemy1;
     public GameObject enemy2;
+    public GameObject enemy3;
+    public GameObject enemy4;
 
     //ドラッグ時に味方駒を半透明とするためのAllyをアタッチしておく
     public CanvasGroup Ally;
@@ -107,6 +114,8 @@ public class BoardSurface : MonoBehaviour
     int[] PointAlly4 = new int[2];
     int[] PointEnemy1 = new int[2];
     int[] PointEnemy2 = new int[2];
+    int[] PointEnemy3 = new int[2];
+    int[] PointEnemy4 = new int[2];
 
     //各モンスターの動く範囲のマスを配列としておく
     // 0 -> 矢印なし, 1 -> 一重矢印, 2 -> 二重矢印
@@ -117,6 +126,8 @@ public class BoardSurface : MonoBehaviour
     int[] moveAlly4 = {1,2,0,1,1,0,2,0};
     int[] moveEnemy1 = {0,1,0,0,0,2,0,2};
     int[] moveEnemy2 = {0,1,0,1,1,0,1,0};
+    int[] moveEnemy3 = {0,2,0,1,1,0,2,0};
+    int[] moveEnemy4 = {0,2,0,1,1,0,2,0};
     //上記をセットするための空配列
     int[] moveAlly = new int[8];
     //モンスターが動ける範囲のマスを配列とする
@@ -125,12 +136,18 @@ public class BoardSurface : MonoBehaviour
     //Squareプレハブを盤面状に格納するための配列
     GameObject[,] SquareBox = new GameObject[4,4];
 
-    //ターン判定のためのbool値（プレイヤーターン -> true, 敵ターン -> false）
-    private bool PlayerTurn;
-
     //ダブルタップ判定に必要な変数
     private bool isDoubleTapStart; //タップ認識中のフラグ
     private float doubleTapTime; //タップ開始からの累積時間
+
+    //ターン判定のためのbool値（プレイヤーターン -> true, 敵ターン -> false）
+    private bool PlayerTurn;
+
+    //次の面に進む判定のためのbool値
+    bool win_board = false;
+
+    //盤面のエリア数
+    int AreaNum = 1;
     
     // Start is called before the first frame update
     void Start()
@@ -144,6 +161,7 @@ public class BoardSurface : MonoBehaviour
         ActionEnemyClass = ActionEnemy.GetComponent<ActionEnemy>();
         DirectAttackClass = DirectAttack.GetComponent<DirectAttack>();
         TurnStartClass = TurnStart.GetComponent<TurnStart>();
+        StepNextClass = StepNext.GetComponent<StepNext>();
 
         //マウスポイントから座標を取得するための準備
         mainCamera = Camera.main;
@@ -160,7 +178,8 @@ public class BoardSurface : MonoBehaviour
         PlayerTurn = false;
     }
 
-    void Update () {
+    void Update ()
+    {
         //ダブルタップの判定
         if (isDoubleTapStart){
             doubleTapTime += Time.deltaTime;
@@ -235,7 +254,7 @@ public class BoardSurface : MonoBehaviour
     void OnMouseDrag()
     {
         //プレイヤーターンかつallyDragにプレイヤー駒オブジェクトがセットされてる場合のみ実行
-        if (PlayerTurn && allyDrag != null && allyDrag != enemy1 && allyDrag != enemy2) {
+        if (PlayerTurn && allyDrag != null && allyDrag != enemy1 && allyDrag != enemy2 && allyDrag != enemy3 && allyDrag != enemy4) {
             mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
 
             //モンスターをドラッグに合わせて移動させる
@@ -311,23 +330,50 @@ public class BoardSurface : MonoBehaviour
         PlayerTurn = false;
 
         //プレイヤーモンスターの攻撃アクション
-        yield return StartCoroutine(DirectAttackClass.AllyDirectAttack(arrayBoard));
+        switch(AreaNum){
+            case 1:
+                yield return StartCoroutine(DirectAttackClass.AllyDirectAttack1stArea(arrayBoard));
+                break;
+            case 2:
+                yield return StartCoroutine(DirectAttackClass.AllyDirectAttack2ndArea(arrayBoard));
+                break;
+        }
 
-        //敵ターン開始のエフェクトの発動
-        TurnStartClass.StartEnemy();
-        yield return new WaitForSeconds(1.5f);
+        //敵が全て撃破されたか判定する
+        win_board = AllEnemyDefeated();
 
-        //敵ターンのギミックを実行
-        yield return StartCoroutine(ActionEnemyClass.ActionEnemyTurn(arrayBoard));
+        if(!win_board){
+            //敵ターン開始のエフェクトの発動
+            TurnStartClass.StartEnemy();
+            yield return new WaitForSeconds(1.5f);
 
-        //敵モンスターの攻撃アクション
-        Debug.Log("enemy attack!!");
+            //敵ターンのギミックを実行
+            yield return StartCoroutine(ActionEnemyClass.ActionEnemyTurn(arrayBoard));
+            //敵モンスターの攻撃アクション
+            yield return StartCoroutine(DirectAttackClass.EnemyDirectAttack(arrayBoard));
 
-        //プレイヤーターンに切り替えるギミックの実行
-        TurnStartClass.StartPlayer();
-        yield return new WaitForSeconds(1.5f);
+            //味方が全て破壊された場合にゲームオーバー表示へ
+            if(AllAllyDefeated()){
+                GameOver.SetActive(true);
+            }else{
+                //プレイヤーターンに切り替えるギミックの実行
+                TurnStartClass.StartPlayer();
+                yield return new WaitForSeconds(1.5f);
+            }
 
-        // yield return null;
+        }else{
+            //２面敵モンスターの配置の決定
+            PlacementEnemyMonster();
+            //二体とも撃破されたときに面の切り替えを表示
+            yield return StartCoroutine(StepNextClass.StepNextArea());
+            yield return new WaitForSeconds(1);
+
+            //プレイヤーターンに切り替えるギミックの実行
+            TurnStartClass.StartPlayer();
+            yield return new WaitForSeconds(1.5f);
+            win_board = true;
+            AreaNum = 2;
+        }
     }
 
     //関数：駒を初期配置に置く
@@ -352,6 +398,10 @@ public class BoardSurface : MonoBehaviour
         arrayBoard[0,1] = 12;  // enemy2
         PointEnemy2[0] = 1;
         PointEnemy2[1] = 0;
+        PointEnemy3[0] = 10;
+        PointEnemy3[1] = 10;
+        PointEnemy4[0] = 10;
+        PointEnemy4[1] = 10;
         //②駒オブジェクトに座標を指定
         ally1.transform.localPosition = new Vector3(105, 35, 0);
         ally2.transform.localPosition = new Vector3(105, -35, 0);
@@ -386,7 +436,6 @@ public class BoardSurface : MonoBehaviour
     //返り値の型は長さ2の配列（int）
     int[] GetBoardPoint(float mPosX, float mPosY)
     {
-        
         if (mPosX > -2.2 && mPosX < -1.1) {
             PointX = 0;
         }else if (mPosX > -1.1 && mPosX < 0) {
@@ -439,6 +488,12 @@ public class BoardSurface : MonoBehaviour
             flying = true;
         } else if (allyDrag == enemy2){
             moveAlly = moveEnemy2;
+            flying = false;
+        } else if (allyDrag == enemy3){
+            moveAlly = moveEnemy3;
+            flying = false;
+        } else if (allyDrag == enemy4){
+            moveAlly = moveEnemy4;
             flying = false;
         }
 
@@ -824,6 +879,14 @@ public class BoardSurface : MonoBehaviour
                 PointEnemy2[0] = PointX;
                 PointEnemy2[1] = PointY;
                 break;
+            case 13:
+                PointEnemy3[0] = PointX;
+                PointEnemy3[1] = PointY;
+                break;
+            case 14:
+                PointEnemy4[0] = PointX;
+                PointEnemy4[1] = PointY;
+                break;
         }
     }
 
@@ -854,27 +917,108 @@ public class BoardSurface : MonoBehaviour
             case 1:
                 ally1.SetActive(false);
                 arrayBoard[PointAlly1[1],PointAlly1[0]] = 0;
+                PointAlly1[0]=10;
+                PointAlly1[1]=10;
                 break;
             case 2:
                 ally2.SetActive(false);
                 arrayBoard[PointAlly2[1],PointAlly2[0]] = 0;
+                PointAlly2[0]=10;
+                PointAlly2[1]=10;
                 break;
             case 3:
                 ally3.SetActive(false);
                 arrayBoard[PointAlly3[1],PointAlly3[0]] = 0;
+                PointAlly3[0]=10;
+                PointAlly3[1]=10;
                 break;
             case 4:
                 ally4.SetActive(false);
                 arrayBoard[PointAlly4[1],PointAlly4[0]] = 0;
+                PointAlly4[0]=10;
+                PointAlly4[1]=10;
                 break;
             case 11:
                 enemy1.SetActive(false);
                 arrayBoard[PointEnemy1[1],PointEnemy1[0]] = 0;
+                PointEnemy1[0]=10;
+                PointEnemy1[1]=10;
                 break;
             case 12:
                 enemy2.SetActive(false);
                 arrayBoard[PointEnemy2[1],PointEnemy2[0]] = 0;
+                PointEnemy2[0]=10;
+                PointEnemy2[1]=10;
                 break;
+            case 13:
+                enemy3.SetActive(false);
+                arrayBoard[PointEnemy3[1],PointEnemy3[0]] = 0;
+                PointEnemy3[0]=10;
+                PointEnemy3[1]=10;
+                break;
+            case 14:
+                enemy4.SetActive(false);
+                arrayBoard[PointEnemy4[1],PointEnemy4[0]] = 0;
+                PointEnemy4[0]=10;
+                PointEnemy4[1]=10;
+                break;
+        }
+    }
+
+    //関数：味方モンスターが盤面に残っていることの判定
+    bool AllAllyDefeated()
+    {
+        if (PointAlly1[0]==10 && PointAlly2[0]==10 && PointAlly3[0]==10 && PointAlly4[0]==10){
+            return true;
+        }
+        return false;
+    }
+
+    //関数：敵モンスターが盤面に残っていることの判定
+    bool AllEnemyDefeated()
+    {
+        if (PointEnemy1[0]==10 && PointEnemy2[0]==10 && PointEnemy3[0]==10 && PointEnemy4[0]==10){
+            return true;
+        }
+        return false;
+    }
+
+    //関数：2面敵モンスターの配置の決定
+    void PlacementEnemyMonster()
+    {
+        //敵モンスターをランダムに配置する
+
+        //配置の決定
+        while(true){
+            Random r1 = new System.Random();
+            Random r2 = new System.Random();
+
+            int PointX = r1.Next(0,4);
+            int PointY = r2.Next(0,4);
+
+            if(arrayBoard[PointY,PointX] == 0){
+                arrayBoard[PointY,PointX] = 13;
+                PointEnemy3[0] = PointX;
+                PointEnemy3[1] = PointY;
+                enemy3.transform.localPosition = new Vector3(PointValueXArray[PointX], PointValueYArray[PointY], 0);
+                break;
+            }
+        }
+
+        while(true){
+            Random r1 = new System.Random();
+            Random r2 = new System.Random();
+
+            int PointX = r1.Next(0,4);
+            int PointY = r2.Next(0,4);
+
+            if(arrayBoard[PointY,PointX] == 0){
+                arrayBoard[PointY,PointX] = 14;
+                PointEnemy4[0] = PointX;
+                PointEnemy4[1] = PointY;
+                enemy4.transform.localPosition = new Vector3(PointValueXArray[PointX], PointValueYArray[PointY], 0);
+                break;
+            }
         }
     }
 }
