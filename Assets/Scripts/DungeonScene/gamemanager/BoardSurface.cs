@@ -362,17 +362,27 @@ public class BoardSurface : MonoBehaviour
             }
 
         }else{
-            //２面敵モンスターの配置の決定
-            PlacementEnemyMonster();
-            //二体とも撃破されたときに面の切り替えを表示
-            yield return StartCoroutine(StepNextClass.StepNextArea());
-            yield return new WaitForSeconds(1);
+            switch(AreaNum){
+                case 1:
+                //     //２面敵モンスターの配置の決定
+                //     PlacementEnemyMonster();
+                //     //二体とも撃破されたときに面の切り替えを表示
+                //     yield return StartCoroutine(StepNextClass.StepNextArea());
+                //     yield return new WaitForSeconds(1);
+                //     AreaNum = 2;
+                //     break;
+                // case 2:
+                    //ボス面への切り替えを表示
+                    yield return StartCoroutine(StepNextClass.StepBossScene());
+                    yield return new WaitForSeconds(1);
+                    AreaNum = 3;
+                    break;
+            }
 
             //プレイヤーターンに切り替えるギミックの実行
             TurnStartClass.StartPlayer();
             yield return new WaitForSeconds(1.5f);
             win_board = true;
-            AreaNum = 2;
         }
     }
 

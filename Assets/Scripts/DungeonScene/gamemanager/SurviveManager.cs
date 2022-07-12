@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class SurviveManager : MonoBehaviour
 {
-    // int ally1HP = 10000;
-    // int ally2HP = 10000;
-    // int ally3HP = 10000;
-    // int ally4HP = 10000;
+    int ally1HP = 10000;
+    int ally2HP = 10000;
+    int ally3HP = 10000;
+    int ally4HP = 10000;
 
-    int ally1HP = 1;
-    int ally2HP = 1;
-    int ally3HP = 1;
-    int ally4HP = 1;
-    int enemy1HP = 1500;
-    int enemy2HP = 1000;
+    // int ally1HP = 1;
+    // int ally2HP = 1;
+    // int ally3HP = 1;
+    // int ally4HP = 1;
+    int enemy1HP = 15;
+    int enemy2HP = 10;
     int enemy3HP = 2000;
     int enemy4HP = 2000;
     // int boss1HP = 10000;
